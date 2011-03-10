@@ -21,7 +21,11 @@ public class Map {
 	int getSizeY() { return sizey; }
 
 	Hex getHexAt(Position p) {
+		try {
 		return maparray[p.getX()][p.getY()];
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 	
 	ArrayList<Hex> getLineOfHex(Position p1,Position p2) {

@@ -113,11 +113,28 @@ public class Dalek {
 	boolean canMoveForwards() { return this.canMove(this.getDirection()); }
 	boolean canMoveBackwards() { return this.canMove(Tables.oppositeDirection(this.getDirection())); }
 
-	boolean moveForwards () { return this.moveDalek(this.getDirection()); }
-	boolean moveBackwards () { return this.moveDalek(Tables.oppositeDirection(this.getDirection())); }
+	boolean moveForwards () { return this.moveDalekDirection(this.getDirection()); }
+	boolean moveBackwards () { return this.moveDalekDirection(Tables.oppositeDirection(this.getDirection())); }
 
 	
-	boolean moveDalek(int d) {
+	boolean moveDalek (int d) {
+	
+		if (d == Tables.LEFT) {
+			return this.turnLeft();
+		}
+		if (d == Tables.RIGHT) {
+			return this.turnRight();
+		}
+		if (d == Tables.FORWARD) {
+			return this.moveForwards();
+		}
+		if (d == Tables.BACKWARD) {
+			return this.moveBackwards();
+		}
+		return false;
+	}
+	
+	boolean moveDalekDirection(int d) {
 		boolean r = this.canMove(d);
 		if (r) {
 			movement += this.getHex().getMovementCost(this.getHexAtNewPosition(d));
@@ -125,10 +142,29 @@ public class Dalek {
 		}
 		return r;
 	}
-	boolean canChangeDirection() { return movement < this.getRun(); }
+	boolean canTurn() { return movement < this.getRun(); }
 	
+	boolean turnLeft () { 			
+		if (this.canTurn()) {
+			setDirection((this.getDirection() - 1)  % 6);
+			movement ++;
+			return true;
+		}
+		return false;
+	}
+	
+	boolean turnRight () { 			
+		if (this.canTurn()) {
+			setDirection((this.getDirection() + 1)  % 6);
+			movement ++;
+			return true;
+		}
+		return false;
+
+	}
+	/*
 	boolean changeDirection(int d) { 
-		boolean r = this.canChangeDirection();
+		boolean r = this.canTurn();
 		if (r) {
 			if (d == Tables.LEFT) {
 				setDirection((this.getDirection() - 1)  % 6);
@@ -140,6 +176,7 @@ public class Dalek {
 		}
 		return r;
 	}
+	 */
 	
 	double distanceMoved() { return this.getPosition().distanceTo(this.old); }
 	int baseHit() { return Tables.movementHitCost(this); }
@@ -220,8 +257,8 @@ public class Dalek {
 		this.locationArray = new ArrayList<DalekSection>();
 		this.locationMap = new HashMap<String,DalekSection>();
 		
-		this.pos = new Position(0,0);
-		this.old = new Position(0,0);
+		this.pos = new Position(-1,-1);
+		this.old = new Position(-1,-1);
 		this.direction = Tables.NORTH; 
 		this.reset();
 	}

@@ -32,7 +32,7 @@ public class DalekTech {
 		players[1] = new Player(new Cli(map),this); // ultimately UI3dGraphic();
 	}
 
-	Map getMap() { return map; }
+	Map getMap() { return this.map; }
 	Player getPlayer(int i) { return this.players[i]; }
 	
 	ArrayList<Position> allDalekPositions() {
@@ -77,7 +77,7 @@ public class DalekTech {
 	public static void main(String[] args) {
 
 		DalekTech Game = DalekTech.getInstance();
-		ArrayList<Player> playerOrder;		
+		ArrayList<Player> playerOrder;	
 		
 		// init map
 		
@@ -88,6 +88,8 @@ public class DalekTech {
 		// player 2 choose some daleks
 		
 		Game.getPlayer(1).selectFactoryDaleks(DalekFactory.getAllDaleks());
+		
+
 		
 		// position daleks 
 		

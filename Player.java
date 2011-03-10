@@ -146,14 +146,14 @@ public class Player {
 			dal = getUI().selectDalek(getHaventMoved());
 			dal.setMoved(true);
 			
+			do {
 			dir = getUI().moveDalek(dal,
 									dal.getMovement(),
 									dal.getWalk(),
 									dal.getRun(),
 									dal.getHex().getMovementCost(dal.getForwardsHex()),
-									dal.getHex().getMovementCost(dal.getBackwardsHex()),
-									1
-									);
+									dal.getHex().getMovementCost(dal.getBackwardsHex()));
+			} while (dal.moveDalek(dir));
 		}
 	}
 	

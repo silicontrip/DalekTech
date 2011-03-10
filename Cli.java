@@ -80,6 +80,7 @@ public class Cli extends UserInterface {
 			} catch (NumberFormatException nfe) { x = -1; y = -1; }
 		} while ( x < 1 || x > getMap().getSizeX() || y < 1 || y > getMap().getSizeY());
 		
+		x--; y--;
 		return new Position(x,y);
 
 	}
@@ -126,59 +127,57 @@ public class Cli extends UserInterface {
 	}
 	
 	ArrayList<Dalek> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
-		int i;
-		String choice;
-		int ichoice=0;
+		Dalek dal;
 		ArrayList<Dalek> dalekSelection = new ArrayList<Dalek>();
 		
 		do {
-			for (i=0; i< dalekList.size(); i++) {
-				System.out.println ((i+1) + ". " + dalekList.get(i));
-			}					
-			System.out.println ((i+1) + ". End");
-			do {
-				System.out.print("? ");
-				choice = readln();
-				try {
-					ichoice = Integer.parseInt(choice) -1;
-				} catch (NumberFormatException nfe) { ichoice = -1; }
-				if (ichoice >0 && ichoice<i) {
-					dalekSelection.add(dalekList.get(ichoice));
-				}
-			} while (ichoice >0 && ichoice <i);
-		} while (ichoice != i);
+			dal = this.selectDalek(dalekList);
+			if (dal != null) {
+				dalekSelection.add(dal);
+			}
+		} while (dal != null);
 		return dalekSelection;
 	}
 	
 	Dalek selectDalek (ArrayList<Dalek> dalekList) {
+		
+		String choice;
+		int ichoice;
 		int i;
+		
 		for (i=0; i< dalekList.size(); i++) {
 			System.out.println ((i+1) + ". " + dalekList.get(i));
 		}					
 		System.out.println ((i+1) + ". End");
-		
-		return dalekList.get(0);
-		
+		do {
+			System.out.print("? ");
+			choice = readln();
+			try {
+				ichoice = Integer.parseInt(choice) -1;
+			} catch (NumberFormatException nfe) { ichoice = -1; }
+			if (ichoice >0 && ichoice<i) {
+				return dalekList.get(ichoice);
+			}
+		} while (ichoice != i);
+		return null;
 	}
 	
-	int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost, int turnCost) { 
+	int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost) { 
 		int dir = -1;
 		String input;
-		String output = new String();
-		boolean allowTurn, allowForwards, allowBackwards;
+		String outString = new String("Enter Movement ");
 		
-		allowTurn = currentMove + turnCost <= run;
-		allowForwards = currentMove + forwardCost <= run;
-		allowBackwards = currentMove + backwardCost <= run;
 		
-		if (allowForwards) { output.concat ("Forward(" + forwardCost +")/"); }
-		if (allowForwards) { output.concat ("Backward(" + backwardCost +")/"); }
-		if (allowTurn) { output.concat ("Left/Right"); }
+		if (d.canMoveForwards()) { outString = outString.concat (new String("Forward(" + forwardCost +")/")); }
+		if (d.canMoveBackwards()) { outString = outString.concat (new String("Backward(" + backwardCost +")/")); }
+		if (d.canTurn()) { outString = outString.concat (new String("Left/Right")); }
 
+		outString = outString.concat(new String (" : "));
+		
 		System.out.println (d.toString());
 		
 		do {
-			System.out.print ("Enter Movement " + output + " : ");
+			System.out.print ( outString );
 			input = readln();
 			dir = this.movementFromString(input);
 		} while (dir == 0);
@@ -207,11 +206,6 @@ public class Cli extends UserInterface {
 		return targetDaleks.get(0);
 	}
 	
-	void dalekStatus (Dalek d) {
-	
-		System.out.println (d.toString());
-		
-	}
 	
 	
 }

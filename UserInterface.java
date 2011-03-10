@@ -6,7 +6,6 @@ public abstract class UserInterface {
 	abstract int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost, int turnCost);
 	abstract int twistDalek (Dalek d);
 	abstract Dalek fireDalek (Dalek d, ArrayList<Dalek> targetDaleks);
-	abstract void dalekStatus (Dalek d);
 	
 	abstract Dalek selectDalek(ArrayList<Dalek> dalekList);
 	abstract Position positionDalek(Dalek d);
@@ -14,7 +13,9 @@ public abstract class UserInterface {
 
 	
 	// status 
+	abstract void notifyName(String n);
 	abstract void notifyEngine(int current, int walk, int run);
+	abstract void notifyDamage(Dalek d);
 	abstract void notifyDifficulty(int cost);
 	abstract void notifyLOS(ArrayList<Hex> line);
 	
