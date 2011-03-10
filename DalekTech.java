@@ -22,14 +22,16 @@ public class DalekTech {
 		Player players[] = new Player[2];
 		
 		rand = new java.util.Random(java.lang.System.currentTimeMillis());
-
-		players[0] = new Player(new Cli()); // UI2DGraphic();
-		players[1] = new Player(new Cli()); // ultimately UI3dGraphic();
 		
 		// init map
 		
 		map = new Map(15,17);
 		map.initSampleMap();
+		
+
+		players[0] = new Player(new Cli(map)); // UI2DGraphic();
+		players[1] = new Player(new Cli(map)); // ultimately UI3dGraphic();
+		
 		
 		// player 1 choose some daleks
 		

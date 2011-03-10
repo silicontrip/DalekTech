@@ -57,18 +57,14 @@ public class Player {
 		return true;		
 	
 	}
-
-	void positionDalek(Dalek d) {
-	
-		System.out.println (d.toString());
-		System.out.println ("Enter co-ordinates 0,0-"
-		
-	}
 	
 	void positionDaleks() {
 		Iterator<Dalek> it = daleks.iterator();
 		while(it.hasNext()) {
-			this.positionDalek(it.next());
+			getUI().positionDalek(it.next());
+			// check it doesn't clobber another dalek
+			// get direction
+			
 		}
 	}
 	

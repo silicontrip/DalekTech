@@ -7,11 +7,15 @@ import java.util.Collection;
 
 public class Cli extends UserInterface {
 
+	Map map;
 	BufferedReader is;
 	
-	public Cli() { 
+	public Cli(Map m) { 
+		this.map = m;
 		is = new BufferedReader(new InputStreamReader(System.in));
 	}
+	
+	Map getMap() { return map; }
 	
 	private String readln() {
 		String ln = "";
@@ -59,10 +63,24 @@ public class Cli extends UserInterface {
 	
 	Position positionDalek(Dalek d) {
 		
-		System.out.println (d.toString());
-		System.out.println ("Enter co-ordinates 0,0-");
+		String input;
+		String sValues[];
+		int x,y;
 		
-		System.out.println ("Enter Direction");
+		System.out.println (d.toString());
+		do {
+			System.out.print ("Enter co-ordinates (0,0-" + getMap().getSizeX() +"," + getMap().getSizeY() +") ? ");
+		
+			input = readln();
+			sValues = input.split(",");
+			try {
+				x = Integer.parseInt(sValues[0]);
+				y = Integer.parseInt(sValues[2]);
+
+			} catch (NumberFormatException nfe) { x = -1; y = -1; }
+		} while ( x < 0 || x > getMap().getSizeX() || y < 0 || y > getMap().getSizeY());
+		
+		return new Position(x,y);
 
 	}
 	
