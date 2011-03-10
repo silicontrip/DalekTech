@@ -1,3 +1,4 @@
+import java.util.*;
 
 public class Position {
 	
@@ -23,6 +24,21 @@ public class Position {
 		return java.lang.Math.sqrt(v1*v1 + v2 * v2);
 	}
 
+	public String toString() {
+		return this.x + "," + this.y;
+	}
+	
+	public boolean isIn (Collection<Position> p) {
+	
+		Iterator<Position> it = p.iterator();
+		
+		while (it.hasNext()) {
+			if (this.equals(it.next())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public boolean equals (Position p) {
 		return p.getX() == this.getX() && p.getY() == this.getY();
 	}

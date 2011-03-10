@@ -26,8 +26,11 @@ public class Dalek {
 	Player owner;
 		
 	void setPosition (Position p) {pos = p;}
+	Position getPosition () { return pos; }
 	void setDirection (int d) {direction = d;}
 	int getDirection() { return direction; }
+	void setMovement (int m) {movement = m;}
+	int getMovement() { return movement; }
 	void setWalk (int w) {walk = w;}
 	void setRun (int r) {run = r;}
 	void setBase (int b) {base = b;}
@@ -60,7 +63,6 @@ public class Dalek {
 		return name +":(" + sections + ")";
 	}
 	
-	void setMovement (int m) {movement = m;}
 	
 	boolean isStationary() { return movement == 0; }
 	boolean isWalking() { return movement <= this.getWalk() && movement > 0; }
@@ -79,7 +81,6 @@ public class Dalek {
 		return weapons;
 	}
 	
-	Position getPos() {return pos;}
 	
 	DalekSection getLocationFromName (String name) {
 		if (this.locationMap.containsKey(name)) {
@@ -89,17 +90,10 @@ public class Dalek {
 		return null;
 	}
 	
-	int getDamage (String name) {
-		return this.getLocationFromName(name).getDamage();
-	}
+	int getDamage (String name) { return this.getLocationFromName(name).getDamage(); }
+	int getDamage (int location) { return locationArray.get(location).getDamage(); }
 	
-	int getDamage (int location) {
-		return locationArray.get(location).getDamage();
-	}
-	
-	void damageLocation (int location, int damage) {
-		locationArray.get(location).doDamage(damage);
-	}
+	void damageLocation (int location, int damage) { locationArray.get(location).doDamage(damage); }
 	
 	void reset() {
 		movement = 0;
@@ -109,11 +103,19 @@ public class Dalek {
 		old.setPosition(pos);
 	}
 	
-	Position newPosition(int d) { return Tables.newPosition(this.getPos(),d); }
+	Position newForwardsPosition() { return newPosition(this.getDirection()); }
+	Position newBackwardsPosition() { return newPosition(Tables.oppositeDirection(this.getDirection())); }
+
+	Position newPosition(int d) { return Tables.newPosition(this.getPosition(),d); }
+
+	boolean canMove(int d) { return this.getHex().getMovementCost(this.getHexAtNewPosition(d)) + movement <= this.getRun() && this.getHex().canMove(this.getHexAtNewPosition(d)); }
 	
-	boolean canMove(int d) { 
-		return this.getHex().getMovementCost(this.getHexAtNewPosition(d)) + movement <= this.getRun() && this.getHex().canMove(this.getHexAtNewPosition(d));
-	}
+	boolean canMoveForwards() { return this.canMove(this.getDirection()); }
+	boolean canMoveBackwards() { return this.canMove(Tables.oppositeDirection(this.getDirection())); }
+
+	boolean moveForwards () { return this.moveDalek(this.getDirection()); }
+	boolean moveBackwards () { return this.moveDalek(Tables.oppositeDirection(this.getDirection())); }
+
 	
 	boolean moveDalek(int d) {
 		boolean r = this.canMove(d);
@@ -124,28 +126,37 @@ public class Dalek {
 		return r;
 	}
 	boolean canChangeDirection() { return movement < this.getRun(); }
+	
 	boolean changeDirection(int d) { 
 		boolean r = this.canChangeDirection();
 		if (r) {
-			setDirection((this.getDirection() + d)  % 6);
+			if (d == Tables.LEFT) {
+				setDirection((this.getDirection() - 1)  % 6);
+			}
+			if (d == Tables.RIGHT) {
+				setDirection((this.getDirection() + 1)  % 6);
+			}
 			movement ++;
 		}
 		return r;
 	}
 	
-	double distanceMoved() { return this.getPos().distanceTo(this.old); }
+	double distanceMoved() { return this.getPosition().distanceTo(this.old); }
 	int baseHit() { return Tables.movementHitCost(this); }
 	int targetHitCost() { return Tables.targetHitCost(this.distanceMoved()); }
 	int getHeight() { return this.getHex().getElevation() + 1; } // Daleks stand 1 unit heigher than the ground
-	Hex getHex() { return this.getHexAt(this.getPos()); }
+	Hex getHex() { return this.getHexAt(this.getPosition()); }
 	Hex getHexAt(Position p) { return getMap().getHexAt(p); }
 	Hex getHexAtNewPosition(int d) { return this.getHexAt(this.newPosition(d)); }
+	Hex getForwardsHex() { return this.getHexAt(this.newForwardsPosition()); }
+	Hex getBackwardsHex() { return this.getHexAt(this.newBackwardsPosition()); }
+
 	
 	int terrainLineCost (Dalek d) {
 	
 		int cost=0;
 		int dalekHeight = java.lang.Math.max(this.getHeight(),d.getHeight());
-		ArrayList line = getMap().getLineOfHex(this.getPos(),d.getPos());
+		ArrayList line = getMap().getLineOfHex(this.getPosition(),d.getPosition());
 		
 		if (this.getHex().isDepth1Water()) { cost ++; }
 		if (d.getHex().isDepth1Water()) { cost --; }
@@ -167,7 +178,7 @@ public class Dalek {
 		int wood = 0;
 		int dalekHeight = java.lang.Math.max(this.getHeight(),d.getHeight());
 		
-		ArrayList line = getMap().getLineOfHex(this.getPos(),d.getPos());
+		ArrayList<Hex> line = getMap().getLineOfHex(this.getPosition(),d.getPosition());
 		
 		// cannot shoot into or out of depth 2 water
 		if (this.getHex().isDepth2Water()) { return false; }
@@ -175,7 +186,7 @@ public class Dalek {
 		
 		// Don't include the first or last hexes
 		for (int index=1;index < line.size()-1;index++) {
-			Hex h = (Hex)line.get(index);
+			Hex h = line.get(index);
 			maxHeight=java.lang.Math.max(h.getElevation(),maxHeight);
 			
 			if (h.getWoodElevation() > dalekHeight) {
@@ -187,7 +198,7 @@ public class Dalek {
 	}
 	
 	
-	double distanceTo (Dalek d) { return this.getPos().distanceTo(d.getPos()); }
+	double distanceTo (Dalek d) { return this.getPosition().distanceTo(d.getPosition()); }
 	
 	void addSection(DalekSection ds) {
 	
@@ -208,12 +219,6 @@ public class Dalek {
 		this.movementDivisor = 1;
 		this.locationArray = new ArrayList<DalekSection>();
 		this.locationMap = new HashMap<String,DalekSection>();
-
-		
-//		it = locHit.iterator();
-//		while (it.hasNext()) {
-//			it.next().setDalek(this);
-//		}
 		
 		this.pos = new Position(0,0);
 		this.old = new Position(0,0);

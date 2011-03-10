@@ -7,8 +7,8 @@ public class Tables {
 	
 	public static final int LEFT = -1;
 	public static final int RIGHT = 1;
-	public static final int FORWARD =1;
-	public static final int BACKWARD =1;
+	public static final int FORWARD =2;
+	public static final int BACKWARD =3;
 	
 	public static final int NORTH = 0;
 	public static final int NORTHEAST = 1;
@@ -71,6 +71,29 @@ public class Tables {
 		return 0;
 	}
 	
+	public static int oppositeDirection(int d) {
+		if (d == NORTH) {
+			return SOUTH;
+		}
+		if (d == NORTHEAST) {
+			return SOUTHWEST;
+		}
+		if (d == SOUTHEAST) {
+			return NORTHWEST;
+		}
+		if (d == SOUTH) {
+			return NORTH;
+		}
+		if (d == SOUTHWEST) {
+			return NORTHEAST;
+		}
+		if (d == NORTHWEST) {
+			return SOUTHEAST;
+		}
+		// invalid direction
+		return d;
+	}
+		
 	public static Position newPosition(Position p, int d) {
 		int col;
 		

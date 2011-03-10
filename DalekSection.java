@@ -31,9 +31,9 @@ public class DalekSection {
 
 	public String toString() { 
 		if (weapon != null) {
-			return name + " (" + currentArmour + "/" + armour + " " + weapon + ")" ;
+			return name + ":(" + currentArmour + "/" + armour + " " + weapon + ")" ;
 		} else {
-			return name + ": " + currentArmour + "/" + armour +")";
+			return name + ":(" + currentArmour + "/" + armour +")";
 		}
 	}
 	void doDamage (int damage) {
