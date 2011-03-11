@@ -49,7 +49,7 @@ public class DalekTech {
 	}
 	
 	boolean allDaleksMoved() {
-		return this.getPlayer(0).allMoved() && this.getPlayer(0).allMoved();
+		return this.getPlayer(0).allMoved() && this.getPlayer(1).allMoved();
 	}
 	
 	int twodsix () {
@@ -107,12 +107,12 @@ public class DalekTech {
 			do {
 		// player x moves 1 dalek
 				
-				Game.getPlayer(0).moveDalek();
-				Game.getPlayer(1).moveDalek();
+				playerOrder.get(0).moveDalek();
+				playerOrder.get(1).moveDalek();
 				
 		// player 3-x moves 1 dalek
 		// until all daleks moved
-			} while (Game.allDaleksMoved());
+			} while (!Game.allDaleksMoved());
 		// repeat
 		// player 3-x twist dalek
 		// player x twist dalek

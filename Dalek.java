@@ -25,6 +25,7 @@ public class Dalek {
 	
 	Player owner;
 		
+	String getName() { return name; }
 	void setPosition (Position p) {pos = p;}
 	Position getPosition () { return pos; }
 	void setDirection (int d) {direction = d;}
@@ -69,10 +70,11 @@ public class Dalek {
 	boolean isRunning() { return movement > this.getWalk(); }
 	boolean isDestroyed () { return this.getDamage("Neck") == 0; }
 
+	HashMap<String,DalekSection> getSections() { return locationMap; }
 	ArrayList<Weapon> getWeaponArray() {
 		
 		ArrayList<Weapon> weapons = new ArrayList<Weapon>();
-		Collection<DalekSection> c = locationMap.values();
+		Collection<DalekSection> c = getSections().values();
 		Iterator<DalekSection> it  = c.iterator();
 		
 		while (it.hasNext()) {

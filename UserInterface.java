@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public abstract class UserInterface {
 
 	abstract ArrayList<Dalek> selectFactoryDaleks (ArrayList<Dalek> dalekList);
-	abstract int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost, int turnCost);
+	abstract int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost);
 	abstract int twistDalek (Dalek d);
 	abstract Dalek fireDalek (Dalek d, ArrayList<Dalek> targetDaleks);
 	
@@ -13,7 +13,7 @@ public abstract class UserInterface {
 
 	
 	// status 
-	abstract void notifyName(String n);
+	abstract void notifyName(Dalek d);
 	abstract void notifyEngine(int current, int walk, int run);
 	abstract void notifyDamage(Dalek d);
 	abstract void notifyDifficulty(int cost);

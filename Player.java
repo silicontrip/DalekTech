@@ -79,7 +79,7 @@ public class Player {
 	
 	
 	boolean allMoved () {
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		while(it.hasNext()) {
 			if (!it.next().hasMoved()) {
 				return false;
@@ -147,13 +147,18 @@ public class Player {
 			dal.setMoved(true);
 			
 			do {
+				getUI().notifyEngine(dal.getMovement(),
+									 dal.getWalk(),
+									 dal.getRun());
+									 
 			dir = getUI().moveDalek(dal,
 									dal.getMovement(),
 									dal.getWalk(),
 									dal.getRun(),
 									dal.getHex().getMovementCost(dal.getForwardsHex()),
 									dal.getHex().getMovementCost(dal.getBackwardsHex()));
-			} while (dal.moveDalek(dir));
+			} while (dal.moveDalek(dir) && dal.canTurn());
+				
 		}
 	}
 	

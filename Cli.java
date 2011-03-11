@@ -107,7 +107,7 @@ public class Cli extends UserInterface {
 		if (dir.equalsIgnoreCase("l")) { return Tables.LEFT; }
 		if (dir.equalsIgnoreCase("r")) { return Tables.RIGHT; }
 
-		return 0;
+		return Tables.NONE;
 	}
 	
 	int directionDalek (Dalek d) {
@@ -139,6 +139,28 @@ public class Cli extends UserInterface {
 		return dalekSelection;
 	}
 	
+	Dalek selectDalekNoEnd (ArrayList<Dalek> dalekList) {
+		
+		String choice;
+		int ichoice;
+		int i;
+		
+		for (i=0; i< dalekList.size(); i++) {
+			System.out.println ((i+1) + ". " + dalekList.get(i));
+		}					
+		do {
+			System.out.print("? ");
+			choice = readln();
+			try {
+				ichoice = Integer.parseInt(choice) -1;
+			} catch (NumberFormatException nfe) { ichoice = -1; }
+			if (ichoice >= 0 && ichoice<i) {
+				return dalekList.get(ichoice);
+			}
+		} while (true);
+	}
+	
+	
 	Dalek selectDalek (ArrayList<Dalek> dalekList) {
 		
 		String choice;
@@ -155,7 +177,7 @@ public class Cli extends UserInterface {
 			try {
 				ichoice = Integer.parseInt(choice) -1;
 			} catch (NumberFormatException nfe) { ichoice = -1; }
-			if (ichoice >0 && ichoice<i) {
+			if (ichoice >= 0 && ichoice<i) {
 				return dalekList.get(ichoice);
 			}
 		} while (ichoice != i);
@@ -163,41 +185,33 @@ public class Cli extends UserInterface {
 	}
 	
 	int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost) { 
-		int dir = -1;
+
 		String input;
 		String outString = new String("Enter Movement ");
-		
 		
 		if (d.canMoveForwards()) { outString = outString.concat (new String("Forward(" + forwardCost +")/")); }
 		if (d.canMoveBackwards()) { outString = outString.concat (new String("Backward(" + backwardCost +")/")); }
 		if (d.canTurn()) { outString = outString.concat (new String("Left/Right")); }
 
-		outString = outString.concat(new String (" : "));
+		outString = outString.concat(new String ("/End : "));
 		
 		System.out.println (d.toString());
 		
-		do {
-			System.out.print ( outString );
-			input = readln();
-			dir = this.movementFromString(input);
-		} while (dir == 0);
+		System.out.print ( outString );
+		input = readln();
+		return this.movementFromString(input);
 		
-		return dir;
 	}
 
 	int twistDalek (Dalek d) {
-		int dir = -1;
 		String input;
 		
 		System.out.println (d.toString());
 		
-		do {
-			System.out.print ("Enter Left Right: ");
-			input = readln();
-			dir = this.movementFromString(input);
-		} while (dir == 0);
+		System.out.print ("Enter Left/Right/End: ");
+		input = readln();
+		return this.movementFromString(input);
 		
-		return dir;
 	}
 	
 	Dalek fireDalek (Dalek d, ArrayList<Dalek> targetDaleks) {
@@ -206,6 +220,23 @@ public class Cli extends UserInterface {
 		return targetDaleks.get(0);
 	}
 	
+	void notifyDamage(Dalek d) {
+	
+		Collection<DalekSection> c = d.getSections().values();
+		Iterator<DalekSection> it  = c.iterator();
+		
+		while (it.hasNext()) {
+			DalekSection section;
+			section = it.next();
+			System.out.print ( section.getDamage() + "/" + section.getArmour() + " ");
+		}
+		System.out.println ("");
+		
+	}
+	
+	void notifyName(Dalek d) {
+		System.out.println (d.getName());
+	}
 	
 	
 }
