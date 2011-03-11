@@ -48,9 +48,10 @@ public class DalekTech {
 		return this.getPlayer(0).allDestroyed() || this.getPlayer(1).allDestroyed();
 	}
 	
-	boolean allDaleksMoved() {
-		return this.getPlayer(0).allMoved() && this.getPlayer(1).allMoved();
-	}
+	boolean allDaleksMoved() { return this.getPlayer(0).allMoved() && this.getPlayer(1).allMoved(); }
+	boolean allDaleksTwist() { return this.getPlayer(0).allTwist() && this.getPlayer(1).allTwist(); }
+	boolean allDaleksFired() { return this.getPlayer(0).allFired() && this.getPlayer(1).allFired(); }
+
 	
 	int twodsix () {
 		return rand.nextInt(6) + rand.nextInt(6) + 2;
@@ -113,18 +114,31 @@ public class DalekTech {
 		// player 3-x moves 1 dalek
 		// until all daleks moved
 			} while (!Game.allDaleksMoved());
+			
+			do {
 		// repeat
+				
+				playerOrder.get(1).twistDalek();
+				playerOrder.get(0).twistDalek();
+
 		// player 3-x twist dalek
 		// player x twist dalek
 		// until all daleks twist
+			} while (!Game.allDaleksTwist());
+			
+			HashMap<Weapon,Dalek> firing = new  HashMap<Weapon,Dalek>();
+			
 		// repeat
+			do {
 		// player x fires weapons of 1 dalek at another dalek
+				
+				
 		// player 3-x fires weapons of 1 dalek at another dalek
 		// until all daleks fired.
 		// repeat
 		// dalek x hit dalek y then damage dalek y
 		// until all daleks fired
-			
+			} while (!Game.allDaleksFired());
 		// until all daleks on one team destroyed
 		}	while (Game.teamDestroyed());
 		

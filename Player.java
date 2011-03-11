@@ -89,7 +89,7 @@ public class Player {
 	}
 	
 	boolean allTwist () {
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		while(it.hasNext()) {
 			if (!it.next().hasTwist()) {
 				return false;
@@ -99,7 +99,7 @@ public class Player {
 	}
 	
 	boolean allFired () {
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		while(it.hasNext()) {
 			if (!it.next().hasFired()) {
 				return false;
@@ -140,10 +140,10 @@ public class Player {
 	}
 	
 	void moveDalek () {
-		int dir;
 		if (!this.allMoved()) {
+			int dir;
 			Dalek dal;
-			dal = getUI().selectDalek(getHaventMoved());
+			dal = getUI().selectDalekNoEnd(getHaventMoved());
 			dal.setMoved(true);
 			
 			do {
@@ -162,5 +162,34 @@ public class Player {
 		}
 	}
 	
+	void twistDalek () {
+		if (!this.allTwist()) {
+			Dalek dal;
+			dal = getUI().selectDalekNoEnd(getHaventTwist());
+			dal.setTwist(true);
+			dal.moveDalek( getUI().twistDalek(dal));
+		}
+	}
+	
+	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
+		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
+		if (!this.allFired()) {
+			Weapon weap;
+			Dalek target;
+			Dalek dal;
+			dal = getUI().selectDalekNoEnd(this.getHaventFired());
+			dal.setFired(true);
+			do {
+				weap = getUI().selectWeapon(dal.getWeaponArray());
+				if (weap != null) {
+					target = getUI().selectTargetDalek(dal,weap,targetDaleks);
+					if (target != null) {
+						fireMap.put(weap,target);
+					}
+				}
+			} while (weap != null);
+		}
+		return fireMap;
+	}
 
 }

@@ -139,49 +139,86 @@ public class Cli extends UserInterface {
 		return dalekSelection;
 	}
 	
-	Dalek selectDalekNoEnd (ArrayList<Dalek> dalekList) {
-		
+	private int choose (ArrayList l) {
 		String choice;
 		int ichoice;
 		int i;
 		
-		for (i=0; i< dalekList.size(); i++) {
-			System.out.println ((i+1) + ". " + dalekList.get(i));
+		for (i=0; i< l.size(); i++) {
+			System.out.println ((i+1) + ". " + l.get(i));
 		}					
-		do {
+		
+		if (l.size() == 1) { return 0; }
+		
+		while (true) {
 			System.out.print("? ");
 			choice = readln();
 			try {
 				ichoice = Integer.parseInt(choice) -1;
 			} catch (NumberFormatException nfe) { ichoice = -1; }
 			if (ichoice >= 0 && ichoice<i) {
-				return dalekList.get(ichoice);
+				return ichoice;
 			}
-		} while (true);
+		} 
+	}
+		
+	
+	Dalek selectTargetDalek (Dalek d, Weapon w, ArrayList<Dalek> targetList) {
+	
+		int choice,i;
+		ArrayList<String> choiceList = new ArrayList<String>();
+		
+		for (i=0; i< targetList.size(); i++) {
+			// calculate difficulty of shot
+			int difficulty  = w.costFire(targetList.get(i));
+			choiceList.add(difficulty + " = " + targetList.get(i).toString());
+		}					
+		choiceList.add ("End");
+		choice = choose(choiceList);
+		if (choice == i ) { return null; }
+		return targetList.get(choice);
 	}
 	
+	Weapon selectWeapon(ArrayList<Weapon> w) {
+	
+		int choice,i;
+		ArrayList<String> choiceList = new ArrayList<String>();
+		
+		for (i=0; i< w.size(); i++) {
+			choiceList.add(w.get(i).toString());
+		}					
+		choiceList.add ("End");
+		choice = choose(choiceList);
+		if (choice == i ) { return null; }
+		return w.get(choice);
+		
+	}
+	
+	Dalek selectDalekNoEnd (ArrayList<Dalek> dalekList) {
+		
+		int choice,i;
+		ArrayList<String> choiceList = new ArrayList<String>();
+		
+		for (i=0; i< dalekList.size(); i++) {
+			choiceList.add(dalekList.get(i).toString());
+		}					
+		choice = choose(choiceList);
+		return dalekList.get(choice);
+	}
 	
 	Dalek selectDalek (ArrayList<Dalek> dalekList) {
 		
-		String choice;
-		int ichoice;
-		int i;
+		int choice,i;
+		ArrayList<String> choiceList = new ArrayList<String>();
 		
 		for (i=0; i< dalekList.size(); i++) {
-			System.out.println ((i+1) + ". " + dalekList.get(i));
-		}					
-		System.out.println ((i+1) + ". End");
-		do {
-			System.out.print("? ");
-			choice = readln();
-			try {
-				ichoice = Integer.parseInt(choice) -1;
-			} catch (NumberFormatException nfe) { ichoice = -1; }
-			if (ichoice >= 0 && ichoice<i) {
-				return dalekList.get(ichoice);
-			}
-		} while (ichoice != i);
-		return null;
+			choiceList.add(dalekList.get(i).toString());
+		}		
+		choiceList.add ("End");		
+		choice = choose(choiceList);
+		if (choice == i ) { return null; }
+
+		return dalekList.get(choice);
 	}
 	
 	int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost) { 

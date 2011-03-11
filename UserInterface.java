@@ -7,6 +7,9 @@ public abstract class UserInterface {
 	abstract int twistDalek (Dalek d);
 	abstract Dalek fireDalek (Dalek d, ArrayList<Dalek> targetDaleks);
 	
+	abstract Dalek selectTargetDalek (Dalek d, Weapon w, ArrayList<Dalek> targetList);
+	abstract Weapon selectWeapon(ArrayList<Weapon> w);
+	abstract Dalek selectDalekNoEnd(ArrayList<Dalek> dalekList);
 	abstract Dalek selectDalek(ArrayList<Dalek> dalekList);
 	abstract Position positionDalek(Dalek d);
 	abstract int directionDalek (Dalek d);
