@@ -29,6 +29,6 @@ public abstract class UserInterface {
 	abstract void notifyDifficulty(int cost);
 	abstract void notifyLOS(ArrayList<Hex> line);
 	abstract void notifyTargetDalek(Dalek d);
-	abstract void notifyDalekDamage(Dalek d,int location, int damage);
-
+	abstract void notifyDalekDamage(Dalek d,int location, Weapon w);
+	abstract void notifyMiss(Dalek d, Weapon w);
 }

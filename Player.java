@@ -77,6 +77,12 @@ public class Player {
 		return selected;
 	}
 	
+	void allReset () {
+		Iterator<Dalek> it = getDaleks().iterator();
+		while(it.hasNext()) {
+			it.next().reset();
+		}
+	}
 	
 	boolean allMoved () {
 		Iterator<Dalek> it = getDaleks().iterator();

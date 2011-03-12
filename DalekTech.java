@@ -153,20 +153,27 @@ public class DalekTech {
 				// roll to hit
 				int roll = Game.twodsix();
 				
+				Dalek dal = firing.get(weap);
+
 				// damage 
 				if (roll >= cost) {
 					//notify players
 					int location = Game.twodsix() -2 ;
 					int damage = weap.getDamage(weap.getDalekSection().getDalek().distanceTo(firing.get(weap)));
-					Dalek dal = firing.get(weap);
 					
-					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,damage);
-					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,damage);
+					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,weap);
+					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,weap);
 					
 					dal.damageLocation(location,damage);
+				} else {
+					playerOrder.get(0).getUI().notifyMiss(dal,weap);
+					playerOrder.get(1).getUI().notifyMiss(dal,weap);
 				}
 				
 			}
+			
+			playerOrder.get(0).allReset();
+			playerOrder.get(1).allReset();
 			
 		// until all daleks on one team destroyed
 		}	while (!Game.teamDestroyed());

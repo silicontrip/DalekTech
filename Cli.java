@@ -294,8 +294,14 @@ public class Cli extends UserInterface {
 		System.out.println (d.getName());
 	}
 	
-	void notifyDalekDamage (Dalek d, int location, int damage) {
-		System.out.println (d.getName() + d.getLocation(location) + " ** " + damage + " **");
+	void notifyDalekDamage (Dalek d, int location, Weapon w) {
+		int damage = w.getDamage(w.getDalekSection().getDalek().distanceTo(d));
+		System.out.println (d.getName() + " " + d.getLocation(location) + " ** " + damage + " **");
 	}
+
+	void notifyMiss (Dalek d, Weapon w) {
+		System.out.println (w.getDalekSection().getDalek().getName() + " Misses " + d.getName() + " with " + w.toString());
+	}
+	
 	
 }
