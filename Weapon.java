@@ -73,13 +73,17 @@ public class Weapon {
 		// longer than long range, cannot hit
 		return 12;
 	}
-	int getDamage (int d) {
-		
+	
+	int getDamage(double d) {
 		if (d <= shortRange) { return shortDamage; }
 		if (d <= medRange) { return medDamage; }
 		if (d <= longRange) { return longDamage; }
 		// longer than long range, cannot hit
 		return 0;
+	}
+	
+	int getDamage (int d) {
+		return this.getDamage((double)d);
 	}
 	
 }

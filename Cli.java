@@ -29,63 +29,7 @@ public class Cli extends UserInterface {
 		return ln;
 	}
 	
-	void notifyEngine (int current, int walk, int run) {
-	
-		if (current == 0) {
-			System.out.println("STATIONARY");
-		} else if (current <= walk) {
-			System.out.println("LOW " + current + "/" + walk);
-		} else {
-			System.out.println("HIGH " + current + "/" + run);
-		}
-		
-	}
-	
-	void notifyDifficulty (int cost) {
-		;
-	}
-	/*
-	 2 - 1 - 1 - 0%
-	 3 - 2 - 3 - 3%
-	 4 - 3 - 6 - 8%
-	 5 - 4 - 10 - 17%
-	 6 - 5 - 15 - 28%
-	 7 - 6 - 21 - 42%
-	 8 - 5 - 26 - 58%
-	 9 - 4 - 30 - 72%
-	 10 - 3 - 33 - 83%
-	 11 - 2 - 35 - 92%
-	 12 - 1 - 36 - 97%
-*/	 
-	void notifyLOS(ArrayList<Hex> line) {
-		;
-	}
-	
-	Position positionDalek(Dalek d) {
-		
-		String input;
-		String sValues[];
-		int x,y;
-		
-		System.out.println (d.toString());
-		do {
-			System.out.print ("Enter co-ordinates (1,1-" + getMap().getSizeX() +"," + getMap().getSizeY() +") ? ");
-		
-			input = readln();
-			sValues = input.split(",");
-			try {
-				x = Integer.parseInt(sValues[0]);
-				y = Integer.parseInt(sValues[1]);
-
-			} catch (NumberFormatException nfe) { x = -1; y = -1; }
-		} while ( x < 1 || x > getMap().getSizeX() || y < 1 || y > getMap().getSizeY());
-		
-		x--; y--;
-		return new Position(x,y);
-
-	}
-	
-	int directionFromString (String dir) {
+	private int directionFromString (String dir) {
 	
 		// lot's of conditional logic
 		
@@ -100,7 +44,7 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	int movementFromString (String dir) {
+	private int movementFromString (String dir) {
 		
 		if (dir.equalsIgnoreCase("f")) { return Tables.FORWARD; }
 		if (dir.equalsIgnoreCase("b")) { return Tables.BACKWARD; }
@@ -110,7 +54,32 @@ public class Cli extends UserInterface {
 		return Tables.NONE;
 	}
 	
-	int directionDalek (Dalek d) {
+	
+	Position getDalekPosition(Dalek d) {
+		
+		String input;
+		String sValues[];
+		int x,y;
+		
+		System.out.println (d.toString());
+		do {
+			System.out.print ("Enter co-ordinates (1,1-" + getMap().getSizeX() +"," + getMap().getSizeY() +") ? ");
+			
+			input = readln();
+			sValues = input.split(",");
+			try {
+				x = Integer.parseInt(sValues[0]);
+				y = Integer.parseInt(sValues[1]);
+				
+			} catch (NumberFormatException nfe) { x = -1; y = -1; }
+		} while ( x < 1 || x > getMap().getSizeX() || y < 1 || y > getMap().getSizeY());
+		
+		x--; y--;
+		return new Position(x,y);
+		
+	}
+	
+	int getDalekDirection (Dalek d) {
 	
 		int dir = -1;
 		String input;
@@ -126,12 +95,44 @@ public class Cli extends UserInterface {
 		return dir;
 	}
 	
+	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost) { 
+		
+		String input;
+		String outString = new String("Enter Movement ");
+		
+		if (d.canMoveForwards()) { outString = outString.concat (new String("Forward(" + forwardCost +")/")); }
+		if (d.canMoveBackwards()) { outString = outString.concat (new String("Backward(" + backwardCost +")/")); }
+		if (d.canTurn()) { outString = outString.concat (new String("Left/Right")); }
+		
+		outString = outString.concat(new String ("/End : "));
+		
+		System.out.println (d.toString());
+		
+		System.out.print ( outString );
+		input = readln();
+		return this.movementFromString(input);
+		
+	}
+	
+	int getDalekTwist(Dalek d) {
+		String input;
+		
+		System.out.println (d.toString());
+		
+		System.out.print ("Enter Left/Right/End: ");
+		input = readln();
+		return this.movementFromString(input);
+		
+	}
+	
+//////////////////////////////////////////////////////////////////////
+	
 	ArrayList<Dalek> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 		Dalek dal;
 		ArrayList<Dalek> dalekSelection = new ArrayList<Dalek>();
 		
 		do {
-			dal = this.selectDalek(dalekList);
+			dal = this.selectDalekWithExit(dalekList);
 			if (dal != null) {
 				dalekSelection.add(dal);
 			}
@@ -194,7 +195,7 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	Dalek selectDalekNoEnd (ArrayList<Dalek> dalekList) {
+	Dalek selectDalek (ArrayList<Dalek> dalekList) {
 		
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -206,7 +207,7 @@ public class Cli extends UserInterface {
 		return dalekList.get(choice);
 	}
 	
-	Dalek selectDalek (ArrayList<Dalek> dalekList) {
+	Dalek selectDalekWithExit (ArrayList<Dalek> dalekList) {
 		
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -221,40 +222,58 @@ public class Cli extends UserInterface {
 		return dalekList.get(choice);
 	}
 	
-	int moveDalek (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost) { 
-
-		String input;
-		String outString = new String("Enter Movement ");
-		
-		if (d.canMoveForwards()) { outString = outString.concat (new String("Forward(" + forwardCost +")/")); }
-		if (d.canMoveBackwards()) { outString = outString.concat (new String("Backward(" + backwardCost +")/")); }
-		if (d.canTurn()) { outString = outString.concat (new String("Left/Right")); }
-
-		outString = outString.concat(new String ("/End : "));
-		
-		System.out.println (d.toString());
-		
-		System.out.print ( outString );
-		input = readln();
-		return this.movementFromString(input);
-		
-	}
-
-	int twistDalek (Dalek d) {
-		String input;
-		
-		System.out.println (d.toString());
-		
-		System.out.print ("Enter Left/Right/End: ");
-		input = readln();
-		return this.movementFromString(input);
-		
-	}
 	
-	Dalek fireDalek (Dalek d, ArrayList<Dalek> targetDaleks) {
+	
+	Dalek getDalekFire(Dalek d, ArrayList<Dalek> targetDaleks) {
 		int i=0;
 		System.out.println ((i+1) + ". End");
 		return targetDaleks.get(0);
+	}
+	
+////////////////////////////////////////////////////////
+// 
+// Status update methods
+//
+///////////////////////////////////////////////////////
+	
+	void notifyEngine (int current, int walk, int run) {
+		
+		if (current == 0) {
+			System.out.println("STATIONARY");
+		} else if (current <= walk) {
+			System.out.println("LOW " + current + "/" + walk);
+		} else {
+			System.out.println("HIGH " + current + "/" + run);
+		}
+		
+	}
+	
+	void notifyDifficulty (int cost) {
+		;
+	}
+	/*
+	 2 - 1 - 1 - 0%
+	 3 - 2 - 3 - 3%
+	 4 - 3 - 6 - 8%
+	 5 - 4 - 10 - 17%
+	 6 - 5 - 15 - 28%
+	 7 - 6 - 21 - 42%
+	 8 - 5 - 26 - 58%
+	 9 - 4 - 30 - 72%
+	 10 - 3 - 33 - 83%
+	 11 - 2 - 35 - 92%
+	 12 - 1 - 36 - 97%
+	 */	 
+	void notifyLOS(ArrayList<Hex> line) {
+		;
+	}
+	
+	void notifyTargetDalek  (Dalek d) { 
+		;
+	}	
+	
+	void notifyDalekPosition(Dalek d) {
+		System.out.println (d.getPosition().toString() + ":" + d.getDirection());
 	}
 	
 	void notifyDamage(Dalek d) {
@@ -275,5 +294,8 @@ public class Cli extends UserInterface {
 		System.out.println (d.getName());
 	}
 	
+	void notifyDalekDamage (Dalek d, int location, int damage) {
+		System.out.println (d.getName() + d.getLocation(location) + " ** " + damage + " **");
+	}
 	
 }

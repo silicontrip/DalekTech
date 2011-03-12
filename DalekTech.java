@@ -132,15 +132,44 @@ public class DalekTech {
 			do {
 		// player x fires weapons of 1 dalek at another dalek
 				
-				
+				firing.putAll(playerOrder.get(0).fireDalek(playerOrder.get(1).getDaleks()));				
+				firing.putAll(playerOrder.get(1).fireDalek(playerOrder.get(0).getDaleks()));
+
 		// player 3-x fires weapons of 1 dalek at another dalek
 		// until all daleks fired.
 		// repeat
 		// dalek x hit dalek y then damage dalek y
 		// until all daleks fired
 			} while (!Game.allDaleksFired());
+			
+			Set<Weapon> w = firing.keySet();
+			Iterator<Weapon> wit = w.iterator();
+			while (wit.hasNext()) {
+			
+				Weapon weap = wit.next();
+				// get cost to hit
+				int cost = weap.costFire(firing.get(weap));
+				
+				// roll to hit
+				int roll = Game.twodsix();
+				
+				// damage 
+				if (roll >= cost) {
+					//notify players
+					int location = Game.twodsix() -2 ;
+					int damage = weap.getDamage(weap.getDalekSection().getDalek().distanceTo(firing.get(weap)));
+					Dalek dal = firing.get(weap);
+					
+					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,damage);
+					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,damage);
+					
+					dal.damageLocation(location,damage);
+				}
+				
+			}
+			
 		// until all daleks on one team destroyed
-		}	while (Game.teamDestroyed());
+		}	while (!Game.teamDestroyed());
 		
 		// show and choose factory daleks (ArrayList<Dalek>)
 		// position daleks (randomly)

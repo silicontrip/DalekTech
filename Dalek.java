@@ -53,7 +53,6 @@ public class Dalek {
 	public void setFired(boolean f) { this.fired = f; }
 	public boolean hasFired() { return this.fired; }
 	
-	
 	public String toString() { 
 		String sections = new String();
 		Collection<DalekSection> c = locationMap.values();
@@ -72,17 +71,21 @@ public class Dalek {
 
 	HashMap<String,DalekSection> getSections() { return locationMap; }
 	ArrayList<Weapon> getWeaponArray() {
-		
+		Weapon w;
 		ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 		Collection<DalekSection> c = getSections().values();
 		Iterator<DalekSection> it  = c.iterator();
 		
 		while (it.hasNext()) {
-			weapons.add(it.next().getWeapon());
+			w = it.next().getWeapon();
+			if (w != null) { weapons.add(w); } // some sections don't have weapons
 		}
 		return weapons;
 	}
 	
+	DalekSection getLocation (int l) {
+		return locationArray.get(l);
+	}
 	
 	DalekSection getLocationFromName (String name) {
 		if (this.locationMap.containsKey(name)) {
@@ -93,7 +96,7 @@ public class Dalek {
 	}
 	
 	int getDamage (String name) { return this.getLocationFromName(name).getDamage(); }
-	int getDamage (int location) { return locationArray.get(location).getDamage(); }
+	int getDamage (int location) { return this.getLocation(location).getDamage(); }
 	
 	void damageLocation (int location, int damage) { locationArray.get(location).doDamage(damage); }
 	
@@ -102,6 +105,7 @@ public class Dalek {
 		facing = direction;
 		setMoved(false);
 		setTwist(false);
+		setFired(false);
 		old.setPosition(pos);
 	}
 	

@@ -87,6 +87,7 @@ public class DalekSection {
 		this.currentArmour = damage;
 		this.transfer = transfer;
 		this.weapon = weapon;
+		this.weapon.setDalekSection(this);
 		
 		this.dalek = null;
 	}
@@ -97,6 +98,8 @@ public class DalekSection {
 		this.currentArmour = damage;
 		this.transfer = transfer;
 		this.weapon = weapon;
+		this.weapon.setDalekSection(this);
+
 		this.dalek = dalek;
 	}
 	

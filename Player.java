@@ -117,12 +117,12 @@ public class Player {
 			Position dalekPosition;
 			dal=it.next();
 			do {
-				dalekPosition=getUI().positionDalek(dal);
+				dalekPosition=getUI().getDalekPosition(dal);
 				// check it doesn't clobber another dalek
 			} while (dalekPosition.isIn(getGame().allDalekPositions()));
 			dal.setPosition(dalekPosition);
 			// get direction
-			direction = getUI().directionDalek(dal);
+			direction = getUI().getDalekDirection(dal);
 			dal.setDirection(direction);
 		}
 	}
@@ -143,15 +143,16 @@ public class Player {
 		if (!this.allMoved()) {
 			int dir;
 			Dalek dal;
-			dal = getUI().selectDalekNoEnd(getHaventMoved());
+			dal = getUI().selectDalek(getHaventMoved());
 			dal.setMoved(true);
 			
 			do {
+				getUI().notifyDalekPosition(dal);
 				getUI().notifyEngine(dal.getMovement(),
 									 dal.getWalk(),
 									 dal.getRun());
 									 
-			dir = getUI().moveDalek(dal,
+			dir = getUI().getDalekMove(dal,
 									dal.getMovement(),
 									dal.getWalk(),
 									dal.getRun(),
@@ -165,9 +166,9 @@ public class Player {
 	void twistDalek () {
 		if (!this.allTwist()) {
 			Dalek dal;
-			dal = getUI().selectDalekNoEnd(getHaventTwist());
+			dal = getUI().selectDalek(getHaventTwist());
 			dal.setTwist(true);
-			dal.moveDalek( getUI().twistDalek(dal));
+			dal.moveDalek( getUI().getDalekTwist(dal));
 		}
 	}
 	
@@ -177,7 +178,7 @@ public class Player {
 			Weapon weap;
 			Dalek target;
 			Dalek dal;
-			dal = getUI().selectDalekNoEnd(this.getHaventFired());
+			dal = getUI().selectDalek(this.getHaventFired());
 			dal.setFired(true);
 			do {
 				weap = getUI().selectWeapon(dal.getWeaponArray());
