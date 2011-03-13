@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 
 public class DalekTech {
@@ -10,29 +11,41 @@ public class DalekTech {
 	
 	Player players[];
 	
-	
+	/*
 	public static DalekTech getInstance() {
 		if (instance == null) {
 			instance = new DalekTech();
 		}
 		return instance;
 	}
+	 */
 	
-	public DalekTech () {
+	UserInterface interfaceFactory (String s,Map m) {
+	
+		if (s.equalsIgnoreCase("cli")) {
+			return new Cli(m);
+		}
+		if (s.equalsIgnoreCase("network"))  {
+			return new Network(m);
+		}
+		return null;
+	}
+	
+	public DalekTech (String i1, String i2) {
 		
 		// Although it's only made here for 2 players, it shouldn't be too hard to extend to more.
 		players = new Player[2];
 		
 		rand = new java.util.Random(java.lang.System.currentTimeMillis());
 
-		map = new Map(15,17);
+		map = Map.getInstance();
 		map.initSampleMap();
 		
-		players[0] = new Player(new Cli(map),this); // UI2DGraphic();
-		players[1] = new Player(new Cli(map),this); // ultimately UI3dGraphic();
+		players[0] = new Player(interfaceFactory(i1,map),this); // UI2DGraphic();
+		players[1] = new Player(interfaceFactory(i2,map),this); // ultimately UI3dGraphic();
 	}
 
-	Map getMap() { return this.map; }
+	Map getMap() { return Map.getInstance(); }
 	Player getPlayer(int i) { return this.players[i]; }
 	
 	ArrayList<Position> allDalekPositions() {
@@ -77,7 +90,13 @@ public class DalekTech {
 
 	public static void main(String[] args) {
 
-		DalekTech Game = DalekTech.getInstance();
+		if (args.length < 2) { 
+			System.out.println("Requires 2 interfaces.  Where interface is cli or network"); 
+			return;
+		} 
+		
+		
+		DalekTech Game = new DalekTech(args[0],args[1]);
 		ArrayList<Player> playerOrder;	
 		
 		// init map
@@ -161,8 +180,8 @@ public class DalekTech {
 					int location = Game.twodsix() -2 ;
 					int damage = weap.getDamage(weap.getDalekSection().getDalek().distanceTo(firing.get(weap)));
 					
-					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,weap);
-					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,weap);
+					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,weap,damage);
+					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,weap,damage);
 					
 					dal.damageLocation(location,damage);
 				} else {
@@ -178,12 +197,10 @@ public class DalekTech {
 		// until all daleks on one team destroyed
 		}	while (!Game.teamDestroyed());
 		
-		// show and choose factory daleks (ArrayList<Dalek>)
-		// position daleks (randomly)
-		// move dalek { select my_dalek; loop { turn/move/end  report_status }}
-		// twist dalek { select my_dalek; turn/end }
-		// fire weapon { select my_dalek; loop { select weapon; loop { select dalek; display difficulty; choose/cancel } fire/cancel } end }
-		// report dalek status
+
+		playerOrder.get(0).endGame();
+		playerOrder.get(1).endGame();
+
 		
 	}
 	

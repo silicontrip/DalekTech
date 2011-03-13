@@ -2,8 +2,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Collection;
+import java.io.*;
 
-public class Dalek {
+public class Dalek implements Serializable  {
 
 	String name;
 	int walk;
@@ -23,7 +24,7 @@ public class Dalek {
 	boolean twist;
 	boolean fired;
 	
-	Player owner;
+//	Player owner;
 		
 	String getName() { return name; }
 	void setPosition (Position p) {pos = p;}
@@ -37,9 +38,9 @@ public class Dalek {
 	void setBase (int b) {base = b;}
 	int getWalk () { return walk / movementDivisor;}
 	int getRun () { return run / movementDivisor;}
-	void setPlayer(Player p) { this.owner=p;}
-	Player getPlayer() {return owner;}
-	Map getMap() { return getPlayer().getMap(); }
+//	void setPlayer(Player p) { this.owner=p;}
+//	Player getPlayer() {return owner;}
+	Map getMap() { return Map.getInstance(); }
 	
 	int getBase() { return base; }
 	void setMoveDiv(int m) {movementDivisor=m;}

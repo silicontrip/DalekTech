@@ -1,5 +1,6 @@
+import java.io.*;
 
-public class Weapon {
+public class Weapon implements Serializable {
 	
 	String name;
 	int min;

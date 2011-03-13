@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class Player {
 
@@ -10,6 +11,8 @@ public class Player {
 	public  Player (UserInterface ui, DalekTech game) {
 		this.ui = ui;
 		this.game = game;
+		
+		daleks = new ArrayList<Dalek>();
 	}
 	
 	void setUI (UserInterface ui) { this.ui = ui; }
@@ -135,12 +138,15 @@ public class Player {
 	
 	
 	void selectFactoryDaleks(ArrayList<Dalek> dalekList) {
-		Iterator<Dalek> it;
-		daleks = getUI().selectFactoryDaleks(dalekList);
+		Iterator<Integer> it;
+		ArrayList<Integer> select;
+		select = getUI().selectFactoryDaleks(dalekList);
 		
-		it  = daleks.iterator();
+		it  = select.iterator();
 		while (it.hasNext()) {
-			it.next().setPlayer(this);
+			daleks.add(
+					   dalekList.get(
+									 it.next()));
 		}
 		
 	}
@@ -149,7 +155,14 @@ public class Player {
 		if (!this.allMoved()) {
 			int dir;
 			Dalek dal;
-			dal = getUI().selectDalek(getHaventMoved());
+			ArrayList<Dalek> havent = getHaventMoved();
+			int select;
+			
+			select = getUI().selectDalek(havent);
+			
+			if (select != -1) {
+				dal = havent.get(select);
+
 			dal.setMoved(true);
 			
 			do {
@@ -163,16 +176,21 @@ public class Player {
 									dal.getWalk(),
 									dal.getRun(),
 									dal.getHex().getMovementCost(dal.getForwardsHex()),
-									dal.getHex().getMovementCost(dal.getBackwardsHex()));
+									dal.getHex().getMovementCost(dal.getBackwardsHex()),
+									   dal.canMoveForwards(),
+									   dal.canMoveBackwards(),
+									   dal.canTurn()
+				);
 			} while (dal.moveDalek(dir) && dal.canTurn());
-				
+			}		
 		}
 	}
 	
 	void twistDalek () {
 		if (!this.allTwist()) {
+			ArrayList<Dalek> havent = getHaventTwist();
 			Dalek dal;
-			dal = getUI().selectDalek(getHaventTwist());
+			dal = havent.get(getUI().selectDalek(havent));
 			dal.setTwist(true);
 			dal.moveDalek( getUI().getDalekTwist(dal));
 		}
@@ -181,22 +199,40 @@ public class Player {
 	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
 		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
 		if (!this.allFired()) {
+			ArrayList<Weapon> weaponArray;
 			Weapon weap;
-			Dalek target;
+			int target;
 			Dalek dal;
-			dal = getUI().selectDalek(this.getHaventFired());
+			ArrayList<Dalek> havent = getHaventFired();
+			int select;
+
+			dal = havent.get(getUI().selectDalek(havent));
 			dal.setFired(true);
+			weaponArray = dal.getWeaponArray();
 			do {
-				weap = getUI().selectWeapon(dal.getWeaponArray());
-				if (weap != null) {
-					target = getUI().selectTargetDalek(dal,weap,targetDaleks);
-					if (target != null) {
-						fireMap.put(weap,target);
+				select = getUI().selectWeapon(weaponArray);
+				if (select != -1) {
+					int selectDalek;
+					weap = weaponArray.get(select);
+					ArrayList<Integer> cost = new ArrayList<Integer>();
+					
+					for (int i=0; i< targetDaleks.size(); i++) {
+                        // calculate difficulty of shot
+						cost.add(new Integer(weap.costFire(targetDaleks.get(i))));
+					}                                       
+					
+					target=getUI().selectTargetDalek(dal,targetDaleks,cost);
+					if (target != -1) {
+						fireMap.put(weap, targetDaleks.get(target));
 					}
 				}
-			} while (weap != null);
+			} while (select != -1);
 		}
 		return fireMap;
+	}
+	
+	void endGame () {
+		getUI.notifyEnd(allDestroyed());
 	}
 
 }

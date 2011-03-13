@@ -1,6 +1,7 @@
-import java.util.ArrayList;
+import java.util.*;
+import java.io.*;
 
-public class Map {
+public class Map implements Serializable {
 
 	public static final int CLEAR = 0;
 	public static final int WOODS = 1;
@@ -9,13 +10,19 @@ public class Map {
 	public static final int WATER = 4;
 	public static final int PAVEMENT = 5;		
 	
+	static Map instance = null;
 	Hex maparray[][];
 	int sizex, sizey;
+
+       public static Map getInstance() {
+                if (instance == null) {
+                        instance = new Map();
+                }
+                return instance;
+        }
+
 	
-	public Map(int x, int y) {
-		sizex=x; sizey=y;
-		maparray=new Hex[x][y];
-	}
+	public Map() { ; }
 	
 	int getSizeX() { return sizex; }
 	int getSizeY() { return sizey; }
@@ -60,6 +67,9 @@ public class Map {
 	}
 	
 	void initSampleMap() {
+
+		maparray=new Hex[15][17];
+		sizex=15; sizey=17;
 			
 		maparray[0][0] = new Hex(CLEAR,0);
 		maparray[1][0] = new Hex(WOODS,0);

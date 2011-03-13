@@ -95,14 +95,14 @@ public class Cli extends UserInterface {
 		return dir;
 	}
 	
-	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost) { 
+	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
 		
 		String input;
 		String outString = new String("Enter Movement ");
 		
-		if (d.canMoveForwards()) { outString = outString.concat (new String("Forward(" + forwardCost +")/")); }
-		if (d.canMoveBackwards()) { outString = outString.concat (new String("Backward(" + backwardCost +")/")); }
-		if (d.canTurn()) { outString = outString.concat (new String("Left/Right")); }
+		if (forward) { outString = outString.concat (new String("Forward(" + forwardCost +")/")); }
+		if (backward) { outString = outString.concat (new String("Backward(" + backwardCost +")/")); }
+		if (turn) { outString = outString.concat (new String("Left/Right")); }
 		
 		outString = outString.concat(new String ("/End : "));
 		
@@ -127,16 +127,16 @@ public class Cli extends UserInterface {
 	
 //////////////////////////////////////////////////////////////////////
 	
-	ArrayList<Dalek> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
-		Dalek dal;
-		ArrayList<Dalek> dalekSelection = new ArrayList<Dalek>();
+	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
+		int dal;
+		ArrayList<Integer> dalekSelection = new ArrayList<Integer>();
 		
 		do {
 			dal = this.selectDalekWithExit(dalekList);
-			if (dal != null) {
-				dalekSelection.add(dal);
+			if (dal != -1) {
+				dalekSelection.add(new Integer(dal));
 			}
-		} while (dal != null);
+		} while (dal != -1);
 		return dalekSelection;
 	}
 	
@@ -164,23 +164,23 @@ public class Cli extends UserInterface {
 	}
 		
 	
-	Dalek selectTargetDalek (Dalek d, Weapon w, ArrayList<Dalek> targetList) {
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost) {
 	
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
 		
 		for (i=0; i< targetList.size(); i++) {
 			// calculate difficulty of shot
-			int difficulty  = w.costFire(targetList.get(i));
+			int difficulty  = targetCost.get(i);
 			choiceList.add(difficulty + " = " + targetList.get(i).toString());
 		}					
 		choiceList.add ("End");
 		choice = choose(choiceList);
-		if (choice == i ) { return null; }
-		return targetList.get(choice);
+		if (choice == i ) { return -1; }
+		return choice;
 	}
 	
-	Weapon selectWeapon(ArrayList<Weapon> w) {
+	int selectWeapon(ArrayList<Weapon> w) {
 	
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -190,24 +190,23 @@ public class Cli extends UserInterface {
 		}					
 		choiceList.add ("End");
 		choice = choose(choiceList);
-		if (choice == i ) { return null; }
-		return w.get(choice);
+		if (choice == i ) { return -1; }
+		return choice;
 		
 	}
 	
-	Dalek selectDalek (ArrayList<Dalek> dalekList) {
+	int selectDalek (ArrayList<Dalek> dalekList) {
 		
-		int choice,i;
+		int i;
 		ArrayList<String> choiceList = new ArrayList<String>();
 		
 		for (i=0; i< dalekList.size(); i++) {
 			choiceList.add(dalekList.get(i).toString());
 		}					
-		choice = choose(choiceList);
-		return dalekList.get(choice);
+		return choose(choiceList);
 	}
 	
-	Dalek selectDalekWithExit (ArrayList<Dalek> dalekList) {
+	int selectDalekWithExit (ArrayList<Dalek> dalekList) {
 		
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -217,17 +216,9 @@ public class Cli extends UserInterface {
 		}		
 		choiceList.add ("End");		
 		choice = choose(choiceList);
-		if (choice == i ) { return null; }
+		if (choice == i) { return -1; }
 
-		return dalekList.get(choice);
-	}
-	
-	
-	
-	Dalek getDalekFire(Dalek d, ArrayList<Dalek> targetDaleks) {
-		int i=0;
-		System.out.println ((i+1) + ". End");
-		return targetDaleks.get(0);
+		return choice;
 	}
 	
 ////////////////////////////////////////////////////////
@@ -294,8 +285,7 @@ public class Cli extends UserInterface {
 		System.out.println (d.getName());
 	}
 	
-	void notifyDalekDamage (Dalek d, int location, Weapon w) {
-		int damage = w.getDamage(w.getDalekSection().getDalek().distanceTo(d));
+	void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
 		System.out.println (d.getName() + " " + d.getLocation(location) + " ** " + damage + " **");
 	}
 
@@ -303,5 +293,11 @@ public class Cli extends UserInterface {
 		System.out.println (w.getDalekSection().getDalek().getName() + " Misses " + d.getName() + " with " + w.toString());
 	}
 	
+	void notifyEnd(boolean destroyed) {
 	
+		if (destroyed) { System.out.println("All Daleks Destroyed - Mission Failed"); }
+		if (!destroyed) { System.out.println("Enemy Daleks Destroyed - Mission Accomplished"); }
+		
+		
+	}
 }

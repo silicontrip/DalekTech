@@ -1,5 +1,6 @@
+import java.io.*;
 
-public class Hex {
+public class Hex implements Serializable {
 	
 	int type;
 	int elevation;

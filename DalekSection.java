@@ -1,5 +1,5 @@
-
-public class DalekSection {
+import java.io.*;
+public class DalekSection implements Serializable {
 
 	String name;
 	int armour;
