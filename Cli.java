@@ -298,6 +298,5 @@ public class Cli extends UserInterface {
 		if (destroyed) { System.out.println("All Daleks Destroyed - Mission Failed"); }
 		if (!destroyed) { System.out.println("Enemy Daleks Destroyed - Mission Accomplished"); }
 		
-		
 	}
 }

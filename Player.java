@@ -232,7 +232,7 @@ public class Player {
 	}
 	
 	void endGame () {
-		getUI.notifyEnd(allDestroyed());
+		getUI().notifyEnd(allDestroyed());
 	}
 
 }
