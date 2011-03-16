@@ -50,21 +50,19 @@ public class Weapon implements Serializable {
 
 	DalekSection getDalekSection() { return this.dalsec; }
 	void setDalekSection(DalekSection ds) { this.dalsec = ds; }
-	Dalek getDalek() {return getDalekSection().getDalek(); }
+	Dalek getDalek() {return this.getDalekSection().getDalek(); }
 	void setFired(boolean b) { fired = b; }
 	boolean canFire () { return !fired && ammo != 0; }
-	boolean inRange(Dalek d) { return this.getDalek().distanceTo(d) < longRange; }
+	boolean inRange(Dalek d) { return this.distanceTo(d) < longRange; }
 	double distanceTo(Dalek d) { return this.getDalek().distanceTo(d); }
 	
 	void destroy() { ammo = 0; } // cheats way to disable the weapon
 	
 	int costFire (Dalek d) {
-		 
-		return this.getRangeCost(this.getDalek().distanceTo(d))  // Range
+		return this.getRangeCost(this.distanceTo(d))  // Range
 		+ this.getDalek().baseHit() // Attacker Movement
 		+ this.getDalek().terrainLineCost(d)  // Terrain
 		+ d.targetHitCost(); // Target
-		
 	}
 	int getRangeCost (double d) {
 		if (d <= min) { return min - (int)d + 1;}

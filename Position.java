@@ -5,16 +5,38 @@ public class Position implements Serializable {
 	
 	int x;
 	int y;
+	int dir;
 	static final double sin60 = 0.866025403784439;
+	static final String[] directionShort = {"N","NE","SE","S","SW","NW"};
 	
 	public int getX() { return x; }
 	public int getY() { return y; }
+	public int getDirection { return dir; }
 	public void setX(int i) { x=i; }
 	public void setY(int i) { y=i; }
+	public void setDirection(dir) { this.dir = dir; }
 	public void setPosition(Position p) {
 		this.x = p.getX();
 		this.y = p.getY();
+		this.dir = p.getDirection();
 	}
+	
+	public void moveForward () {
+		;
+	}
+	
+	public void moveBackward () {
+		;
+	}
+	
+	public void turnLeft () {
+		setDirection((this.getDirection() - 1)  % 6);
+	}
+	
+	public void turnRight () {
+		setDirection((this.getDirection() + 1)  % 6);
+	}
+	
 	
 	public double getSpatialX() { return x * sin60; }
 	public double getSpatialY() { return y + (x % 2) / 2; }
@@ -26,7 +48,7 @@ public class Position implements Serializable {
 	}
 
 	public String toString() {
-		return this.x + "," + this.y;
+		return this.x + "," + this.y + "/" + this.directionShort(dir);
 	}
 	
 	public boolean isIn (Collection<Position> p) {
@@ -46,6 +68,8 @@ public class Position implements Serializable {
 	
 	public Position () {;}
 	public Position (int x, int y) {this.setX(x); this.setY(y);}
+	public Position (int x, int y, int dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
+
 	public Position (double x, double y) { 
 		// finds the nearest point
 		this.x = (int)java.lang.Math.round(x/sin60);

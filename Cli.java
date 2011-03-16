@@ -170,7 +170,6 @@ public class Cli extends UserInterface {
 		ArrayList<String> choiceList = new ArrayList<String>();
 		
 		for (i=0; i< targetList.size(); i++) {
-			// calculate difficulty of shot
 			int difficulty  = targetCost.get(i);
 			choiceList.add(difficulty + " = " + targetList.get(i).toString());
 		}					
