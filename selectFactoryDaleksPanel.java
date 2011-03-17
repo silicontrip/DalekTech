@@ -4,20 +4,19 @@ import java.awt.image.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
-import java.net.URL;
-
 
 public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 	
 	int dalekWidth;
 	int dalekIconWidth;
+	Guitwo callback;
 
 	ArrayList<Dalek> dalekList;
 	ArrayList<Integer> selectedDaleks;
 	int select;
 	HashMap<String,Image> dalekImages;
 
-	void setDalekWidth( int i) { dalekWidth = i; }
+	void setDalekWidth(int i) { dalekWidth = i; }
 	int getDalekWidth() { return dalekWidth; }
 	
 	void setDalekIconWidth( int i) { dalekIconWidth = i; }
@@ -32,40 +31,21 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 		setFocusable(true);
 		select = 0;
 		selectedDaleks = new ArrayList<Integer>();
-		dalekImages = InitDalekImage();
 	}
 	
-	public selectFactoryDaleksPanel (ArrayList<Dalek> dalekList) {
+	// really want this to be a generic interface class not a specific sub class.
+	public selectFactoryDaleksPanel (HashMap<String,Image> dalekImages, ArrayList<Dalek> dalekList,Guitwo ui) {
 		super();
 		this.dalekList = dalekList;
+		this.callback = ui;
+		this.dalekImages = dalekImages;
 		dalekWidth = 1;
 		addKeyListener(this);
 		setFocusable(true);
 
 		select = 0;
 		selectedDaleks = new ArrayList<Integer>();
-		dalekImages = InitDalekImage();
 	}
-	
-	HashMap<String,Image> InitDalekImage() {
-		
-		HashMap<String,Image> imageMap = new HashMap<String,Image>();
-		
-		imageMap.put("Black Renegade",getImageWithFilename("Images/BlackRenegade.png"));
-		imageMap.put("Black Supreme",getImageWithFilename("Images/BlackSupreme.png"));
-		imageMap.put("Blue Drone",getImageWithFilename("Images/BlueDrone.png"));
-		imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWar.png"));
-		imageMap.put("Gold Supreme",getImageWithFilename("Images/GoldSupreme.png"));
-		imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWar.png"));
-		imageMap.put("Grey Renegade",getImageWithFilename("Images/GreyRenegade.png"));
-		imageMap.put("Imperial",getImageWithFilename("Images/Imperial.png"));
-		imageMap.put("Red Commander",getImageWithFilename("Images/RedCommander.png"));
-		imageMap.put("Red Saucer Pilot",getImageWithFilename("Images/RedSaucerPilot.png"));
-		imageMap.put("Special Weapon",getImageWithFilename("Images/SpecialWeapon.png"));
-		
-		return imageMap;
-	}
-	
 	
 	Image dalekImage(String name) {
 // I think I'd rather it throw an exception
@@ -76,18 +56,6 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 //		System.out.println("Canot find: "+ name);
 //		return null;
 	}
-	
-	Image getImageWithFilename (String fn) {
-		URL imageURL = DalekTech.class.getResource(fn);
-		// graphic should not return null
-		// indicates programming error elsewhere
-	//	if (imageURL != null) {
-			return new ImageIcon(imageURL).getImage();
-	//	}
-	//	System.err.println ("Graphic Factory Returns Null");
-	//	return null;
-	}
-		
 	
 	public Dimension getPreferredSize() {
         return new Dimension(640,480);
@@ -149,7 +117,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		System.out.println("Action: " + e);
+	//	System.out.println("Action: " + e);
 		
 		int kc = e.getKeyCode();
 		
@@ -166,19 +134,24 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 			this.repaint();
 		}
 		
-		if (kc == KeyEvent.VK_ENTER) {
+		if (kc == KeyEvent.VK_SPACE) {
 			selectedDaleks.add(new Integer(select));
 			this.repaint();
 		}
 		
+		if (kc == KeyEvent.VK_ENTER) {
+			if (selectedDaleks.size() > 0) {
+				callback.setSelectedDaleks(selectedDaleks);
+			}
+		}
 		
     }
 	
 	public void keyReleased(KeyEvent e) {
-		System.out.println("Action: " + e);
+	//	System.out.println("Action: " + e);
     }
 	public void keyTyped(KeyEvent e) {
-		System.out.println("Action: " + e);
+		//System.out.println("Action: " + e);
     }
 	
 	

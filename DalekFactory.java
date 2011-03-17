@@ -171,7 +171,7 @@ public class DalekFactory {
 	
 	static Dalek getBlackRenegade() {
 		
-		Dalek dalek = new Dalek(new String("Black Supreme"), 6, 9, 4);		
+		Dalek dalek = new Dalek(new String("Black Renegade"), 6, 9, 4);		
 		DalekSection neck = new DalekSection ("Neck",8);
 		DalekSectionDome dome = new DalekSectionDome("Dome",8,neck);
 		DalekSection rightShoulder = new DalekSection ("Right Shoulder",10,neck,new Weapon("Plunger",0,1, 0, 2, 6, 6, 6,-1));

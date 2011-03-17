@@ -19,6 +19,7 @@ public class Guitwo extends Cli {
 	selectFactoryDaleksPanel factoryPanel;
 	
 	HashMap<String,Image> dalekImages;
+	ArrayList<Integer> selectedDaleks = null;
 	
 	BufferedImage statusImage;
 	BufferedImage mapImage;
@@ -38,63 +39,38 @@ public class Guitwo extends Cli {
 		// TODO: listener class
 
 		
-	//	statusImage = new BufferedImage (160,480,BufferedImage.TYPE_INT_ARGB);
-	//	statusGraphic  = statusImage.createGraphics();
-
-	//	mapImage = new BufferedImage (640,480,BufferedImage.TYPE_INT_ARGB);
-	//	mapGraphic  = mapImage.createGraphics();
-
-	//	statusLabel  = new JLabel(new ImageIcon(statusImage));
-	//	mapLabel  = new JLabel(new ImageIcon(mapImage));
-
-	//	statusLabel.setFocusable(true);
-	//	mapLabel.setFocusable(true);
-
-	//	statusLabel.setMinimumSize(new Dimension(160,480));
-	//	statusLabel.setMinimumSize(new Dimension(640,480));
-
-	//	statusPanel = new JPanel();
-	//	mapPanel = new JPanel();
-		
-		//statusLabel.addMouseListener(this);
-		//mapLabel.addMouseListener(this);
-	//	statusLabel.addKeyListener(this);
-	//	mapLabel.
-		//statusLabel.addMouseMotionListener(this);
-		//mapLabel.addMouseMotionListener(this);
-
-		// statusPanel.add(statusLabel);
-		// mapPanel.add(mapLabel);
-
-		//frame.getContentPane().add(BorderLayout.EAST,mapPanel);
-		//frame.getContentPane().add(BorderLayout.WEST,statusPanel);
 		
 		frame.setSize(800,480); // phone resolution
 		frame.setVisible(true);
 		
 	}
 	
+	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) {
+		this.selectedDaleks = selectedDaleks;
+	}
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 
-		factoryPanel = new selectFactoryDaleksPanel(dalekList);
+		factoryPanel = new selectFactoryDaleksPanel(dalekImages,dalekList,this);
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
 
 		frame.getContentPane().add(BorderLayout.EAST, factoryPanel);
 		
-		 factoryPanel.requestFocus();
+		factoryPanel.requestFocus();
 		
 		frame.pack();
 		frame.setVisible(true);
 		factoryPanel.setFocusable(true);
 
 		
-		while (true) { 	
+		while (selectedDaleks == null) { 	
 			try {
-				Thread.sleep(10000); 
+				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 		}
+		frame.getContentPane().remove (factoryPanel);
+		return this.selectedDaleks;
 	}
 	
 	HashMap<String,Image> InitDalekImage() {
