@@ -13,6 +13,8 @@ public class Map implements Serializable {
 	static Map instance = null;
 	Hex maparray[][];
 	int sizex, sizey;
+	String graphicFile;
+	int  regtlx, regtly, regbrx,regbry;
 
        public static Map getInstance() {
                 if (instance == null) {
@@ -70,6 +72,10 @@ public class Map implements Serializable {
 
 		maparray=new Hex[15][17];
 		sizex=15; sizey=17;
+		
+		graphicFile = new String("object83_0.png");
+		regtlx = 98; regtly = 66;
+		regbrx = 1232; regbry = 1564;
 			
 		maparray[0][0] = new Hex(CLEAR,0);
 		maparray[1][0] = new Hex(WOODS,0);

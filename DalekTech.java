@@ -28,6 +28,10 @@ public class DalekTech {
 		if (s.equalsIgnoreCase("network"))  {
 			return new Network(m);
 		}
+		if (s.equalsIgnoreCase("gui2"))  {
+			return new Guitwo(m);
+		}
+		
 		return null;
 	}
 	

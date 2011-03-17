@@ -11,10 +11,11 @@ public class Position implements Serializable {
 	
 	public int getX() { return x; }
 	public int getY() { return y; }
-	public int getDirection { return dir; }
+	public int getDirection() { return dir; }
 	public void setX(int i) { x=i; }
 	public void setY(int i) { y=i; }
-	public void setDirection(dir) { this.dir = dir; }
+	public void setDirection(int dir) { this.dir = dir; }
+	
 	public void setPosition(Position p) {
 		this.x = p.getX();
 		this.y = p.getY();
@@ -48,7 +49,7 @@ public class Position implements Serializable {
 	}
 
 	public String toString() {
-		return this.x + "," + this.y + "/" + this.directionShort(dir);
+		return this.x + "," + this.y + "/" + this.directionShort[dir];
 	}
 	
 	public boolean isIn (Collection<Position> p) {
