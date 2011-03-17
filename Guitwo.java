@@ -16,13 +16,14 @@ public class Guitwo extends Cli {
 	JLabel statusLabel;
 	JLabel mapLabel;
 	
+	Image mapImage;
+	
 	selectFactoryDaleksPanel factoryPanel;
 	
 	HashMap<String,Image> dalekImages;
 	ArrayList<Integer> selectedDaleks = null;
 	
 	BufferedImage statusImage;
-	BufferedImage mapImage;
 	
 	Graphics2D statusGraphic;
 	Graphics2D mapGraphic;
@@ -38,6 +39,7 @@ public class Guitwo extends Cli {
 
 		// TODO: listener class
 
+		mapImage = getImageWithFilename ("Images/object83_0.png");
 		
 		
 		frame.setSize(800,480); // phone resolution
@@ -70,6 +72,10 @@ public class Guitwo extends Cli {
 			} catch (InterruptedException ie) { ; }
 		}
 		frame.getContentPane().remove (factoryPanel);
+		frame.getContentPane().add(BorderLayout.EAST, new mapPanel(mapImage));
+		frame.pack();
+		frame.setVisible(true);
+
 		return this.selectedDaleks;
 	}
 	
