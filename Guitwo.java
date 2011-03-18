@@ -21,6 +21,7 @@ public class Guitwo extends Cli {
 	
 	ArrayList<Integer> selectedDaleks = null;
 	Position selectedPosition;
+	int selectedDirection = -1;
 	
 	BufferedImage statusImage;
 	
@@ -46,6 +47,8 @@ public class Guitwo extends Cli {
 		
 	}
 	
+	mapPanel getMapPanel() { return mapp; }
+	
 	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) {
 		this.selectedDaleks = selectedDaleks;
 	}
@@ -54,9 +57,13 @@ public class Guitwo extends Cli {
 		this.selectedPosition = p;
 	}
 	
+	void setSelectedDirection(int d) {
+		this.selectedDirection = d;
+	}
+	
 	Position getDalekPosition(Dalek d) {
 
-		mapp.positionDalek(dalekImage(d.getName()));
+		getMapPanel().positionDalek(dalekImage(d.getName()));
 		
 		while (selectedPosition == null) {
 			try {
@@ -64,8 +71,21 @@ public class Guitwo extends Cli {
 			} catch (InterruptedException ie) { ; }
 		}
 		
-		return selectedPosition;
+		getMapPanel().addArray(d.getName(),dalekImage(d.getName()),selectedPosition);
 		
+		return selectedPosition;
+	}
+	
+	int getDalekDirection (Dalek d) {
+		getMapPanel().directDalek(d.getName());
+		
+		while (selectedDirection == -1) {
+			try {
+				Thread.sleep(250); 
+			} catch (InterruptedException ie) { ; }
+			
+		}
+		return selectedDirection;
 	}
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {

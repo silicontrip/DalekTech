@@ -19,9 +19,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 	Image posDalekImage = null;
 	Position posDalek=null;
+	String dirDalekName=null;
 	
-	ArrayList<Position> dalekImagePosition;
-	ArrayList<Image> dalekImage;
+	HashMap<String,Position> dalekImagePosition;
+	HashMap<String,Image> dalekImage;
 	
 	public static final int mapPanelWidth = 640;
 	public static final int mapPanelHeight = 480;
@@ -33,8 +34,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		this.gridMap = m;
 		this.callback = ui;
 		
-		dalekImagePosition = new ArrayList<Position>();
-		dalekImage = new ArrayList<Image>();
+		dalekImagePosition = new HashMap<String,Position>();
+		dalekImage = new HashMap<String,Image>();
 
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
@@ -63,13 +64,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	
-	void addArray(Image i, Position p) {
-		dalekImagePosition.add(p);
-		dalekImage.add(i);
+	void addArray(String s, Image i, Position p) {
+		dalekImagePosition.put(s,p);
+		dalekImage.put(s,i);
 	}
-	void removeArray (int i) {
-		dalekImagePosition.remove(i);
-		dalekImage.remove(i);
+	void removeArray (String s) {
+		dalekImagePosition.remove(s);
+		dalekImage.remove(s);
 	}
 	int sizeArray () {
 		
@@ -105,6 +106,12 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 	}
 	
+	void directDalek (String name) {
+		
+		this.dirDalekName = name;
+		
+	}
+	
 	
 	public void paintComponent (Graphics g) {
 		
@@ -137,7 +144,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	boolean imageBound (double scale, int x, int y) {
 		return x<=0 && y<=0 && map.getHeight(null) * scale+y >= mapPanelHeight && map.getWidth(null) * scale+x >= mapPanelWidth;
 	}
-	
 	
 	public void mouseReleased(MouseEvent e) { 		
 	//	System.out.println("mouseReleased: " + e);
@@ -216,6 +222,17 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			//System.out.println ("x: " + x + ", y: " + y);
 			this.repaint();
 
+		}
+		if (this.dirDalekName != null) {
+			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
+			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
+			
+			Position p = new Position (x,y);
+			
+			int dir = dalekImagePosition.get(this.dirDalekName).directionTo(p);
+			
+			System.out.println ("Direction : " +dir);
+			
 		}
 		
 	}

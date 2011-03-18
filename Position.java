@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.lang.Math;
 
 public class Position implements Serializable {
 	
@@ -48,6 +49,46 @@ public class Position implements Serializable {
 		setDirection((this.getDirection() + 1)  % 6);
 	}
 	
+	public int directionTo(Position p) {
+	
+		double v1 = p.getSpatialX() - this.getSpatialX() ;
+
+		double v2 = p.getSpatialY() - this.getSpatialY() ;
+
+
+	//	System.out.println("tsx: " + this.getSpatialX() + ", tsy: " + this.getSpatialY() + ", psx: " + p.getSpatialX() + ", psy: " +  p.getSpatialY() );
+		
+		if (java.lang.Math.abs (v1) < 0.001) {
+		
+			if (p.getSpatialY() > this.getSpatialY() ) { return Tables.SOUTH; }
+			if (p.getSpatialY() < this.getSpatialY() ) { return Tables.NORTH; }
+
+			return Tables.NONE;
+		}
+		
+		double angle = java.lang.Math.atan( v2 / v1 );
+		
+	//	System.out.println("angle: " + angle);
+		
+		if (v1 >= 0 ) {
+			if (angle >=0 && angle < 1.04719755109187799103455468647774618) {return Tables.SOUTHEAST;}
+			if (angle >= 1.04719755109187799103455468647774618) { return Tables.SOUTH; }
+			if (angle <0 && angle > - 1.04719755109187799103455468647774618) { return Tables.NORTHEAST; }
+			if (angle <= -1.04719755109187799103455468647774618) { return Tables.NORTH; }
+
+		}
+		if (v1 < 0) {
+			if (angle >=0 && angle < 1.04719755109187799103455468647774618) {return Tables.NORTHWEST;}
+			if (angle >= 1.04719755109187799103455468647774618) { return Tables.NORTH; }
+			if (angle <0 && angle > - 1.04719755109187799103455468647774618) { return Tables.SOUTHWEST; }
+			if (angle <= -1.04719755109187799103455468647774618) { return Tables.SOUTH; }
+			
+		}
+			
+		return Tables.NONE;
+
+		
+	}
 	
 	public double getSpatialX() { return x * sin60; }
 	public double getSpatialY() { return y + (x % 2) / 2.0; }
