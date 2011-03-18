@@ -20,7 +20,11 @@ public class Position implements Serializable {
 		this.x =x;
 		this.y =y;
 	}
-	
+	public void setPosition(double x, double y) {
+		// finds the nearest point
+		this.x = (int)java.lang.Math.round(x/sin60);
+		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
+	}
 	
 	public void setPosition(Position p) {
 		this.x = p.getX();
@@ -73,6 +77,8 @@ public class Position implements Serializable {
 		return p.getX() == this.getX() && p.getY() == this.getY();
 	}
 	
+	
+	
 	public Position () {;}
 	public Position (int x, int y) {this.setX(x); this.setY(y);}
 	public Position (int x, int y, int dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
@@ -80,7 +86,7 @@ public class Position implements Serializable {
 	public Position (double x, double y) { 
 		// finds the nearest point
 		this.x = (int)java.lang.Math.round(x/sin60);
-		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2);
+		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
 	}
 	public Position(Position p) { this.setPosition(p); }
 }

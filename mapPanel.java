@@ -205,8 +205,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 			// mouse to grid
 			
-			int x = (int)(( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / (int)getMap().getRegScaleX();
-			int y = (int)(( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / (int)getMap().getRegScaleY();
+			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
+			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
 
 			if (posDalek == null) {
 				posDalek = new Position(x,y);
