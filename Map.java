@@ -14,7 +14,7 @@ public class Map implements Serializable {
 	Hex maparray[][];
 	int sizex, sizey;
 	String graphicFile;
-	int  regtlx, regtly, regbrx,regbry;
+	int  regtlx, regtly, regbrx, regbry;
 
        public static Map getInstance() {
                 if (instance == null) {
@@ -28,7 +28,20 @@ public class Map implements Serializable {
 	
 	int getSizeX() { return sizex; }
 	int getSizeY() { return sizey; }
+	int getRegTLX () { return regtlx; }
+	int getRegTLY () { return regtly; }
+	int getRegBRX () { return regbrx; }
+	int getRegBRY () { return regbry; }
 
+	int getRegHeight() { return regbry - regtly; }
+	int getRegWidth() { return regbrx - regtlx; }
+
+	double getRegScaleX () { return this.getRegWidth()/this.getSizeX(); }
+	double getRegScaleY () { return this.getRegHeight()/this.getSizeY(); }
+
+	
+	String getImageName() { return graphicFile; }
+	
 	Hex getHexAt(Position p) {
 		try {
 		return maparray[p.getX()][p.getY()];
@@ -67,6 +80,10 @@ public class Map implements Serializable {
 		}
 		return h;
 	}
+	
+	
+	
+	
 	
 	void initSampleMap() {
 

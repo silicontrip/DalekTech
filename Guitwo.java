@@ -14,7 +14,7 @@ public class Guitwo extends Cli {
 	JPanel statusPanel;
 	JPanel mapPanel;
 	JLabel statusLabel;
-	JLabel mapLabel;
+	mapPanel mapp;
 	
 	Image mapImage;
 	
@@ -39,8 +39,8 @@ public class Guitwo extends Cli {
 
 		// TODO: listener class
 
-		mapImage = getImageWithFilename ("Images/object83_0.png");
-		
+		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
+		mapp = new mapPanel(mapImage,m);
 		
 		frame.setSize(800,480); // phone resolution
 		frame.setVisible(true);
@@ -72,10 +72,14 @@ public class Guitwo extends Cli {
 			} catch (InterruptedException ie) { ; }
 		}
 		frame.getContentPane().remove (factoryPanel);
-		frame.getContentPane().add(BorderLayout.EAST, new mapPanel(mapImage));
+		
+		frame.getContentPane().add(BorderLayout.EAST, mapp);
 		frame.pack();
 		frame.setVisible(true);
 
+		mapp.addArray(dalekImage("Black Renegade"),new Position(0,0));
+		
+		
 		return this.selectedDaleks;
 	}
 	
