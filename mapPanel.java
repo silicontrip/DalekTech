@@ -14,8 +14,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Image map;
 	Map gridMap;
 	int startx, starty;
+	Guitwo callback;
 
-	
+
+	Image posDalekImage = null;
+	Position posDalek=null;
 	
 	ArrayList<Position> dalekImagePosition;
 	ArrayList<Image> dalekImage;
@@ -24,10 +27,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public static final int mapPanelHeight = 480;
 
 	
-	public mapPanel (Image map, Map m) {
+	public mapPanel (Image map, Map m, Guitwo ui) {
 		super();
 		this.map = map;
 		this.gridMap = m;
+		this.callback = ui;
 		
 		dalekImagePosition = new ArrayList<Position>();
 		dalekImage = new ArrayList<Image>();
@@ -45,12 +49,17 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Map getMap() { return gridMap; }
 	
 	
-	int calX (int x) {
-		return (int)((getMap().getRegScaleX() *x + getMap().getRegTLX()) * scale) + xpos;
+	double calX (double x) {
+		
+		System.out.println ("reg Scale X: " + getMap().getRegScaleX());
+		
+		return ((getMap().getRegScaleX() *x + getMap().getRegTLX()) * scale) + xpos;
 	}
 	
-	int calY (int y) {
-		return (int)((getMap().getRegScaleY() *y + getMap().getRegTLY()) * scale) + ypos;
+	double calY (double y) {
+		System.out.println ("reg Scale Y: " + getMap().getRegScaleY());
+
+		return ((getMap().getRegScaleY() *y + getMap().getRegTLY()) * scale) + ypos;
 	}
 	
 	
@@ -89,6 +98,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 	}
 	
+	void positionDalek (Image dalek) {
+	
+		this.posDalekImage = dalek;
+		this.posDalek = null;
+		
+	}
+	
 	
 	public void paintComponent (Graphics g) {
 		
@@ -105,7 +121,14 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 		for (int n=0; n < this.sizeArray(); n++) {
 			Position pos= dalekImagePosition.get(n);
-			this.drawDalekAt(g,dalekImage.get(n),this.calX(pos.getX()), this.calY(pos.getY()), (int)(getMap().getRegScaleX() * scale * dalekScale));			
+			this.drawDalekAt(g,dalekImage.get(n),(int)this.calX(pos.getSpatialX()), (int)this.calY(pos.getSpatialY()), (int)(getMap().getRegScaleX() * scale * dalekScale));			
+		}
+		
+		if (this.posDalekImage != null && this.posDalek != null) {
+			
+			System.out.println ("x: " + posDalek.getX() + ", y: " + posDalek.getY() + ", xs: " + posDalek.getSpatialX() + ", ys: " + posDalek.getSpatialY());
+			
+			this.drawDalekAt(g,posDalekImage,(int)this.calX(this.posDalek.getSpatialX()), (int)this.calY(this.posDalek.getSpatialY()), (int)(getMap().getRegScaleY() * scale * dalekScale));		
 		}
 		
 		
@@ -117,31 +140,42 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	
 	public void mouseReleased(MouseEvent e) { 		
-		System.out.println("mouseReleased: " + e);
+	//	System.out.println("mouseReleased: " + e);
 	}
 	
 	public void mousePressed(MouseEvent e) { 		
 	//	System.out.println("mousePressed: " + e);
 		
-		startx = e.getX();
-		starty = e.getY();
+		if (this.posDalekImage == null) {
+			startx = e.getX();
+			starty = e.getY();
+		}
 	} 
 	
 	public void mouseEntered(MouseEvent e)
 	{
-		System.out.println("mouseEntered: " + e);
+		// System.out.println("mouseEntered: " + e);
 		
 		//e.getComponent().setFocusable(true);
 	}
 	
 	public void mouseExited(MouseEvent e)
 	{
-		System.out.println("mouseExited: " + e);
+		// System.out.println("mouseExited: " + e);
 	}
 	
 	public void mouseClicked(MouseEvent e)
 	{
-		System.out.println("mouseClicked: " + e);
+		// System.out.println("mouseClicked: " + e);
+		
+		if (this.posDalekImage != null && this.posDalek != null) {
+
+			callback.setSelectedPosition(posDalek);
+			
+			this.posDalekImage = null;
+			this.posDalek = null;
+			
+		}
 	}
 	public void mouseDragged(MouseEvent e)  {
 		//System.out.println("mouseDragged: " + e);
@@ -150,15 +184,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 		int txpos = xpos + (e.getX() - startx);
 		int typos = ypos + (e.getY() - starty);
-		
 						
 		if (imageBound(this.scale,txpos,typos)) {
-		xpos = txpos;
-		ypos = typos;
+			xpos = txpos;
+			ypos = typos;
 		}
 	//	System.out.println("xpos: " + xpos + ", ypos: " + ypos + "startx: " + startx + ", starty: " + starty);
 						    
-		
 		startx = e.getX();
 		starty = e.getY();
 		
@@ -168,6 +200,24 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	public void mouseMoved(MouseEvent e) {
 		// System.out.println("Action: " + e);
+		
+		if (this.posDalekImage != null) {
+		
+			// mouse to grid
+			
+			int x = (int)(( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / (int)getMap().getRegScaleX();
+			int y = (int)(( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / (int)getMap().getRegScaleY();
+
+			if (posDalek == null) {
+				posDalek = new Position(x,y);
+			} else {
+				posDalek.setPosition(x,y);
+			}
+			//System.out.println ("x: " + x + ", y: " + y);
+			this.repaint();
+
+		}
+		
 	}
 	
 	public void mouseWheelMoved(MouseWheelEvent e) {

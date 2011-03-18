@@ -12,7 +12,10 @@ public class Map implements Serializable {
 	
 	static Map instance = null;
 	Hex maparray[][];
-	int sizex, sizey;
+	
+	Position size;
+	
+// 	int sizex, sizey;
 	String graphicFile;
 	int  regtlx, regtly, regbrx, regbry;
 
@@ -26,8 +29,9 @@ public class Map implements Serializable {
 	
 	public Map() { ; }
 	
-	int getSizeX() { return sizex; }
-	int getSizeY() { return sizey; }
+	Position getSize() { return size; }
+	int getSizeX() { return getSize().getX(); }
+	int getSizeY() { return getSize().getY(); }
 	int getRegTLX () { return regtlx; }
 	int getRegTLY () { return regtly; }
 	int getRegBRX () { return regbrx; }
@@ -36,8 +40,8 @@ public class Map implements Serializable {
 	int getRegHeight() { return regbry - regtly; }
 	int getRegWidth() { return regbrx - regtlx; }
 
-	double getRegScaleX () { return this.getRegWidth()/this.getSizeX(); }
-	double getRegScaleY () { return this.getRegHeight()/this.getSizeY(); }
+	double getRegScaleX () { return this.getRegWidth()/this.getSize().getSpatialX(); }
+	double getRegScaleY () { return this.getRegHeight()/this.getSize().getSpatialY(); }
 
 	
 	String getImageName() { return graphicFile; }
@@ -81,14 +85,10 @@ public class Map implements Serializable {
 		return h;
 	}
 	
-	
-	
-	
-	
 	void initSampleMap() {
 
-		maparray=new Hex[15][17];
-		sizex=15; sizey=17;
+		maparray=new Hex[15][17];		
+		size = new Position(14,16);
 		
 		graphicFile = new String("object83_0.png");
 		regtlx = 98; regtly = 66;

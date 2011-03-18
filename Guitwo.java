@@ -11,17 +11,16 @@ import java.net.URL;
 public class Guitwo extends Cli {
 
 	JFrame frame;
-	JPanel statusPanel;
-	JPanel mapPanel;
-	JLabel statusLabel;
-	mapPanel mapp;
 	
 	Image mapImage;
 	
+	mapPanel mapp;
 	selectFactoryDaleksPanel factoryPanel;
 	
 	HashMap<String,Image> dalekImages;
+	
 	ArrayList<Integer> selectedDaleks = null;
+	Position selectedPosition;
 	
 	BufferedImage statusImage;
 	
@@ -40,7 +39,7 @@ public class Guitwo extends Cli {
 		// TODO: listener class
 
 		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
-		mapp = new mapPanel(mapImage,m);
+		mapp = new mapPanel(mapImage,m,this);
 		
 		frame.setSize(800,480); // phone resolution
 		frame.setVisible(true);
@@ -49,6 +48,24 @@ public class Guitwo extends Cli {
 	
 	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) {
 		this.selectedDaleks = selectedDaleks;
+	}
+	
+	void setSelectedPosition(Position p) {
+		this.selectedPosition = p;
+	}
+	
+	Position getDalekPosition(Dalek d) {
+
+		mapp.positionDalek(dalekImage(d.getName()));
+		
+		while (selectedPosition == null) {
+			try {
+				Thread.sleep(250); 
+			} catch (InterruptedException ie) { ; }
+		}
+		
+		return selectedPosition;
+		
 	}
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
@@ -77,8 +94,8 @@ public class Guitwo extends Cli {
 		frame.pack();
 		frame.setVisible(true);
 
-		mapp.addArray(dalekImage("Black Renegade"),new Position(0,0));
-		
+		// mapp.addArray(dalekImage("Black Renegade"),new Position(0,0));
+	
 		
 		return this.selectedDaleks;
 	}

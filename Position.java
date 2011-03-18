@@ -16,6 +16,12 @@ public class Position implements Serializable {
 	public void setY(int i) { y=i; }
 	public void setDirection(int dir) { this.dir = dir; }
 	
+	public void setPosition(int x, int y) {
+		this.x =x;
+		this.y =y;
+	}
+	
+	
 	public void setPosition(Position p) {
 		this.x = p.getX();
 		this.y = p.getY();
@@ -40,7 +46,7 @@ public class Position implements Serializable {
 	
 	
 	public double getSpatialX() { return x * sin60; }
-	public double getSpatialY() { return y + (x % 2) / 2; }
+	public double getSpatialY() { return y + (x % 2) / 2.0; }
 	public double distanceTo(Position p) { 
 		double v1 = java.lang.Math.abs(this.getSpatialX() - p.getSpatialX());
 		double v2 = java.lang.Math.abs(this.getSpatialY() - p.getSpatialY());
