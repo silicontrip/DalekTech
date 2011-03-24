@@ -25,6 +25,7 @@ public class Guitwo extends Cli {
 	ArrayList<Integer> selectedDaleks = null;
 	Position selectedPosition;
 	int selectedDirection = -1;
+	int selectedMovement;
 	
 	BufferedImage statusImage;
 	
@@ -47,7 +48,7 @@ public class Guitwo extends Cli {
 		
 		statusp.setDamageImages (dalekDamageImages);
 		statusp.setTacticalImages (dalekImages);
-
+		statusp.setBackground(getImageWithFilename("Images/statusPanel.png"));
 		
 		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
 		mapp = new mapPanel(mapImage,m,this);
@@ -76,6 +77,10 @@ public class Guitwo extends Cli {
 	
 	void setSelectedDirection(int d) {
 		this.selectedDirection = d;
+	}
+	
+	void setSelectedMovement(int d) { 
+		this.selectedMovement = d;
 	}
 	
 	Position getDalekPosition(Dalek d) {
@@ -136,6 +141,31 @@ public class Guitwo extends Cli {
 		return selectedPosition;
 	}
 	
+	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
+		selectedMovement = -2;
+		
+		getStatusPanel().setEngineCurrent(currentMove);
+		getStatusPanel().setEngineWalk(walk);
+		getStatusPanel().setEngineRun(run);
+		
+		getStatusPanel().repaint();
+
+		
+		mapp.setFocusable(true);
+
+		// not sure where to put forward/backward cost.
+		
+	//	getMapPanel().moveDalek(d.getName());
+		
+		while (selectedMovement == -2) {
+			try {
+				Thread.sleep(250); 
+			} catch (InterruptedException ie) { ; }
+		}
+		
+		return selectedMovement;
+		
+	}
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 

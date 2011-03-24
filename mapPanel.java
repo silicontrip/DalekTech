@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.*;
 
-public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelListener, MouseListener, ActionListener {
+public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelListener, MouseListener, ActionListener, KeyListener {
 
 	javax.swing.Timer timer;
 	
@@ -47,6 +47,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
 		addMouseListener(this);
+		addKeyListener(this);
 
 		scale = 1;
 		xpos = 0;
@@ -98,7 +99,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				System.out.println("Target: " + moveDalekTargetX + "," + moveDalekTargetY +" Delta: " + moveDalekX + "," + moveDalekY);
 			
 				timer.start();
-			} else {
+			} else if ( p.getDirection() != dalekImagePosition.get(s).getDirection()) {
 				
 				// reposition dalek incase of rotation.
 				// want to animate
@@ -110,6 +111,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				moveDalekCurrentY = 0;
 				moveDalekTargetX = 0;
 				moveDalekTargetY = 0;
+				moveDalekX = 0;
+				moveDalekY = 0;
+
 				
 				moveDalekCurrentDir = 0;
 				moveDalekTargetDir = p.getDirection() - dalekImagePosition.get(s).getDirection();
@@ -430,6 +434,47 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		this.repaint();
 
 	}
+	
+	public void keyPressed(KeyEvent e) {
+			System.out.println("Action: " + e);
+		
+		int kc = e.getKeyCode();
+		
+		if (kc == KeyEvent.VK_LEFT) {
+			callback.setSelectedMovement(Tables.LEFT);
+		}
+		
+		if (kc == KeyEvent.VK_RIGHT) {
+			callback.setSelectedMovement(Tables.RIGHT);
+
+		}
+		
+		if (kc == KeyEvent.VK_UP) {
+			callback.setSelectedMovement(Tables.FORWARD);
+		}
+		
+		if (kc == KeyEvent.VK_DOWN) {
+			callback.setSelectedMovement(Tables.BACKWARD);
+			
+		}
+		
+		
+		if (kc == KeyEvent.VK_SPACE) {
+		}
+		
+		if (kc == KeyEvent.VK_ENTER) {
+			callback.setSelectedMovement(Tables.NONE);
+		}
+		
+    }
+	
+	public void keyReleased(KeyEvent e) {
+		//	System.out.println("Action: " + e);
+    }
+	public void keyTyped(KeyEvent e) {
+		//System.out.println("Action: " + e);
+    }
+	
 
 	
 }
