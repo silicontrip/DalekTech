@@ -1,6 +1,18 @@
+import java.awt.*;
+import java.awt.image.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.*;
+
+
 public class statusPanel extends JPanel {
 
 	String name;
+	
+	HashMap<String,Image> dalekDamageImages;
+	HashMap<String,Image> dalekTacticalImages;
+
+	
 	Image dalekTacticalImage;
 	Image dalekDamageImage;
 	Image dalekImage;
@@ -31,16 +43,39 @@ public class statusPanel extends JPanel {
 	int getPanelHeight() { return panelHeight; }
 	int getPanelWidth() { return panelWidth; }
 
-	void setName(String s) { this.name = new String(s); }
+	void setTacticalImages(HashMap<String,Image> hm) {
+		dalekTacticalImages = hm;
+	}
+	
+	void setDamageImages(HashMap<String,Image> hm) {
+		dalekDamageImages = hm;
+	}
+	
+	
+	void setDalekName(String s) { 
+		this.name = new String(s);
+		setDamageImage(getDamageImageFromName(s));
+		setTacticalImage(getTacticalImageFromName(s));
+
+	}
 	void setDamageImage(Image i) { this.dalekDamageImage = i; }
 	void setTacticalImage(Image i) { this.dalekTacticalImage = i; }
+	
+	Image getTacticalImageFromName (String s) {
+		return dalekTacticalImages.get(name);
+	}
+	
+	Image getDamageImageFromName (String s) {
+		return dalekDamageImages.get(name);
+	}
+	
 	
 	void setEngineCurrent (int i) { engineCurrent = new Integer(i); }
 	void setEngineWalk (int i) { engineWalk = new Integer(i); }
 	void setEngineRun (int i) { engineRun = new Integer(i); }
 
 	void tacticalView() { dalekImage = this.dalekTacticalImage; }
-	void DamageView() { dalekImage = this.dalekDamageImage; }
+	void damageView() { dalekImage = this.dalekDamageImage; }
 
 	
 	public Dimension getPreferredSize() {
@@ -54,13 +89,13 @@ public class statusPanel extends JPanel {
 
 		if ( dalekImage != null) {
 			int w = 100;
-			int h = (int)  (dalek.getHeight(null) * w / dalek.getWidth(null)  );
+			int h = (int)  (dalekImage.getHeight(null) * w / dalekImage.getWidth(null)  );
 
-			BufferedImage thumbImage = new BufferedImage(mapPanelWidth, mapPanelHeight, BufferedImage.TYPE_4BYTE_ABGR);
+			BufferedImage thumbImage = new BufferedImage(getPanelWidth(), getPanelHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2D.drawImage(dalekImage, 0,0, w, h, null);
-			g.drawImage(thumbImage,getPanelWidth - (w/2), getPanelHeight() - h,null);
+			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
 		}
 		
 		if (this.engineRun > 0) {

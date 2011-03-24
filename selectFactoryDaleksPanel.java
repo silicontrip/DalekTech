@@ -14,6 +14,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 
 	javax.swing.Timer timer;
 
+//	statusPanel sp;
 	
 	ArrayList<Dalek> dalekList;
 	ArrayList<Integer> selectedDaleks;
@@ -63,6 +64,16 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		
 	}
 	
+	/*
+	void setStatusPanel(statusPanel sp) {
+		this.sp = sp;
+	}
+	*/
+	
+	statusPanel getStatusPanel() {
+		return callback.getStatusPanel();
+	}
+	
 	Image dalekImage(String name) {
 // I think I'd rather it throw an exception
 		// there should be no case where not found is valid
@@ -72,6 +83,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 //		System.out.println("Canot find: "+ name);
 //		return null;
 	}
+	
 	
 	public Dimension getPreferredSize() {
         return new Dimension(640,480);
@@ -105,6 +117,12 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 			int xl = -128;
 			String dalekName;
 			
+			if (slide == 0) {
+				getStatusPanel().setDalekName(dalekList.get(select).getName());
+				getStatusPanel().damageView();
+				getStatusPanel().repaint();
+			}
+			
 			
 			for (int d=select-3;d<=select+3;d++) {
 				int dal = d % dalekList.size();
@@ -112,6 +130,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 				
 				dalekName = dalekList.get(dal).getName();
 				this.drawDalekAt(g,dalekName,xl+slide,360,getDalekWidth());
+				
 
 				xl += getDalekWidth();
 			}	

@@ -16,6 +16,7 @@ public class Guitwo extends Cli {
 	
 	mapPanel mapp;
 	selectFactoryDaleksPanel factoryPanel;
+	statusPanel statusp;
 	
 	HashMap<String,Image> dalekImages;
 	HashMap<String,Image> dalekDamageImages;
@@ -42,8 +43,19 @@ public class Guitwo extends Cli {
 
 		// TODO: listener class
 
+		statusp = new statusPanel();
+		
+		statusp.setDamageImages (dalekDamageImages);
+		statusp.setTacticalImages (dalekImages);
+
+		
 		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
 		mapp = new mapPanel(mapImage,m,this);
+		
+		frame.getContentPane().add(BorderLayout.WEST, statusp);
+		//frame.pack();
+		//frame.setVisible(true);
+		
 		
 		frame.setSize(800,480); // phone resolution
 		frame.setVisible(true);
@@ -51,6 +63,8 @@ public class Guitwo extends Cli {
 	}
 	
 	mapPanel getMapPanel() { return mapp; }
+	statusPanel getStatusPanel() { return statusp; }
+	
 	
 	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) {
 		this.selectedDaleks = selectedDaleks;
@@ -209,6 +223,16 @@ public class Guitwo extends Cli {
 		System.out.println("Canot find: "+ name);
 		return null;
 	}
+	
+	Image getDamageImage(String name) {
+		
+		if (dalekImages.containsKey(name)) {
+			return dalekDamageImages.get(name);
+		}
+		System.out.println("Canot find: "+ name);
+		return null;
+	}
+	
 	
 	Image getImageWithFilename (String fn) {
 		URL imageURL = DalekTech.class.getResource(fn);
