@@ -5,12 +5,16 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
+public class selectFactoryDaleksPanel extends JPanel implements KeyListener, ActionListener {
 	
 	int dalekWidth;
 	int dalekIconWidth;
+	int slide, slideDelta;
 	Guitwo callback;
 
+	javax.swing.Timer timer;
+
+	
 	ArrayList<Dalek> dalekList;
 	ArrayList<Integer> selectedDaleks;
 	int select;
@@ -31,6 +35,12 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 		setFocusable(true);
 		select = 0;
 		selectedDaleks = new ArrayList<Integer>();
+		
+		timer = new javax.swing.Timer(10, this);
+		timer.setInitialDelay(10);
+		timer.setCoalesce(false);
+		timer.setRepeats(true);
+		
 	}
 	
 	// really want this to be a generic interface class not a specific sub class.
@@ -45,6 +55,12 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 
 		select = 0;
 		selectedDaleks = new ArrayList<Integer>();
+		timer = new javax.swing.Timer(10, this);
+		timer.setInitialDelay(10);
+		timer.setCoalesce(false);
+		timer.setRepeats(true);
+		
+		
 	}
 	
 	Image dalekImage(String name) {
@@ -86,16 +102,16 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 		
 		if (dalekList != null) {
 			
-			int xl = 0;
+			int xl = -128;
 			String dalekName;
 			
 			
-			for (int d=select-2;d<=select+2;d++) {
+			for (int d=select-3;d<=select+3;d++) {
 				int dal = d % dalekList.size();
 				if (dal < 0) { dal += dalekList.size();}
 				
 				dalekName = dalekList.get(dal).getName();
-				this.drawDalekAt(g,dalekName,xl,360,getDalekWidth());
+				this.drawDalekAt(g,dalekName,xl+slide,360,getDalekWidth());
 
 				xl += getDalekWidth();
 			}	
@@ -116,22 +132,53 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener {
 		}
 	}
 	
+	public void actionPerformed(ActionEvent e) {
+		// I want to slide the daleks across.
+		
+		//System.out.println ("Action Event");
+		
+		if (slideDelta != 0 ) {
+		slide += slideDelta;
+		if (slide < -128) {
+			select ++ ;
+			select = select % dalekList.size();
+
+			slide = 0;
+			timer.stop();
+			
+		}
+		if (slide > 128) {
+			
+			select -- ;
+			if (select < 0) { select += dalekList.size();}
+			slide = 0;
+
+			timer.stop();
+			
+		}
+		
+		this.repaint();
+		}
+
+		
+	}
+	
 	public void keyPressed(KeyEvent e) {
 	//	System.out.println("Action: " + e);
 		
 		int kc = e.getKeyCode();
 		
 		if (kc == KeyEvent.VK_LEFT) {
-			select -- ;
-			if (select < 0) { select += dalekList.size();}
-			this.repaint();
-
+			slideDelta = -5;
+			timer.start();
 		}
 		
 		if (kc == KeyEvent.VK_RIGHT) {
-			select ++ ;
-			select = select % dalekList.size();
-			this.repaint();
+			slideDelta = 5;
+			
+		//	select ++ ;
+		//	select = select % dalekList.size();
+			timer.start();
 		}
 		
 		if (kc == KeyEvent.VK_SPACE) {

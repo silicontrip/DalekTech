@@ -18,6 +18,8 @@ public class Guitwo extends Cli {
 	selectFactoryDaleksPanel factoryPanel;
 	
 	HashMap<String,Image> dalekImages;
+	HashMap<String,Image> dalekDamageImages;
+
 	
 	ArrayList<Integer> selectedDaleks = null;
 	Position selectedPosition;
@@ -33,7 +35,8 @@ public class Guitwo extends Cli {
 		super(m);
 		
 		dalekImages = InitDalekImage();
-
+		dalekDamageImages = InitDalekImageDamage();
+		
 		frame = new JFrame();
 		frame.setTitle("Dalek Battle");
 
@@ -63,6 +66,8 @@ public class Guitwo extends Cli {
 	
 	Position getDalekPosition(Dalek d) {
 
+		selectedPosition = null;
+
 		getMapPanel().positionDalek(dalekImage(d.getName()));
 		
 		while (selectedPosition == null) {
@@ -71,13 +76,15 @@ public class Guitwo extends Cli {
 			} catch (InterruptedException ie) { ; }
 		}
 		
-		getMapPanel().addArray(d.getName(),dalekImage(d.getName()),selectedPosition);
+		// getMapPanel().addArray(d.getName(),dalekImage(d.getName()),selectedPosition);
 		
 		return selectedPosition;
 	}
 	
 	int getDalekDirection (Dalek d) {
-		getMapPanel().directDalek(d.getName());
+		
+		selectedDirection  = -1;
+		getMapPanel().directDalek(dalekImage(d.getName()),d.getPosition());
 		
 		while (selectedDirection == -1) {
 			try {
@@ -87,6 +94,34 @@ public class Guitwo extends Cli {
 		}
 		return selectedDirection;
 	}
+	
+	Position getDalekPositionAndDirection(Dalek d) {
+		
+		selectedPosition = null;
+
+		getMapPanel().positionDalek(dalekImage(d.getName()));
+		
+		while (selectedPosition == null) {
+			try {
+				Thread.sleep(250); 
+			} catch (InterruptedException ie) { ; }
+		}
+		
+		selectedDirection  = -1;
+		getMapPanel().directDalek(dalekImage(d.getName()),selectedPosition);
+		
+		while (selectedDirection == -1) {
+			try {
+				Thread.sleep(250); 
+			} catch (InterruptedException ie) { ; }
+			
+		}
+		
+		selectedPosition.setDirection(selectedDirection);
+		
+		return selectedPosition;
+	}
+	
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 
@@ -139,6 +174,33 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
+	HashMap<String,Image> InitDalekImageDamage() {
+		
+		HashMap<String,Image> imageMap = new HashMap<String,Image>();
+		
+		imageMap.put("Black Renegade",getImageWithFilename("Images/BlackRenegadeDamage.png"));
+		imageMap.put("Black Supreme",getImageWithFilename("Images/InvasionDamage.png"));
+		imageMap.put("Blue Drone",getImageWithFilename("Images/InvasionDamage.png"));
+		imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWarDamage.png"));
+		imageMap.put("Gold Supreme",getImageWithFilename("Images/GoldSupremeDamage.png"));
+		imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWardamage.png"));
+		imageMap.put("Grey Renegade",getImageWithFilename("Images/GreyRenegadeDamage.png"));
+		imageMap.put("Imperial",getImageWithFilename("Images/ImperialDamage.png"));
+		imageMap.put("Red Commander",getImageWithFilename("Images/InvasionDamage.png"));
+		imageMap.put("Red Saucer Pilot",getImageWithFilename("Images/RedSaucerDamage.png"));
+		imageMap.put("Special Weapon",getImageWithFilename("Images/SpecialWeaponDamage.png"));
+		
+		return imageMap;
+	}
+	
+	
+	
+	void notifyDalekPosition(Dalek d) {
+	
+		getMapPanel().notifyDalek(d.getName(),dalekImage(d.getName()),d.getPosition());
+		
+	}
+	
 	Image dalekImage(String name) {
 	
 		if (dalekImages.containsKey(name)) {
@@ -153,7 +215,7 @@ public class Guitwo extends Cli {
 		if (imageURL != null) {
 			return new ImageIcon(imageURL).getImage();
 		}
-		System.err.println ("Graphic Factory Returns Null");
+		System.err.println ("getImageWithFilename (" + fn + ") Returns Null");
 		return null;
 	}
 	

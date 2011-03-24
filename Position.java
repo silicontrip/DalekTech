@@ -17,14 +17,27 @@ public class Position implements Serializable {
 	public void setY(int i) { y=i; }
 	public void setDirection(int dir) { this.dir = dir; }
 	
+	public void setPosition(int x, int y, int d) {
+		this.x =x;
+		this.y =y;
+		this.dir = d;
+	}
+	
 	public void setPosition(int x, int y) {
 		this.x =x;
 		this.y =y;
 	}
+	
+	public void setPosition(double x, double y,int dir) {
+		setPosition(x,y);
+		setDirection(dir);
+	}
+	
+	
 	public void setPosition(double x, double y) {
 		// finds the nearest point
-		this.x = (int)java.lang.Math.round(x/sin60);
-		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
+		this.setX((int)java.lang.Math.round(x/sin60));
+		this.setY((int)java.lang.Math.round(y - (this.x % 2) / 2.0));
 	}
 	
 	public void setPosition(Position p) {
@@ -39,6 +52,10 @@ public class Position implements Serializable {
 	
 	public void moveBackward () {
 		;
+	}
+	
+	public void facePosition (Position p) {
+		this.setDirection(this.directionTo(p));
 	}
 	
 	public void turnLeft () {
@@ -100,6 +117,10 @@ public class Position implements Serializable {
 	}
 
 	public String toString() {
+		
+		if (this.getDirection() == Tables.NONE) {
+			return this.x + "," + this.y;
+		}
 		return this.x + "," + this.y + "/" + this.directionShort[dir];
 	}
 	
@@ -121,13 +142,23 @@ public class Position implements Serializable {
 	
 	
 	public Position () {;}
-	public Position (int x, int y) {this.setX(x); this.setY(y);}
+	public Position (int x, int y) {this.setX(x); this.setY(y); this.setDirection(0); }
 	public Position (int x, int y, int dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
 
-	public Position (double x, double y) { 
+	public Position (double x, double y) {
+	
+		this.x = (int)java.lang.Math.round(x/sin60);
+		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
+		this.setDirection(0);
+		
+		
+	}
+	
+	public Position (double x, double y, int dir) { 
 		// finds the nearest point
 		this.x = (int)java.lang.Math.round(x/sin60);
 		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
+		this.setDirection(dir);
 	}
 	public Position(Position p) { this.setPosition(p); }
 }

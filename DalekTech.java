@@ -45,8 +45,14 @@ public class DalekTech {
 		map = Map.getInstance();
 		map.initSampleMap();
 		
-		players[0] = new Player(interfaceFactory(i1,map),this); // UI2DGraphic();
-		players[1] = new Player(interfaceFactory(i2,map),this); // ultimately UI3dGraphic();
+		UserInterface ui1,ui2;
+		
+		ui1 = interfaceFactory(i1,map);
+		ui2 = interfaceFactory(i2,map);
+
+		
+		players[0] = new Player(ui1,ui2,this); // UI2DGraphic();
+		players[1] = new Player(ui2,ui1,this); // ultimately UI3dGraphic();
 	}
 
 	Map getMap() { return Map.getInstance(); }
@@ -119,6 +125,8 @@ public class DalekTech {
 		
 		Game.getPlayer(0).positionDaleks();
 		Game.getPlayer(1).positionDaleks();
+		
+		// show all daleks
 		
 		// repeat
 

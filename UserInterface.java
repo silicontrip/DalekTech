@@ -7,6 +7,7 @@ public abstract class UserInterface {
 	// Ask user for information
 	abstract Position getDalekPosition(Dalek d);
 	abstract int getDalekDirection (Dalek d);	
+	abstract Position getDalekPositionAndDirection(Dalek d);
 	abstract int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn)  ;
 
 	abstract int getDalekTwist (Dalek d);

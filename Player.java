@@ -4,12 +4,14 @@ import java.io.*;
 public class Player {
 
 	UserInterface ui;
+	UserInterface oui;
 	ArrayList<Dalek> daleks;
 	Map map;
 	DalekTech game;
 	
-	public  Player (UserInterface ui, DalekTech game) {
+	public  Player (UserInterface ui, UserInterface ui2, DalekTech game) {
 		this.ui = ui;
+		this.oui = ui2;
 		this.game = game;
 		
 		daleks = new ArrayList<Dalek>();
@@ -17,6 +19,9 @@ public class Player {
 	
 	void setUI (UserInterface ui) { this.ui = ui; }
 	UserInterface getUI() { return ui; }
+	void setOtherUI (UserInterface ui) { this.oui = ui; }
+	UserInterface getOtherUI() { return oui; }
+
 	Map getMap() { return getGame().getMap(); }
 	ArrayList<Dalek> getDaleks() { return daleks; }
 	
@@ -126,13 +131,20 @@ public class Player {
 			Position dalekPosition;
 			dal=it.next();
 			do {
-				dalekPosition=getUI().getDalekPosition(dal);
+				dalekPosition=getUI().getDalekPositionAndDirection(dal);
 				// check it doesn't clobber another dalek
 			} while (dalekPosition.isIn(getGame().allDalekPositions()));
 			dal.setPosition(dalekPosition);
+			getUI().notifyDalekPosition(dal);
+
 			// get direction
-			direction = getUI().getDalekDirection(dal);
-			dal.setDirection(direction);
+			//direction = getUI().getDalekDirection(dal);
+			//dal.setDirection(direction);
+			
+			// need to tell the other interface
+			//getOtherUI().notifyDalekPosition(dal);
+
+			
 		}
 	}
 	
@@ -167,6 +179,7 @@ public class Player {
 			
 			do {
 				getUI().notifyDalekPosition(dal);
+				getOtherUI().notifyDalekPosition(dal);
 				getUI().notifyEngine(dal.getMovement(),
 									 dal.getWalk(),
 									 dal.getRun());
@@ -177,9 +190,9 @@ public class Player {
 									dal.getRun(),
 									dal.getHex().getMovementCost(dal.getForwardsHex()),
 									dal.getHex().getMovementCost(dal.getBackwardsHex()),
-									   dal.canMoveForwards(),
-									   dal.canMoveBackwards(),
-									   dal.canTurn()
+									dal.canMoveForwards(),
+									dal.canMoveBackwards(),
+									dal.canTurn()
 				);
 			} while (dal.moveDalek(dir) && dal.canTurn());
 			}		

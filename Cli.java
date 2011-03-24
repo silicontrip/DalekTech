@@ -95,6 +95,35 @@ public class Cli extends UserInterface {
 		return dir;
 	}
 	
+	Position getDalekPositionAndDirection(Dalek d) {
+	
+		String input;
+		String sValues[];
+		int x=-1,y=-1,dir=-1;
+		
+		System.out.println (d.toString());
+		do {
+			System.out.print ("Enter co-ordinates (1,1-" + getMap().getSizeX() +"," + getMap().getSizeY() +") and direction (N,NE,SE,S,SW,NW): ");
+			
+			input = readln();
+			sValues = input.split(",");
+			
+			if (sValues.length == 3) {
+			dir = this.directionFromString(sValues[2]);
+
+			try {
+				x = Integer.parseInt(sValues[0]);
+				y = Integer.parseInt(sValues[1]);
+			} catch (NumberFormatException nfe) { x = -1; y = -1;}
+			}
+		} while ( (x < 1 || x > getMap().getSizeX() || y < 1 || y > getMap().getSizeY() ) && dir != -1);
+		
+		x--; y--;
+		return new Position(x,y,dir);
+		
+	}
+	
+	
 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
 		
 		String input;

@@ -17,7 +17,6 @@ public class Dalek implements Serializable  {
 	
 	Position pos;
 	Position old;
-	int direction;
 	int facing;
 	int movement;
 	boolean moved;
@@ -29,8 +28,8 @@ public class Dalek implements Serializable  {
 	String getName() { return name; }
 	void setPosition (Position p) {pos = p;}
 	Position getPosition () { return pos; }
-	void setDirection (int d) {direction = d;}
-	int getDirection() { return direction; }
+	void setDirection (int d) {pos.setDirection(d);}
+	int getDirection() { return pos.getDirection(); }
 	void setMovement (int m) {movement = m;}
 	int getMovement() { return movement; }
 	void setWalk (int w) {walk = w;}
@@ -56,8 +55,7 @@ public class Dalek implements Serializable  {
 	
 	public String toString() { 
 		String sections = new String();
-		Collection<DalekSection> c = locationMap.values();
-		Iterator<DalekSection> it  = c.iterator();
+		Iterator<DalekSection> it  = locationMap.values().iterator();
 		while (it.hasNext()) {
 			sections += it.next().toString();
 		}
@@ -101,7 +99,7 @@ public class Dalek implements Serializable  {
 	
 	void reset() {
 		movement = 0;
-		facing = direction;
+		facing = this.getDirection();
 		setMoved(false);
 		setTwist(false);
 		setFired(false);
@@ -242,9 +240,8 @@ public class Dalek implements Serializable  {
 		this.locationArray = new ArrayList<DalekSection>();
 		this.locationMap = new HashMap<String,DalekSection>();
 		
-		this.pos = new Position(-1,-1);
-		this.old = new Position(-1,-1);
-		this.direction = Tables.NORTH; 
+		this.pos = new Position(-1,-1,Tables.NONE);
+		this.old = new Position(-1,-1,Tables.NONE);
 		this.reset();
 	}
 	
