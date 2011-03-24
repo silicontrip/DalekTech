@@ -24,9 +24,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	String moveDalekName=null;
 	Position moveDalekPosition=null;
-	double moveDalekX,moveDalekY;
-	double moveDalekTargetX,moveDalekTargetY;
-	double moveDalekCurrentX,moveDalekCurrentY;
+	double moveDalekX,moveDalekY,moveDalekDir;
+	double moveDalekTargetX,moveDalekTargetY,moveDalekTargetDir;
+	double moveDalekCurrentX,moveDalekCurrentY,moveDalekCurrentDir;
 	
 	HashMap<String,Position> dalekImagePosition;
 	HashMap<String,Image> dalekImage;
@@ -84,23 +84,47 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			double distance = dalekImagePosition.get(s).distanceTo(p);
 			if (distance > 0.0) {
 
-			moveDalekName = s;
-			moveDalekPosition = new Position(p);
-			moveDalekCurrentX = 0;
-			moveDalekCurrentY = 0;
+				moveDalekName = s;
+				moveDalekPosition = new Position(p);
+				moveDalekCurrentX = 0;
+				moveDalekCurrentY = 0;
 
-			moveDalekTargetX = p.getSpatialX() -  dalekImagePosition.get(s).getSpatialX() ;
-			moveDalekTargetY = p.getSpatialY() -  dalekImagePosition.get(s).getSpatialY();
+				moveDalekTargetX = p.getSpatialX() -  dalekImagePosition.get(s).getSpatialX() ;
+				moveDalekTargetY = p.getSpatialY() -  dalekImagePosition.get(s).getSpatialY();
 
-			moveDalekX = moveDalekTargetX / (distance * 100);
-			moveDalekY = moveDalekTargetY / (distance * 100);
+				moveDalekX = moveDalekTargetX / (distance * 50.0);
+				moveDalekY = moveDalekTargetY / (distance * 50.0);
 			
-			System.out.println("Target: " + moveDalekTargetX + "," + moveDalekTargetY +" Delta: " + moveDalekX + "," + moveDalekY);
+				System.out.println("Target: " + moveDalekTargetX + "," + moveDalekTargetY +" Delta: " + moveDalekX + "," + moveDalekY);
 			
-			timer.start();
+				timer.start();
 			} else {
+				
 				// reposition dalek incase of rotation.
-				dalekImagePosition.put(moveDalekName,moveDalekPosition);
+				// want to animate
+				
+				moveDalekName = s;
+				moveDalekPosition = new Position(p);
+
+				moveDalekCurrentX = 0;
+				moveDalekCurrentY = 0;
+				moveDalekTargetX = 0;
+				moveDalekTargetY = 0;
+				
+				moveDalekCurrentDir = 0;
+				moveDalekTargetDir = p.getDirection() - dalekImagePosition.get(s).getDirection();
+				// condition for wrap around
+				if (java.lang.Math.abs(moveDalekTargetDir) > 1) {
+					if (moveDalekTargetDir >1 ) { moveDalekTargetDir = -1;} 
+					if (moveDalekTargetDir <-1 ) { moveDalekTargetDir = 1;} 
+
+				}
+				
+				
+				moveDalekDir = moveDalekTargetDir  / 50.0;
+				// dalekImagePosition.put(moveDalekName,moveDalekPosition);
+				timer.start();
+
 			}
 		} else {
 			 System.out.println("**** adding dalek at " + p +" ****");
@@ -132,7 +156,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		drawDalekAt(g,dalek,x,y,w,0);
 	}
 	
-	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w,int dir) {
+	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w,double dir) {
 		
 		if (x>0 && x< mapPanelWidth && y>0 && y < mapPanelHeight) {
 		
@@ -214,7 +238,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 								 (int)this.calX(pos.getSpatialX()+moveDalekCurrentX), 
 								 (int)this.calY(pos.getSpatialY()+moveDalekCurrentY), 
 								 (int)(getMap().getRegScaleX() * scale * dalekScale),
-								 pos.getDirection());
+								 pos.getDirection() + moveDalekCurrentDir);
 			} else {
 
 				this.drawDalekAt(g,dalekImage.get(n),
@@ -226,8 +250,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			}
 		}
 		
+		// temporary dalek image (for positioning and direction)
 		if (this.posDalekImage != null && this.posDalek != null) {
-			this.drawDalekAt(g,posDalekImage,(int)this.calX(this.posDalek.getSpatialX()), (int)this.calY(this.posDalek.getSpatialY()), (int)(getMap().getRegScaleY() * scale * dalekScale),this.posDalek.getDirection());		
+			this.drawDalekAt(g,posDalekImage,
+							 (int)this.calX(this.posDalek.getSpatialX()), 
+							 (int)this.calY(this.posDalek.getSpatialY()), 
+							 (int)(getMap().getRegScaleY() * scale * dalekScale),
+							 this.posDalek.getDirection());		
 		}
 
 	}
@@ -245,9 +274,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 			moveDalekCurrentX += moveDalekX;
 			moveDalekCurrentY += moveDalekY;
+			moveDalekCurrentDir += moveDalekDir;
 
 			if (java.lang.Math.abs(moveDalekCurrentX - moveDalekTargetX) < 0.001 &&
-				java.lang.Math.abs(moveDalekCurrentY - moveDalekTargetY) < 0.001 ) {
+				java.lang.Math.abs(moveDalekCurrentY - moveDalekTargetY) < 0.001 && 
+				java.lang.Math.abs(moveDalekCurrentDir - moveDalekTargetDir) < 0.001) {
 				
 				System.out.println ("**** Dalek at Target ****");
 				
