@@ -77,9 +77,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		if (dalekImagePosition.containsKey(s)) {
 			// dalek exists 
 			// animate to new position.
-			moveDalekName = s;
-			moveDalekPosition = p;
+			
+			System.out.println("Animating: "+s + " from: " + dalekImagePosition.get(s) +" to " + p);
+
+			
 			double distance = dalekImagePosition.get(s).distanceTo(p);
+			if (distance > 0.0) {
+
+			moveDalekName = s;
+			moveDalekPosition = new Position(p);
 			moveDalekCurrentX = 0;
 			moveDalekCurrentY = 0;
 
@@ -89,12 +95,17 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			moveDalekX = moveDalekTargetX / (distance * 100);
 			moveDalekY = moveDalekTargetY / (distance * 100);
 			
+			System.out.println("Target: " + moveDalekTargetX + "," + moveDalekTargetY +" Delta: " + moveDalekX + "," + moveDalekY);
 			
 			timer.start();
+			} else {
+				// reposition dalek incase of rotation.
+				dalekImagePosition.put(moveDalekName,moveDalekPosition);
+			}
 		} else {
-			System.out.println("**** adding dalek at " + p +" ****");
+			 System.out.println("**** adding dalek at " + p +" ****");
 				// simply add the new dalek
-			dalekImagePosition.put(s,p);
+			dalekImagePosition.put(s,new Position(p));
 			dalekImage.put(s,i);
 			this.repaint();
 		}
@@ -194,10 +205,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			
 			Position pos= dalekImagePosition.get(n);
 			
-			System.out.println("**** dalek " + n + " at " + pos +" ****");
 
 			// This is for the dalek animated movement
 			if (moveDalekName != null && moveDalekName.equals(n)) {
+				// System.out.println("**** dalek " + n + " at " + pos +" ****");
+
 				this.drawDalekAt(g,dalekImage.get(n),
 								 (int)this.calX(pos.getSpatialX()+moveDalekCurrentX), 
 								 (int)this.calY(pos.getSpatialY()+moveDalekCurrentY), 
@@ -229,10 +241,16 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		// more dalek sliding
 		if (moveDalekName != null) {
 		
+		// 	System.out.println ("**** Animating movement ****");
+
 			moveDalekCurrentX += moveDalekX;
 			moveDalekCurrentY += moveDalekY;
 
-			if (moveDalekCurrentX == moveDalekTargetX) {
+			if (java.lang.Math.abs(moveDalekCurrentX - moveDalekTargetX) < 0.001 &&
+				java.lang.Math.abs(moveDalekCurrentY - moveDalekTargetY) < 0.001 ) {
+				
+				System.out.println ("**** Dalek at Target ****");
+				
 				dalekImagePosition.put(moveDalekName,moveDalekPosition);
 				moveDalekCurrentX = 0;
 				moveDalekCurrentY = 0;
@@ -311,10 +329,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		int txpos = xpos + (e.getX() - startx);
 		int typos = ypos + (e.getY() - starty);
 						
-		if (imageBound(this.scale,txpos,typos)) {
-			xpos = txpos;
+		if (imageBound(this.scale,xpos,typos)) {
+			// xpos = txpos;
 			ypos = typos;
 		}
+		if (imageBound(this.scale,txpos,ypos)) {
+			xpos = txpos;
+			//ypos = typos;
+		}
+		
 	//	System.out.println("xpos: " + xpos + ", ypos: " + ypos + "startx: " + startx + ", starty: " + starty);
 						    
 		startx = e.getX();

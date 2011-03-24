@@ -135,14 +135,10 @@ public class Player {
 				// check it doesn't clobber another dalek
 			} while (dalekPosition.isIn(getGame().allDalekPositions()));
 			dal.setPosition(dalekPosition);
-			getUI().notifyDalekPosition(dal);
-
-			// get direction
-			//direction = getUI().getDalekDirection(dal);
-			//dal.setDirection(direction);
 			
-			// need to tell the other interface
-			//getOtherUI().notifyDalekPosition(dal);
+			// tell both interfaces where the new dalek is.
+			getUI().notifyDalekPosition(dal);
+			getOtherUI().notifyDalekPosition(dal);
 
 			
 		}
@@ -195,6 +191,9 @@ public class Player {
 									dal.canTurn()
 				);
 			} while (dal.moveDalek(dir) && dal.canTurn());
+				getUI().notifyDalekPosition(dal);
+				getOtherUI().notifyDalekPosition(dal);
+
 			}		
 		}
 	}

@@ -99,25 +99,25 @@ public class Tables {
 		int col;
 		
 		if (d == NORTH) {
-			return new Position(p.getX(),p.getY()-1);
+			return new Position(p.getX(),p.getY()-1,p.getDirection());
 		}
 		if (d == SOUTH) {
-			return new Position(p.getX(),p.getY()+1);
+			return new Position(p.getX(),p.getY()+1,p.getDirection());
 		}
 		
 		col=p.getX() % 2;
 		
 		if (d == NORTHWEST) {
-			return new Position(p.getX()-1,p.getY()+col-1);
+			return new Position(p.getX()-1,p.getY()+col-1,p.getDirection());
 		}
 		if (d == NORTHEAST) {
-			return new Position(p.getX()+1,p.getY()+col-1);
+			return new Position(p.getX()+1,p.getY()+col-1,p.getDirection());
 		}
 		if (d == SOUTHWEST) {
-			return new Position(p.getX()-1,p.getY()+col);
+			return new Position(p.getX()-1,p.getY()+col,p.getDirection());
 		}
 		if (d == SOUTHEAST) {
-			return new Position(p.getX()+1,p.getY()+col);
+			return new Position(p.getX()+1,p.getY()+col,p.getDirection());
 		}
 		return p;
 	}
