@@ -90,6 +90,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				moveDalekCurrentX = 0;
 				moveDalekCurrentY = 0;
 
+				moveDalekDir = 0;
+				moveDalekTargetDir = 0;
+				
 				moveDalekTargetX = p.getSpatialX() -  dalekImagePosition.get(s).getSpatialX() ;
 				moveDalekTargetY = p.getSpatialY() -  dalekImagePosition.get(s).getSpatialY();
 
@@ -289,6 +292,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				dalekImagePosition.put(moveDalekName,moveDalekPosition);
 				moveDalekCurrentX = 0;
 				moveDalekCurrentY = 0;
+				moveDalekCurrentDir=0;
+				moveDalekDir = 0;
 				moveDalekPosition = null;
 				moveDalekName = null;
 				timer.stop();
@@ -436,7 +441,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	public void keyPressed(KeyEvent e) {
-			System.out.println("Action: " + e);
+			//System.out.println("Action: " + e);
 		
 		int kc = e.getKeyCode();
 		

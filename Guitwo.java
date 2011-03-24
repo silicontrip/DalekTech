@@ -152,6 +152,8 @@ public class Guitwo extends Cli {
 
 		
 		mapp.setFocusable(true);
+		mapp.requestFocus();
+
 
 		// not sure where to put forward/backward cost.
 		
