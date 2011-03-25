@@ -119,8 +119,7 @@ public class Player {
 				return false;
 			}
 		}
-		return true;		
-	
+		return true;
 	}
 	
 	void positionDaleks() {
@@ -154,7 +153,6 @@ public class Player {
 		while (it.hasNext()) {
 			daleks.add(dalekList.get(it.next()));
 		}
-		
 	}
 	
 	void moveDalek () {

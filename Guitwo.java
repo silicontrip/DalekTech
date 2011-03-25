@@ -53,6 +53,11 @@ public class Guitwo extends Cli {
 		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
 		mapp = new mapPanel(mapImage,m,this);
 		
+		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
+		
+		// for testing the selector registration...
+		// mapp.setSelectorPosition(new Position(0,0));
+		
 		frame.getContentPane().add(BorderLayout.WEST, statusp);
 		//frame.pack();
 		//frame.setVisible(true);
@@ -142,7 +147,6 @@ public class Guitwo extends Cli {
 	}
 	
 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
-		selectedMovement = -2;
 		
 		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().setEngineCurrent(currentMove);
@@ -159,7 +163,8 @@ public class Guitwo extends Cli {
 		// not sure where to put forward/backward cost.
 		
 	//	getMapPanel().moveDalek(d.getName());
-		
+		selectedMovement = -2;
+
 		while (selectedMovement == -2) {
 			try {
 				Thread.sleep(250); 
@@ -172,20 +177,20 @@ public class Guitwo extends Cli {
 	
 	int getDalekTwist(Dalek d) {
 
-		selectedMovement = -2;
 		
 		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().repaint();
 		
 		
-		mapp.setFocusable(true);
-		mapp.requestFocus();
+		getMapPanel().setFocusable(true);
+		getMapPanel().requestFocus();
 		
 		
 		// not sure where to put forward/backward cost.
 		
 		//	getMapPanel().moveDalek(d.getName());
 		do {
+			selectedMovement = -2;
 		while (selectedMovement == -2) {
 			try {
 				Thread.sleep(250); 
@@ -196,6 +201,47 @@ public class Guitwo extends Cli {
 			   selectedMovement != Tables.NONE) ;
 			
 		return selectedMovement;
+		
+	}
+	
+	int selectDalek (ArrayList<Dalek> dalekList) {
+
+		int currentSelection = 0;
+		int dalekSize = dalekList.size();
+		
+		
+		getMapPanel().setFocusable(true);
+		getMapPanel().requestFocus();
+
+		do {
+			
+			
+			getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+			getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
+			getMapPanel().repaint();
+			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
+
+			selectedMovement = -2;
+
+			while (selectedMovement == -2) {
+				try {
+					Thread.sleep(250); 
+				} catch (InterruptedException ie) { ; }
+			}
+		
+		if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+			currentSelection --;
+			if (currentSelection < 0 ) { currentSelection += dalekSize; }
+		}
+			if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+				currentSelection++;
+				if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
+				
+			}
+		} while (selectedMovement != Tables.NONE) ;
+
+		getMapPanel().setSelectorPosition(null);
+		return currentSelection;
 		
 	}
 	

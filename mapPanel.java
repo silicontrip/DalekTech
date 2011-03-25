@@ -13,6 +13,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	double dalekScale = 0.5;
 	int xpos, ypos;
 	Image map;
+	Image selectorImage=null;
+	Position selectorPosition=null;
 	Map gridMap;
 	int startx, starty;
 	Guitwo callback;
@@ -60,6 +62,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 	}
 			
+	void setSelectorImage(Image i) { this.selectorImage = i; }
+	void setSelectorPosition(Position p) { this.selectorPosition = p; }
+	Position getSelectorPosition() { return this.selectorPosition; }
+	
 	Map getMap() { return gridMap; }
 	double getScale() { return scale; }
 	
@@ -231,6 +237,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		graphics2D.drawImage(map, xpos, ypos, w, h, null);
 		g.drawImage(thumbImage,0,0,null);
 		 
+		if (getSelectorPosition() != null) {
+			// arg horrible registration values.
+			g.drawImage(selectorImage, 
+						(int)this.calX(getSelectorPosition().getSpatialX() - 0.57),
+						(int)this.calY(getSelectorPosition().getSpatialY() - 0.50), 
+						(int)(getMap().getRegScaleX() * scale * 1.175),
+						(int)(getMap().getRegScaleY() * scale * 1.025 ),
+						null);
+		}
 		
 	//	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		// g.drawImage(map,xpos,ypos,w,h,null);  // doesn't do antialiased scaling.
