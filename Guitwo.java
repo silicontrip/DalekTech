@@ -72,21 +72,12 @@ public class Guitwo extends Cli {
 	statusPanel getStatusPanel() { return statusp; }
 	
 	
-	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) {
-		this.selectedDaleks = selectedDaleks;
-	}
+	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) { this.selectedDaleks = selectedDaleks; }
+	void setSelectedPosition(Position p) { this.selectedPosition = p; }
+	void setSelectedDirection(int d) { this.selectedDirection = d; }
+	void setSelectedMovement(int d) { this.selectedMovement = d; }
 	
-	void setSelectedPosition(Position p) {
-		this.selectedPosition = p;
-	}
-	
-	void setSelectedDirection(int d) {
-		this.selectedDirection = d;
-	}
-	
-	void setSelectedMovement(int d) { 
-		this.selectedMovement = d;
-	}
+	void setInterfaceMessage(String s) { getMapPanel().setInterfaceMessage(s); }
 	
 	Position getDalekPosition(Dalek d) {
 
@@ -205,45 +196,91 @@ public class Guitwo extends Cli {
 	}
 	
 	int selectDalek (ArrayList<Dalek> dalekList) {
-
+		
 		int currentSelection = 0;
 		int dalekSize = dalekList.size();
 		
+		getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+		
+		if (dalekSize > 1) {
+			getMapPanel().setFocusable(true);
+			getMapPanel().requestFocus();
+			
+			do {
+				getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+				getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
+				getMapPanel().repaint();
+				//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
+				
+				selectedMovement = -2;
+				
+				while (selectedMovement == -2) {
+					try {
+						Thread.sleep(250); 
+					} catch (InterruptedException ie) { ; }
+				}
+				
+				if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+					currentSelection --;
+					if (currentSelection < 0 ) { currentSelection += dalekSize; }
+				}
+				if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+					currentSelection++;
+					if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
+				}
+			} while (selectedMovement != Tables.NONE) ;
+			
+			getMapPanel().setSelectorPosition(null);
+			getMapPanel().repaint();
+
+			return currentSelection;
+		}
+		return 0;
+		
+	}
+	
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> dalekList, ArrayList<Integer> targetCost) {
+		
+		int currentSelection = 0;
+		int dalekSize = dalekList.size();
+		
+		getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+
 		
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
-
+		
 		do {
-			
-			
 			getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
 			getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
+			getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+
 			getMapPanel().repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
-
+			
 			selectedMovement = -2;
-
+			
 			while (selectedMovement == -2) {
 				try {
 					Thread.sleep(250); 
 				} catch (InterruptedException ie) { ; }
 			}
-		
-		if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
-			currentSelection --;
-			if (currentSelection < 0 ) { currentSelection += dalekSize; }
-		}
+			
+			if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+				currentSelection --;
+				if (currentSelection < 0 ) { currentSelection += dalekSize; }
+			}
 			if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
 				currentSelection++;
 				if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
-				
 			}
 		} while (selectedMovement != Tables.NONE) ;
-
+		
 		getMapPanel().setSelectorPosition(null);
 		return currentSelection;
 		
 	}
+	
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 
@@ -318,13 +355,26 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
-	
-	
-	void notifyDalekPosition(Dalek d) {
-	
-		getMapPanel().notifyDalek(d.getName(),dalekImage(d.getName()),d.getPosition());
+	void notifyEngine (int current, int walk, int run) {
+		
+		getStatusPanel().setEngineCurrent(current);
+		getStatusPanel().setEngineWalk(walk);
+		getStatusPanel().setEngineRun(run);
+		
+		getStatusPanel().repaint();
+		
 		
 	}
+	
+	void notifyDalekPosition(Dalek d) {
+		getMapPanel().notifyDalek(d.getName(),dalekImage(d.getName()),d.getPosition());
+	}
+	
+	void notifyEnd(boolean destroyed) {
+		if (destroyed) { this.setInterfaceMessage("All Daleks Destroyed - Mission Failed"); }
+		if (!destroyed) { this.setInterfaceMessage("Enemy Daleks Destroyed - Mission Accomplished"); }
+	}
+	
 	
 	Image dalekImage(String name) {
 	
@@ -353,6 +403,8 @@ public class Guitwo extends Cli {
 		System.err.println ("getImageWithFilename (" + fn + ") Returns Null");
 		return null;
 	}
+	
+	
 	
 	
 	/*

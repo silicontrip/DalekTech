@@ -125,6 +125,10 @@ public class Player {
 	void positionDaleks() {
 		Dalek dal;
 		Iterator<Dalek> it = daleks.iterator();
+		
+		getUI().setInterfaceMessage("Position");
+
+		
 		while(it.hasNext()) {
 			int direction;
 			Position dalekPosition;
@@ -138,9 +142,9 @@ public class Player {
 			// tell both interfaces where the new dalek is.
 			getUI().notifyDalekPosition(dal);
 			getOtherUI().notifyDalekPosition(dal);
-
-			
 		}
+		getUI().setInterfaceMessage(null);
+
 	}
 	
 	
@@ -156,6 +160,10 @@ public class Player {
 	}
 	
 	void moveDalek () {
+		
+		getUI().setInterfaceMessage("Move");
+
+		
 		if (!this.allMoved()) {
 			int dir;
 			Dalek dal;
@@ -192,9 +200,14 @@ public class Player {
 
 			}		
 		}
+		getUI().setInterfaceMessage(null);
+
 	}
 	
 	void twistDalek () {
+		
+		getUI().setInterfaceMessage("Twist");
+		
 		if (!this.allTwist()) {
 			ArrayList<Dalek> havent = getHaventTwist();
 			Dalek dal;
@@ -202,10 +215,15 @@ public class Player {
 			dal.setTwist(true);
 			dal.faceDalek( getUI().getDalekTwist(dal) );
 		}
+		getUI().setInterfaceMessage(null);
+
 	}
 	
 	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
 		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
+		
+		getUI().setInterfaceMessage("Fire");
+
 		if (!this.allFired()) {
 			ArrayList<Weapon> weaponArray;
 			Weapon weap;
@@ -228,7 +246,8 @@ public class Player {
                         // calculate difficulty of shot
 						cost.add(new Integer(weap.costFire(targetDaleks.get(i))));
 					}                                       
-					
+					getUI().setInterfaceMessage("Target");
+
 					target=getUI().selectTargetDalek(dal,targetDaleks,cost);
 					if (target != -1) {
 						fireMap.put(weap, targetDaleks.get(target));
@@ -236,6 +255,8 @@ public class Player {
 				}
 			} while (select != -1);
 		}
+		getUI().setInterfaceMessage(null);
+
 		return fireMap;
 	}
 	

@@ -23,6 +23,7 @@ public abstract class UserInterface {
 	// or getting this class to do the work.
 	
 	// status 
+	abstract void setInterfaceMessage(String s);
 	abstract void notifyDalekPosition(Dalek d);
 	abstract void notifyName(Dalek d);
 	abstract void notifyEngine(int current, int walk, int run);

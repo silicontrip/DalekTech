@@ -278,6 +278,13 @@ public class Cli extends UserInterface {
 //
 ///////////////////////////////////////////////////////
 	
+	void setInterfaceMessage(String s) {
+		if (s != null) {
+			System.out.println (s);
+		}
+	}
+
+	
 	void notifyEngine (int current, int walk, int run) {
 		
 		if (current == 0) {
@@ -315,7 +322,7 @@ public class Cli extends UserInterface {
 	}	
 	
 	void notifyDalekPosition(Dalek d) {
-		System.out.println (d.getPosition().toString() + ":" + d.getDirection());
+		System.out.println (d.getName() + ": " + d.getPosition().toString());
 	}
 	
 	void notifyDamage(Dalek d) {

@@ -18,17 +18,23 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Map gridMap;
 	int startx, starty;
 	Guitwo callback;
-
+	
+	
 	Image posDalekImage = null;
 	Position posDalek=null;
 
 	int mouseState = 0;
+	
+	String interfaceMessage = null;
 	
 	String moveDalekName=null;
 	Position moveDalekPosition=null;
 	double moveDalekX,moveDalekY,moveDalekDir;
 	double moveDalekTargetX,moveDalekTargetY,moveDalekTargetDir;
 	double moveDalekCurrentX,moveDalekCurrentY,moveDalekCurrentDir;
+	
+	double moveXpos=0, moveYpos=0;
+	Position moveXYpos;
 	
 	HashMap<String,Position> dalekImagePosition;
 	HashMap<String,Image> dalekImage;
@@ -60,34 +66,54 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		timer.setCoalesce(false);
 		timer.setRepeats(true);
 		
+
+		
 	}
 			
 	void setSelectorImage(Image i) { this.selectorImage = i; }
 	void setSelectorPosition(Position p) { this.selectorPosition = p; }
 	Position getSelectorPosition() { return this.selectorPosition; }
 	
+	void setInterfaceMessage(String s) { interfaceMessage = s; }
+		
+	
 	Map getMap() { return gridMap; }
 	double getScale() { return scale; }
 	
-	double calX (double x) {
+	double calX (double x) { return ((getMap().getRegScaleX() *x + getMap().getRegTLX()) * getScale()) + xpos; }
+	double calY (double y) { return ((getMap().getRegScaleY() *y + getMap().getRegTLY()) * getScale()) + ypos; }
 		
-		//System.out.println("regScaleX: " + getMap().getRegScaleX() +", RegTLX: " + getMap().getRegTLX());
+	void centreOn(Position p) { 
+	
+		moveXpos = (mapPanelWidth/2  - this.calX(p.getSpatialX())) / 50.0;
+		moveYpos = (mapPanelHeight/2 - this.calY(p.getSpatialY())) / 50.0;
 		
-		return ((getMap().getRegScaleX() *x + getMap().getRegTLX()) * getScale()) + xpos;
+		/*
+		if (moveXpos > 0 && moveXpos<1) {moveXpos = 1; }
+		if (moveYpos > 0 && moveYpos<1 ) {moveYpos = 1; }
+
+		if (moveXpos < 0 && moveXpos>-1) {moveXpos = -1; }
+		if (moveYpos < 0 && moveYpos>-1 ) {moveYpos = -1; }
+		 */
+		
+		moveXYpos = new Position (p);		
+		
+		timer.start();
 	}
 	
-	double calY (double y) {
-		return ((getMap().getRegScaleY() *y + getMap().getRegTLY()) * getScale()) + ypos;
-	}
-		
 	void notifyDalek(String s, Image i, Position p) {
+		// scroll map display to position.
+		
+		this.centreOn(p);
+		
+		//System.out.println("Animate: " + moveXpos + ","+moveYpos+" : " + moveXYpos);
+		
 		if (dalekImagePosition.containsKey(s)) {
 			// dalek exists 
 			// animate to new position.
 			
 			// System.out.println("Animating: "+s + " from: " + dalekImagePosition.get(s) +" to " + p);
 
-			
 			double distance = dalekImagePosition.get(s).distanceTo(p);
 			if (distance > 0.0) {
 
@@ -107,7 +133,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			
 				// System.out.println("Target: " + moveDalekTargetX + "," + moveDalekTargetY +" Delta: " + moveDalekX + "," + moveDalekY);
 			
-				timer.start();
+				// timer.start();
 			} else if ( p.getDirection() != dalekImagePosition.get(s).getDirection()) {
 				
 				// reposition dalek incase of rotation.
@@ -136,7 +162,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				
 				moveDalekDir = moveDalekTargetDir  / 50.0;
 				// dalekImagePosition.put(moveDalekName,moveDalekPosition);
-				timer.start();
+				// timer.start();
 
 			}
 		} else {
@@ -146,6 +172,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			dalekImage.put(s,i);
 			this.repaint();
 		}
+		timer.start();
 	}
 	void removeArray (String s) {
 		dalekImagePosition.remove(s);
@@ -287,6 +314,14 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 							 (int)(getMap().getRegScaleY() * scale * dalekScale),
 							 this.posDalek.getDirection());		
 		}
+		
+		if (interfaceMessage != null) {
+			
+			g.setColor(java.awt.Color.WHITE);
+			g.setFont( new Font("Eurostile",0,24));
+			g.drawString(interfaceMessage,32,32);
+		}
+			
 
 	}
 	
@@ -295,16 +330,16 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-
+		
 		// more dalek sliding
 		if (moveDalekName != null) {
-		
-		// 	System.out.println ("**** Animating movement ****");
-
+			
+			// 	System.out.println ("**** Animating movement ****");
+			
 			moveDalekCurrentX += moveDalekX;
 			moveDalekCurrentY += moveDalekY;
 			moveDalekCurrentDir += moveDalekDir;
-
+			
 			if (java.lang.Math.abs(moveDalekCurrentX - moveDalekTargetX) < 0.01 &&
 				java.lang.Math.abs(moveDalekCurrentY - moveDalekTargetY) < 0.01 && 
 				java.lang.Math.abs(moveDalekCurrentDir - moveDalekTargetDir) < 0.01) {
@@ -318,13 +353,58 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				moveDalekDir = 0;
 				moveDalekPosition = null;
 				moveDalekName = null;
-				timer.stop();
+				//	timer.stop();
 			}
-			this.repaint();	
+		}
+		if (moveXYpos != null) {
+			
+			int txpos = xpos + (int)moveXpos;
+			int typos = ypos + (int)moveYpos;
+			
+			boolean xfin,yfin,xcant,ycant;
+			
+			double dx,dy;
+			
+			yfin =  (moveYpos > -1 && moveYpos < 1);
+			xfin =  (moveXpos > -1 && moveXpos < 1);
+
+			
+			dx = java.lang.Math.abs(mapPanelWidth/2  - this.calX(moveXYpos.getSpatialX()));
+			dy = java.lang.Math.abs(mapPanelHeight/2  - this.calY(moveXYpos.getSpatialY()));
+			
+			xfin = dx <java.lang.Math.abs(moveXpos) || xfin;
+			yfin = dy <java.lang.Math.abs(moveYpos) || yfin;
+			
+			//centreOn(moveXYpos);
+			
+			ycant = (!imageBound(this.scale,xpos,typos));
+			xcant = (!imageBound(this.scale,txpos,ypos));
+
+			//System.out.print("Motion: " + moveXpos+ ", " + moveYpos + " Distance: " + dx + ", " +dy);
+
+//			System.out.println(" xfin: " + xfin + ", yfin: " + yfin + ", xcant: " + xcant + ", ycant: " + ycant);
+			
+			if (imageBound(this.scale,xpos,typos)) { ypos = typos; }
+			if (imageBound(this.scale,txpos,ypos)) { xpos = txpos; }
+			if (yfin) { moveYpos = 0;}
+			if (xfin) { moveXpos = 0;}
+
+			if ((xcant && ycant) || (xfin && yfin) || (xcant && yfin) || (xfin && ycant)){
+				moveXpos =0;
+				moveYpos =0;
+				moveXYpos = null;
+			} 
+			
 		}
 		
-	}
+		if (moveDalekName == null && moveXYpos == null) {
+			timer.stop();
+		}
 		
+		this.repaint();	
+		
+	}
+	
 	public void mouseReleased(MouseEvent e) { 		
 	//	System.out.println("mouseReleased: " + e);
 	}
