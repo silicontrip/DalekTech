@@ -144,6 +144,7 @@ public class Guitwo extends Cli {
 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
 		selectedMovement = -2;
 		
+		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().setEngineCurrent(currentMove);
 		getStatusPanel().setEngineWalk(walk);
 		getStatusPanel().setEngineRun(run);
@@ -169,11 +170,42 @@ public class Guitwo extends Cli {
 		
 	}
 	
+	int getDalekTwist(Dalek d) {
+
+		selectedMovement = -2;
+		
+		getStatusPanel().setDalekName(d.getName());
+		getStatusPanel().repaint();
+		
+		
+		mapp.setFocusable(true);
+		mapp.requestFocus();
+		
+		
+		// not sure where to put forward/backward cost.
+		
+		//	getMapPanel().moveDalek(d.getName());
+		do {
+		while (selectedMovement == -2) {
+			try {
+				Thread.sleep(250); 
+			} catch (InterruptedException ie) { ; }
+		}
+		} while (selectedMovement != Tables.LEFT &&
+			   selectedMovement != Tables.RIGHT &&
+			   selectedMovement != Tables.NONE) ;
+			
+		return selectedMovement;
+		
+	}
+	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 
 		factoryPanel = new selectFactoryDaleksPanel(dalekImages,dalekList,this);
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
+		factoryPanel.setSelectorImage(getImageWithFilename("Images/statusPanel.png"));
+
 
 		frame.getContentPane().add(BorderLayout.EAST, factoryPanel);
 		

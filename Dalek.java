@@ -28,8 +28,18 @@ public class Dalek implements Serializable  {
 	String getName() { return name; }
 	void setPosition (Position p) {pos = p;}
 	Position getPosition () { return pos; }
-	void setDirection (int d) {pos.setDirection(d);}
-	int getDirection() { return pos.getDirection(); }
+	void setDirection (int d) {
+		while (d<0) {d += 6;}
+		d = d % 6;
+		this.getPosition().setDirection(d); 
+		this.setFacing(d); 
+	}
+	void setFacing(int d) { 
+		while (d<0) {d += 6;}
+		d = d % 6;
+		this.facing = d; 
+	}
+	int getDirection() { return this.getPosition().getDirection(); }
 	void setMovement (int m) {movement = m;}
 	int getMovement() { return movement; }
 	void setWalk (int w) {walk = w;}
@@ -99,7 +109,7 @@ public class Dalek implements Serializable  {
 	
 	void reset() {
 		movement = 0;
-		facing = this.getDirection();
+		this.setFacing(this.getDirection());
 		setMoved(false);
 		setTwist(false);
 		setFired(false);
@@ -117,6 +127,17 @@ public class Dalek implements Serializable  {
 	
 	boolean moveForwards () { return this.moveDalekDirection(this.getDirection()); }
 	boolean moveBackwards () { return this.moveDalekDirection(Tables.oppositeDirection(this.getDirection())); }
+	
+	void faceDalek(int d) {
+		
+		if (d == Tables.LEFT) {
+			 this.faceLeft();
+		}
+		if (d == Tables.RIGHT) {
+			 this.faceRight();
+		}
+	}		
+	
 	boolean moveDalek (int d) {
 	
 		if (d == Tables.LEFT) {
@@ -146,7 +167,7 @@ public class Dalek implements Serializable  {
 	
 	boolean turnLeft () { 			
 		if (this.canTurn()) {
-			setDirection((this.getDirection() - 1)  % 6);
+			setDirection(this.getDirection() - 1);
 			movement ++;
 			return true;
 		}
@@ -155,13 +176,22 @@ public class Dalek implements Serializable  {
 	
 	boolean turnRight () { 			
 		if (this.canTurn()) {
-			setDirection((this.getDirection() + 1)  % 6);
+			setDirection(this.getDirection() + 1);
 			movement ++;
 			return true;
 		}
 		return false;
 
 	}
+	
+	void faceLeft() {
+		setFacing(this.getDirection() - 1);
+	}
+	
+	void faceRight() {
+		setFacing(this.getDirection() + 1);
+	}
+	
 	
 	double distanceMoved() { return this.getPosition().distanceTo(this.old); }
 	int baseHit() { return Tables.movementHitCost(this) + getBase(); }

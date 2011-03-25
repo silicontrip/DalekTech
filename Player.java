@@ -152,9 +152,7 @@ public class Player {
 		
 		it  = select.iterator();
 		while (it.hasNext()) {
-			daleks.add(
-					   dalekList.get(
-									 it.next()));
+			daleks.add(dalekList.get(it.next()));
 		}
 		
 	}
@@ -204,7 +202,7 @@ public class Player {
 			Dalek dal;
 			dal = havent.get(getUI().selectDalek(havent));
 			dal.setTwist(true);
-			dal.moveDalek( getUI().getDalekTwist(dal));
+			dal.faceDalek( getUI().getDalekTwist(dal) );
 		}
 	}
 	
