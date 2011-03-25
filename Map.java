@@ -30,8 +30,8 @@ public class Map implements Serializable {
 	public Map() { ; }
 	
 	Position getSize() { return size; }
-	int getSizeX() { return getSize().getX(); }
-	int getSizeY() { return getSize().getY(); }
+	int getSizeX() { return getSize().getX() + 1; }
+	int getSizeY() { return getSize().getY() + 1; }
 	int getRegTLX () { return regtlx; }
 	int getRegTLY () { return regtly; }
 	int getRegBRX () { return regbrx; }

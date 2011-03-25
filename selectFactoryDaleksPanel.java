@@ -12,6 +12,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	int slide, slideDelta;
 	Guitwo callback;
 	Image selector;
+	Image overlay;
 
 	javax.swing.Timer timer;
 
@@ -66,10 +67,9 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	
 	Guitwo getCallbackUI() { return callback; }
 	
-	void setSelectorImage (Image i) {
-		selector = i;
-	}
-	
+	void setSelectorImage (Image i) { selector = i; }
+	void setOverlayImage (Image i) { overlay = i; }
+
 	/*
 	void setStatusPanel(statusPanel sp) {
 		this.sp = sp;
@@ -144,14 +144,15 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 				xl += getDalekWidth();
 			}	
 			
-			BufferedImage thumbImage = new BufferedImage(128, 384, BufferedImage.TYPE_4BYTE_ABGR);
+			BufferedImage thumbImage = new BufferedImage(128, 320, BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			graphics2D.drawImage(selector, 0, 0, 128, 384, null);
+			graphics2D.drawImage(selector, 0, 0, 128, 320, null);
 			
-			g.drawImage(thumbImage,256,48,null);
+			g.drawImage(thumbImage,256,80,null);
 			
-			
+			g.drawImage(overlay,0,0,640,480,null);
+
 			
 			Iterator<Integer> it = selectedDaleks.iterator();
 			xl = 0;
@@ -159,12 +160,14 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 			while (it.hasNext()) {
 				dalekName = dalekList.get(it.next()).getName();
 				
-				this.drawDalekAt(g,dalekName,xl,480,getDalekIconWidth());
+				this.drawDalekAt(g,dalekName,xl+32,458,getDalekIconWidth());
 				
 				xl += getDalekIconWidth();
 				
 				
 			}
+			
+
 			
 		}
 	}

@@ -205,6 +205,7 @@ public class Guitwo extends Cli {
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
 		factoryPanel.setSelectorImage(getImageWithFilename("Images/statusPanel.png"));
+		factoryPanel.setOverlayImage(getImageWithFilename("Images/selectionOverlay.png"));
 
 
 		frame.getContentPane().add(BorderLayout.EAST, factoryPanel);

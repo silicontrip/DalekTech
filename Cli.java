@@ -157,15 +157,38 @@ public class Cli extends UserInterface {
 //////////////////////////////////////////////////////////////////////
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
+		String sValues[];
+		String input;
 		int dal;
 		ArrayList<Integer> dalekSelection = new ArrayList<Integer>();
 		
+		for (int i=0; i< dalekList.size(); i++) {
+			System.out.println ((i+1) + ". " + dalekList.get(i));
+		}					
+	
+		System.out.println("Enter comma seperated daleks: ");
+		
 		do {
-			dal = this.selectDalekWithExit(dalekList);
-			if (dal != -1) {
-				dalekSelection.add(new Integer(dal));
+
+			input = readln();
+			sValues = input.split(",");
+			
+			dal = 1;
+			try {
+
+				for (int i=0; i< sValues.length; i++) {
+					
+					//System.out.println("Parsing: " + sValues[i]);
+					
+					dalekSelection.add(new Integer(Integer.parseInt(sValues[i])-1));
+				}
+			} 
+			catch (NumberFormatException nfe) 
+			{ 
+				dal = 0;
 			}
-		} while (dal != -1);
+
+		} while (dal == 0);
 		return dalekSelection;
 	}
 	
