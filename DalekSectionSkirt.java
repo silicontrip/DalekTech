@@ -1,4 +1,3 @@
-
 public class DalekSectionSkirt extends DalekSection {
 	
 	void auxilaryDamage () {
@@ -13,6 +12,4 @@ public class DalekSectionSkirt extends DalekSection {
 	public DalekSectionSkirt (String name, int damage, DalekSection transfer, Weapon weapon) {
 		super(name,damage,transfer,weapon);
 	}
-	
-	
 }

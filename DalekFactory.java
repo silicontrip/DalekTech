@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public class DalekFactory {
 	
@@ -247,6 +249,20 @@ public class DalekFactory {
 		
 		
 		return dalek;
+	}
+	
+	Dalek dalekWithName(String n) {
+
+		ArrayList<Dalek> dalekList = getAllDaleks();
+		Iterator<Dalek> it = dalekList.iterator();
+		
+		while (it.hasNext()){
+			Dalek d = it.next();
+			if (d.getName().equals(n)) {
+				return d;
+			}
+		}
+		return null;
 	}
 	
 	static ArrayList<Dalek> getAllDaleks() {

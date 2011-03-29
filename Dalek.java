@@ -29,9 +29,7 @@ public class Dalek implements Serializable  {
 	void setPosition (Position p) {pos = p;}
 	Position getPosition () { return pos; }
 	void setDirection (int d) {
-		while (d<0) {d += 6;}
-		d = d % 6;
-		this.getPosition().setDirection(d); 
+		this.getPosition().setDirection(d);  // position direction has out of bounds detector
 		this.setFacing(d); 
 	}
 	void setFacing(int d) { 
@@ -184,13 +182,8 @@ public class Dalek implements Serializable  {
 
 	}
 	
-	void faceLeft() {
-		setFacing(this.getDirection() - 1);
-	}
-	
-	void faceRight() {
-		setFacing(this.getDirection() + 1);
-	}
+	void faceLeft() { setFacing(this.getDirection() - 1); }
+	void faceRight() { setFacing(this.getDirection() + 1); }
 	
 	
 	double distanceMoved() { return this.getPosition().distanceTo(this.old); }

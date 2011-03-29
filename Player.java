@@ -127,7 +127,6 @@ public class Player {
 		Iterator<Dalek> it = daleks.iterator();
 		
 		getUI().setInterfaceMessage("Position");
-
 		
 		while(it.hasNext()) {
 			int direction;
@@ -155,7 +154,7 @@ public class Player {
 		
 		it  = select.iterator();
 		while (it.hasNext()) {
-			daleks.add(dalekList.get(it.next()));
+			daleks.add(DalekFactory.getInstance().dalekWithName(dalekList.get(it.next()).getName()));
 		}
 	}
 	
