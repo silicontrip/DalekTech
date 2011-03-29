@@ -11,6 +11,9 @@ public class statusPanel extends JPanel {
 	
 	HashMap<String,Image> dalekDamageImages;
 	HashMap<String,Image> dalekTacticalImages;
+	HashMap<String,ArrayList<Integer>> dalekDamageValue;
+	HashMap<String,ArrayList<Point>> dalekdamageRegistration; // this needs a composite key
+	
 
 	Image panelBackground;
 	

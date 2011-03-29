@@ -1,6 +1,8 @@
 import java.util.*;
 import java.io.*;
 import java.lang.Math;
+import java.awt.geom.Point2D.Double;
+
 
 public class Position implements Serializable {
 	
@@ -15,7 +17,11 @@ public class Position implements Serializable {
 	public int getDirection() { return dir; }
 	public void setX(int i) { x=i; }
 	public void setY(int i) { y=i; }
-	public void setDirection(int dir) { this.dir = dir; }
+	public void setDirection(int dir) { 
+		dir = dir %6;
+		while (dir<0) {dir += 6;}
+		this.dir = dir; 
+	}
 	
 	public void setPosition(int x, int y, int d) {
 		this.x =x;
@@ -45,6 +51,11 @@ public class Position implements Serializable {
 		this.y = p.getY();
 		this.dir = p.getDirection();
 	}
+
+	public void setPosition(Double p) {
+		this.setPosition(p.getX(),p.getY());
+		this.dir = Tables.NONE;
+	}
 	
 	public void moveForward () {
 		;
@@ -58,24 +69,16 @@ public class Position implements Serializable {
 		this.setDirection(this.directionTo(p));
 	}
 	
-	public void turnLeft () {
-		setDirection((this.getDirection() - 1)  % 6);
-	}
-	
-	public void turnRight () {
-		setDirection((this.getDirection() + 1)  % 6);
-	}
+	public void turnLeft () { setDirection((this.getDirection() - 1)  % 6); }
+	public void turnRight () { setDirection((this.getDirection() + 1)  % 6); }
 	
 	public int directionTo(Position p) {
 	
-		double v1 = p.getSpatialX() - this.getSpatialX() ;
-
-		double v2 = p.getSpatialY() - this.getSpatialY() ;
-
-
+		Double diff = this.getSpatialDiff(p);
+		
 	//	System.out.println("tsx: " + this.getSpatialX() + ", tsy: " + this.getSpatialY() + ", psx: " + p.getSpatialX() + ", psy: " +  p.getSpatialY() );
 		
-		if (java.lang.Math.abs (v1) < 0.001) {
+		if (java.lang.Math.abs (diff.getX()) < 0.001) {
 		
 			if (p.getSpatialY() > this.getSpatialY() ) { return Tables.SOUTH; }
 			if (p.getSpatialY() < this.getSpatialY() ) { return Tables.NORTH; }
@@ -83,37 +86,40 @@ public class Position implements Serializable {
 			return Tables.NONE;
 		}
 		
-		double angle = java.lang.Math.atan( v2 / v1 );
+		double angle = java.lang.Math.atan( diff.getY() / diff.getX() );
 		
 	//	System.out.println("angle: " + angle);
 		
-		if (v1 >= 0 ) {
+		if (diff.getX() >= 0 ) {
 			if (angle >=0 && angle < 1.04719755109187799103455468647774618) {return Tables.SOUTHEAST;}
 			if (angle >= 1.04719755109187799103455468647774618) { return Tables.SOUTH; }
 			if (angle <0 && angle > - 1.04719755109187799103455468647774618) { return Tables.NORTHEAST; }
 			if (angle <= -1.04719755109187799103455468647774618) { return Tables.NORTH; }
-
 		}
-		if (v1 < 0) {
+		if (diff.getX() < 0) {
 			if (angle >=0 && angle < 1.04719755109187799103455468647774618) {return Tables.NORTHWEST;}
 			if (angle >= 1.04719755109187799103455468647774618) { return Tables.NORTH; }
 			if (angle <0 && angle > - 1.04719755109187799103455468647774618) { return Tables.SOUTHWEST; }
 			if (angle <= -1.04719755109187799103455468647774618) { return Tables.SOUTH; }
-			
 		}
 			
 		return Tables.NONE;
 
 		
 	}
+
+	public Double getSpatial() { return new Double(getSpatialX(),getSpatialY()); }
+	public Double getSpatialDiff(Position p) {
+		return new Double(p.getSpatialX() - this.getSpatialX(),
+						  p.getSpatialY() - this.getSpatialY());
+	}
 	
 	public double getSpatialX() { return x * sin60; }
 	public double getSpatialY() { return y + (x % 2) / 2.0; }
 	public double distanceTo(Position p) { 
-		double v1 = java.lang.Math.abs(this.getSpatialX() - p.getSpatialX());
-		double v2 = java.lang.Math.abs(this.getSpatialY() - p.getSpatialY());
-		
-		return java.lang.Math.sqrt(v1*v1 + v2 * v2);
+		return this.getSpatial().distance(p.getSpatial());		
+//		Double diff = this.getSpatialDiff(p);
+//		return java.lang.Math.sqrt(diff.getX() * diff.getX()  + diff.getY() * diff.getY());
 	}
 
 	public String toString() {
@@ -129,36 +135,21 @@ public class Position implements Serializable {
 		Iterator<Position> it = p.iterator();
 		
 		while (it.hasNext()) {
-			if (this.equals(it.next())) {
+			if (this.equalsIgnoreDirection(it.next())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean equals (Position p) {
+	public boolean equalsIgnoreDirection (Position p) {
 		return p.getX() == this.getX() && p.getY() == this.getY();
 	}
 	
-	
-	
 	public Position () {;}
-	public Position (int x, int y) {this.setX(x); this.setY(y); this.setDirection(0); }
+	public Position (int x, int y) {this(x,y,0);}
 	public Position (int x, int y, int dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
-
-	public Position (double x, double y) {
-	
-		this.x = (int)java.lang.Math.round(x/sin60);
-		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
-		this.setDirection(0);
-		
-		
-	}
-	
-	public Position (double x, double y, int dir) { 
-		// finds the nearest point
-		this.x = (int)java.lang.Math.round(x/sin60);
-		this.y = (int)java.lang.Math.round(y - (this.x % 2) / 2.0);
-		this.setDirection(dir);
-	}
-	public Position(Position p) { this.setPosition(p); }
+	public Position (Double p) { this(p.getX(),p.getY()); }
+	public Position (double x, double y) { this(x,y,0); }
+	public Position (double x, double y, int dir) { this.setPosition(x,y,dir);}
+	public Position (Position p) { this(p.getX(),p.getY(),p.getDirection()); }
 }

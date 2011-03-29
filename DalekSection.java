@@ -60,38 +60,9 @@ public class DalekSection implements Serializable {
 //		}
 	}
 	
-	public DalekSection (String name, int damage) {
-		this.name = name;
-		this.armour = damage;
-		this.currentArmour = damage;
-		
-		this.transfer = null;
-		this.dalek = null;
-		this.weapon = null;
-	}
-	
-	
-	public DalekSection (String name, int damage, DalekSection transfer) {
-		this.name = name;
-		this.armour = damage;
-		this.currentArmour = damage;
-		this.transfer = transfer;
-		
-		this.dalek = null;
-		this.weapon = null;
-	}
-	
-	public DalekSection (String name, int damage, DalekSection transfer, Weapon weapon) {
-		this.name = name;
-		this.armour = damage;
-		this.currentArmour = damage;
-		this.transfer = transfer;
-		this.weapon = weapon;
-		this.weapon.setDalekSection(this);
-		
-		this.dalek = null;
-	}
-	
+	public DalekSection (String name, int damage) {	this(name,damage,null); }
+	public DalekSection (String name, int damage, DalekSection transfer) { this(name,damage,transfer,null);}	
+	public DalekSection (String name, int damage, DalekSection transfer, Weapon weapon) { this(name,damage,transfer,weapon,null); }
 	public DalekSection (String name, int damage, DalekSection transfer, Weapon weapon, Dalek dalek) {
 		this.name = name;
 		this.armour = damage;
@@ -99,7 +70,6 @@ public class DalekSection implements Serializable {
 		this.transfer = transfer;
 		this.weapon = weapon;
 		this.weapon.setDalekSection(this);
-
 		this.dalek = dalek;
 	}
 	

@@ -1,5 +1,7 @@
 import java.util.*;
 import java.io.*;
+import java.awt.*;
+import java.awt.geom.Point2D.Double;
 
 public class Map implements Serializable {
 
@@ -17,9 +19,11 @@ public class Map implements Serializable {
 	
 // 	int sizex, sizey;
 	String graphicFile;
-	int  regtlx, regtly, regbrx, regbry;
+	//int  regtlx, regtly, regbrx, regbry;
 
-       public static Map getInstance() {
+	Point regTL,regBR;
+	
+	public static Map getInstance() {
                 if (instance == null) {
                         instance = new Map();
                 }
@@ -32,14 +36,16 @@ public class Map implements Serializable {
 	Position getSize() { return size; }
 	int getSizeX() { return getSize().getX() + 1; }
 	int getSizeY() { return getSize().getY() + 1; }
-	int getRegTLX () { return regtlx; }
-	int getRegTLY () { return regtly; }
-	int getRegBRX () { return regbrx; }
-	int getRegBRY () { return regbry; }
+	int getRegTLX () { return (int)regTL.getX(); }
+	int getRegTLY () { return (int)regTL.getY(); }
+	int getRegBRX () { return (int)regBR.getX(); }
+	int getRegBRY () { return (int)regBR.getY(); }
 
-	int getRegHeight() { return regbry - regtly; }
-	int getRegWidth() { return regbrx - regtlx; }
+	void setRegTL(int x, int y) { regTL.setLocation(x,y); }
+	void setRegBR(int x, int y) { regBR.setLocation(x,y); }
 
+	int getRegHeight() { return getRegBRY() - getRegTLY(); }
+	int getRegWidth() { return getRegBRX() - getRegTLX(); }	
 	double getRegScaleX () { return this.getRegWidth()/this.getSize().getSpatialX(); }
 	double getRegScaleY () { return this.getRegHeight()/this.getSize().getSpatialY(); }
 
@@ -55,16 +61,14 @@ public class Map implements Serializable {
 	}
 	
 	ArrayList<Hex> getLineOfHex(Position p1,Position p2) {
+
 		
-		double xs = p1.getSpatialX();
-		double ys = p1.getSpatialY();
-		double exs = p2.getSpatialX();
-		double eys = p2.getSpatialY();
+		Double spatial = p1.getSpatial();
+		Double espatial = p2.getSpatial();
 		double scale = p1.distanceTo(p2) * 2;
 		Position here; 
 		Position there;
-		double deltaX = (exs - xs) / scale;
-		double deltaY = (eys - ys) / scale;
+		Double delta = new Double ((espatial.getX() - spatial.getX()) / scale, (espatial.getY() - espatial.getY())/scale);
 		int index=0;
 		
 		ArrayList<Hex> h = new ArrayList<Hex>();
@@ -75,9 +79,10 @@ public class Map implements Serializable {
 		while (!here.equals(p2)) {
 			
 			while (here.equals(there)) {
-				xs += deltaX;
-				ys += deltaY;
-				here = new Position(xs,ys);
+				spatial.setLocation(
+					spatial.getX() + delta.getX(),
+					spatial.getY() + delta.getY());
+				here = new Position(spatial);
 			}
 			h.add(getHexAt(here));
 			there.setPosition(here);
@@ -91,8 +96,8 @@ public class Map implements Serializable {
 		size = new Position(14,16);
 		
 		graphicFile = new String("object83_0.png");
-		regtlx = 98; regtly = 66;
-		regbrx = 1232; regbry = 1564;
+		setRegTL(98, 66);
+		setRegBR(1232,1564);
 			
 		maparray[0][0] = new Hex(CLEAR,0);
 		maparray[1][0] = new Hex(WOODS,0);

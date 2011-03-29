@@ -32,18 +32,7 @@ public class Weapon implements Serializable {
 	}
 	
 	public Weapon (String n, int m, int sr, int mr, int lr, int sd, int md, int ld, int a) {
-		this.name = n;
-		this.min = m;
-		this.shortRange = sr;
-		this.medRange = mr;
-		this.longRange = lr;
-		this.shortDamage = sd;
-		this.medDamage = md;
-		this.longDamage = ld;
-		this.ammo = a;
-		
-		this.dalsec = null;
-		this.fired = false;
+		this(n,m,sr,mr,lr,sd,md,ld,null,a);
 	}
 	
 	public String toString () { return name; }
@@ -64,6 +53,7 @@ public class Weapon implements Serializable {
 		+ this.getDalek().terrainLineCost(d)  // Terrain
 		+ d.targetHitCost(); // Target
 	}
+	
 	int getRangeCost (double d) {
 		if (d <= min) { return min - (int)d + 1;}
 		if (d <= shortRange) { return 0; }
@@ -81,8 +71,6 @@ public class Weapon implements Serializable {
 		return 0;
 	}
 	
-	int getDamage (int d) {
-		return this.getDamage((double)d);
-	}
+	int getDamage (int d) { return this.getDamage((double)d); }
 	
 }
