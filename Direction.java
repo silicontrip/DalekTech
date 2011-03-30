@@ -52,13 +52,14 @@ public class Direction {
 	void setDirectionFromString (String dir) {
 		
 		// lot's of conditional logic
+		this.setDirection(NONE);
+
 		if (dir.equalsIgnoreCase("n") ) { this.setDirection(NORTH); }
 		if (dir.equalsIgnoreCase("ne") ) { this.setDirection(NORTHEAST); }
 		if (dir.equalsIgnoreCase("se") ) { this.setDirection(SOUTHEAST); }
 		if (dir.equalsIgnoreCase("s") ) { this.setDirection(SOUTH); }
 		if (dir.equalsIgnoreCase("sw") ) { this.setDirection(SOUTHWEST); }
 		if (dir.equalsIgnoreCase("nw") ) { this.setDirection(NORTHWEST); }
-		this.setDirection(NONE);
 	}
 	
 	

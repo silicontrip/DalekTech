@@ -72,26 +72,31 @@ public class Position implements Serializable {
 		
 		Double diff = this.getSpatialDiff(p);
 		
+		double angle=0;
+		
 		//	System.out.println("tsx: " + this.getSpatialX() + ", tsy: " + this.getSpatialY() + ", psx: " + p.getSpatialX() + ", psy: " +  p.getSpatialY() );
 		
 		if (java.lang.Math.abs (diff.getX()) < 0.001) {
 			
-			if (p.getSpatialY() > this.getSpatialY() ) { return 3 * java.lang.Math.PI / 2; }
-			if (p.getSpatialY() < this.getSpatialY() ) { return java.lang.Math.PI/2; }
+			if (p.getSpatialY() > this.getSpatialY() ) { angle =  3 * java.lang.Math.PI / 2; }
+			if (p.getSpatialY() < this.getSpatialY() ) { angle =  java.lang.Math.PI/2; }
 			
-			return 0; // the two points are the same
+		} else {
+		
+			// cartesian coordinates have the origin at the bottom left.
+			// hence the -diff.getY
+			angle = java.lang.Math.atan( (-diff.getY()) / diff.getX() );
+			if (diff.getX() < 0 ) {	angle += java.lang.Math.PI; }
+		
+			// convert from trig angle to mapping angles
+			// rotate 90 degrees, 
+			// anticlockwise to clockwise.
+		
 		}
+		angle -= java.lang.Math.PI/2;
+		angle = 2*java.lang.Math.PI - angle;
 		
-		double angle = java.lang.Math.atan( diff.getY() / diff.getX() );
-				
-		if (diff.getY() < 0 ) {	angle += java.lang.Math.PI; }
-		
-		// convert from trig angle to mapping angles
-		// rotate 90 degrees, 
-		// anticlockwise to clockwise.
-		
-		angle += java.lang.Math.PI/2;
-		return 2*java.lang.Math.PI - angle;
+		return angle;
 		
 	}
 	
