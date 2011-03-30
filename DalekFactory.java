@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import java.io.*;
+import java.beans.*;
+import javax.xml.parsers.*;
+
 
 public class DalekFactory {
 	
@@ -267,6 +271,9 @@ public class DalekFactory {
 	
 	static ArrayList<Dalek> getAllDaleks() {
 	
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		
+				
 		ArrayList<Dalek> dalekList = new ArrayList<Dalek>();
 		
 		dalekList.add(getRedCommander());
@@ -279,6 +286,16 @@ public class DalekFactory {
 		dalekList.add(getImperial());
 		dalekList.add(getSpecialWeapon());
 
+		try {
+			XMLEncoder e = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("Daleks.xml")));
+			e.writeObject(dalekList);
+			e.close();
+		} catch (FileNotFoundException fnfe) {
+			System.out.println("dalekfactory: file not found " + fnfe);
+		}
+		
+		
+		
 		return dalekList;
 	}
 	

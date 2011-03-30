@@ -5,6 +5,8 @@ public class DalekSectionSkirt extends DalekSection {
 		super.auxilaryDamage();
 	}
 	
+	public DalekSectionSkirt () { ; } 
+	
 	public DalekSectionSkirt (String name, int damage, DalekSection transfer) {
 		super(name,damage,transfer);
 	}

@@ -2,6 +2,9 @@ import java.util.*;
 import java.io.*;
 import java.awt.*;
 import java.awt.geom.Point2D.Double;
+import java.beans.*;
+import javax.xml.parsers.*;
+
 
 public class Map implements Serializable {
 
@@ -27,13 +30,25 @@ public class Map implements Serializable {
 		return instance;
 	}
 
+
+	public Hex[][] getMaparray() { return maparray;}
+	public void setMaparray(Hex[][] ma) { this.maparray = ma; }
+//	public Dimension getSize() { return size; }
+	public void setSize(Position d) { this.size = d; }
+	public String getGraphicFile() { return graphicFile; }
+	public void setGraphicFile(String s) { this.graphicFile = s; }
+	public Point getRegTL () { return regTL; }
+	public Point getRegBR () { return regBR; }
+	public void setRegTL (Point p) { this.regTL = p; }
+	public void setRegBR (Point p) { this.regBR = p; }
+	
 	
 	public Map() { 
 		regTL = new Point(0,0);
 		regBR = new Point(0,0);
 	}
 	
-	Position getSize() { return size; }
+	public Position getSize() { return size; }
 	int getSizeX() { return getSize().getX() + 1; }
 	int getSizeY() { return getSize().getY() + 1; }
 	int getRegTLX () { return (int)regTL.getX(); }
@@ -90,6 +105,8 @@ public class Map implements Serializable {
 		return h;
 	}
 	
+	
+	// will move this to XML doc loader
 	void initSampleMap() {
 
 		maparray=new Hex[15][17];		
@@ -370,6 +387,15 @@ public class Map implements Serializable {
 		maparray[12][16] = new Hex(CLEAR,0);
 		maparray[13][16] = new Hex(CLEAR,0);
 		maparray[14][16] = new Hex(CLEAR,0);
+
+               try {
+                        XMLEncoder e = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("Map1.xml")));
+                        e.writeObject(this);
+                        e.close();
+                } catch (FileNotFoundException fnfe) {
+                        System.out.println("Map: file not found " + fnfe);
+                }
+
 		
 	}
 	

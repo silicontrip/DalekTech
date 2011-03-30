@@ -10,24 +10,36 @@ public class Dalek implements Serializable  {
 	int walk;
 	int run;
 	int base;
-	int movementDivisor;
 	
 	ArrayList<DalekSection> locationArray;
 	HashMap<String,DalekSection> locationMap;
 	
-	Position pos;
-	Position old;
-	Direction facing;
-	int movement;
-	boolean moved;
-	boolean twist;
-	boolean fired;
+	transient int movementDivisor;
+	Position position;
+	transient Position old;
+	transient Direction facing;
+	transient int movement;
+	transient boolean moved;
+	transient boolean twist;
+	transient boolean fired;
 	
 //	Player owner;
 		
-	String getName() { return name; }
-	void setPosition (Position p) {pos = p;}
-	Position getPosition () { return pos; }
+	public String getName() { return name; }
+	public void setName(String s) { name = s; }
+	public void setWalk (int w) { walk = w; }
+	public void setRun (int r) { run = r; }
+	public void setBase (int b) { base = b; }
+	public int getWalk () { return walk / movementDivisor; }
+	public int getRun () { return run / movementDivisor; }
+	public int getBase() { return base; }
+	public ArrayList<DalekSection> getLocationArray() { return locationArray; }
+	public void setLocationArray(ArrayList<DalekSection> ds) {  this.locationArray = ds; }
+	public HashMap<String,DalekSection> getLocationMap() { return locationMap; }
+	public void getLocationMap(HashMap<String,DalekSection> ds) { this.locationMap = ds; }
+	
+	public void setPosition (Position p) {this.position = p;}
+	public Position getPosition () { return this.position; }
 	void setDirection (Direction d) {
 		this.getPosition().setDirection(d);  // position direction has out of bounds detector
 		this.setFacing(d); 
@@ -35,29 +47,27 @@ public class Dalek implements Serializable  {
 	void setFacing(Direction d) { this.facing = d; }
 	Direction getFacing() { return facing; }
 	Direction getDirection() { return this.getPosition().getDirection(); }
-	void setMovement (int m) {movement = m;}
+	void setMovement (int m) { movement = m; }
 	int getMovement() { return movement; }
-	void setWalk (int w) {walk = w;}
-	void setRun (int r) {run = r;}
-	void setBase (int b) {base = b;}
-	int getWalk () { return walk / movementDivisor;}
-	int getRun () { return run / movementDivisor;}
 //	void setPlayer(Player p) { this.owner=p;}
 //	Player getPlayer() {return owner;}
 	Map getMap() { return Map.getInstance(); }
 	
-	int getBase() { return base; }
-	void setMoveDiv(int m) {movementDivisor=m;}
-	int getMoveDiv() { return movementDivisor;}
+	void setMoveDiv(int m) { movementDivisor=m; }
+	int getMoveDiv() { return movementDivisor; }
 	
 	void setMoved(boolean m) { this.moved = m; }
+	boolean getMoved() {return this.moved;}
 	boolean hasMoved() {return this.moved;}
 	void setTwist(boolean t) { this.twist = t; }
+	boolean getTwist() { return this.twist; }
+
 	boolean hasTwist() { return this.twist; }
 
 	public void setFired(boolean f) { this.fired = f; }
 	public boolean hasFired() { return this.fired; }
-	
+	public boolean getFired() { return this.fired; }
+
 	public String toString() { 
 		String sections = new String();
 		Iterator<DalekSection> it  = locationMap.values().iterator();
@@ -108,7 +118,7 @@ public class Dalek implements Serializable  {
 		setMoved(false);
 		setTwist(false);
 		setFired(false);
-		old.setPosition(pos);
+		old.setPosition(this.getPosition());
 	}
 	
 	Position newForwardsPosition() { return this.getPosition().newForwardsPosition(); }
@@ -157,7 +167,7 @@ public class Dalek implements Serializable  {
 		boolean r = this.canMove(d);
 		if (r) {
 			movement += this.getHex().getMovementCost(this.getHexAtNewPosition(d));
-			pos.setPosition(this.newPosition(d));
+			this.setPosition(this.newPosition(d));
 		}
 		return r;
 	}
@@ -260,19 +270,23 @@ public class Dalek implements Serializable  {
 		locationMap.put(ds.getName(),ds);
 	}
 	
+	public Dalek () { 
+		this.movementDivisor = 1;
+		this.locationArray = new ArrayList<DalekSection>();
+		this.locationMap = new HashMap<String,DalekSection>();
+		
+		setPosition(new Position(-1,-1));
+		this.old = new Position(-1,-1);
+		this.reset();
+	}		
+	
 	public Dalek (String name, int walk, int run, int base) {
+		this();
 		this.name = name;
 		this.walk = walk;
 		this.run = run;
 		this.base = base;
 		
-		this.movementDivisor = 1;
-		this.locationArray = new ArrayList<DalekSection>();
-		this.locationMap = new HashMap<String,DalekSection>();
-		
-		this.pos = new Position(-1,-1);
-		this.old = new Position(-1,-1);
-		this.reset();
 	}
 	
 }

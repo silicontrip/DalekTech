@@ -3,19 +3,25 @@ public class DalekSection implements Serializable {
 
 	String name;
 	int armour;
-	int currentArmour;
 	DalekSection transfer;
-	Dalek dalek;
 	Weapon weapon; // only one for the time being
 
+	transient Dalek dalek;
+	transient int currentArmour;
+	
 	void setDalek(Dalek dalek) { this.dalek = dalek; }
 	Dalek getDalek() { return this.dalek; }
-	void setWeapon(Weapon weapon) { this.weapon = weapon; weapon.setDalekSection(this); }
-	Weapon getWeapon() { return this.weapon; }
 	
-	String getName() { return name; }
+	public void setWeapon(Weapon weapon) { this.weapon = weapon; weapon.setDalekSection(this); }
+	public Weapon getWeapon() { return this.weapon; }
+	
+	public String getName() { return name; }
+	public void setName(String s) { this.name = s; }
+
 	boolean nameEquals(String s) { return s.equals(this.name); }
-	int getArmour() { return armour; }
+	public int getArmour() { return armour; }
+	public void setArmour(int i) { this.armour = i; }
+	
 	int getDamage() { return currentArmour; }
 	void destroyArmour() { currentArmour = 0; }
 	
@@ -60,6 +66,7 @@ public class DalekSection implements Serializable {
 //		}
 	}
 	
+	public DalekSection () { ; } 
 	public DalekSection (String name, int damage) {	this(name,damage,null); }
 	public DalekSection (String name, int damage, DalekSection transfer) { this(name,damage,transfer,null);}	
 	public DalekSection (String name, int damage, DalekSection transfer, Weapon weapon) { this(name,damage,transfer,weapon,null); }

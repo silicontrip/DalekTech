@@ -5,6 +5,8 @@ public class DalekSectionDome extends DalekSection {
 		super.auxilaryDamage();
 	}
 
+	public DalekSectionDome() { ; } 
+
 	public DalekSectionDome (String name, int damage, DalekSection transfer) {
 		super(name,damage,transfer);
 	}

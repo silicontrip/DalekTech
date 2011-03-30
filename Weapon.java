@@ -11,11 +11,32 @@ public class Weapon implements Serializable {
 	int shortDamage;
 	int medDamage;
 	int longDamage;
-	
-	boolean fired;
-	DalekSection dalsec;
 	int ammo;
 	
+	transient boolean fired;
+	transient DalekSection dalsec;
+
+public String getName () { return name; }
+public void setName (String s) { this.name = s; }
+public int getMin() { return min; }
+public void setMin(int i) { this.min = i; }
+public int getShortRange() { return shortRange; }
+public void setShortRange(int i) { this.shortRange = i; }
+public int getMedRange() { return medRange; }
+public void setMedRange(int i) { this.medRange = i; }
+public int getLongRange() { return longRange; }
+public void setLongRange(int i) { this.longRange = i; }
+public int getShortDamage() { return shortDamage; }
+public void setShortDamage(int i) { this.shortDamage = i; }
+public int getMedDamage() { return medDamage; }
+public void setMedDamage(int i) { this.medDamage = i; }
+public int getLongDamage() { return longDamage; }
+public void setLongDamage(int i) { this.longDamage = i; }
+public int getAmmo() { return ammo; }
+public void setAmmo(int i) { this.ammo = i; }
+
+	public Weapon () { ; } 
+
 	public Weapon (String n, int m, int sr, int mr, int lr, int sd, int md, int ld, DalekSection ds, int a) {
 		this.name = n;
 		this.min = m;
