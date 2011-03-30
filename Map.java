@@ -16,22 +16,22 @@ public class Map implements Serializable {
 	Hex maparray[][];
 	
 	Position size;
-	
-// 	int sizex, sizey;
 	String graphicFile;
-	//int  regtlx, regtly, regbrx, regbry;
 
 	Point regTL,regBR;
 	
 	public static Map getInstance() {
-                if (instance == null) {
-                        instance = new Map();
-                }
-                return instance;
-        }
+		if (instance == null) {
+			instance = new Map();
+		}
+		return instance;
+	}
 
 	
-	public Map() { ; }
+	public Map() { 
+		regTL = new Point(0,0);
+		regBR = new Point(0,0);
+	}
 	
 	Position getSize() { return size; }
 	int getSizeX() { return getSize().getX() + 1; }
@@ -54,7 +54,7 @@ public class Map implements Serializable {
 	
 	Hex getHexAt(Position p) {
 		try {
-		return maparray[p.getX()][p.getY()];
+			return maparray[p.getX()][p.getY()];
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			return null;
 		}

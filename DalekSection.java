@@ -69,7 +69,9 @@ public class DalekSection implements Serializable {
 		this.currentArmour = damage;
 		this.transfer = transfer;
 		this.weapon = weapon;
-		this.weapon.setDalekSection(this);
+		if (this.weapon != null) {
+			this.weapon.setDalekSection(this);
+		}
 		this.dalek = dalek;
 	}
 	

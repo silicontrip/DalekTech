@@ -8,22 +8,17 @@ public class Position implements Serializable {
 	
 	int x;
 	int y;
-	int dir;
+	Direction dir;
 	static final double sin60 = 0.866025403784439;
-	static final String[] directionShort = {"N","NE","SE","S","SW","NW"};
 	
 	public int getX() { return x; }
 	public int getY() { return y; }
-	public int getDirection() { return dir; }
+	public Direction getDirection() { return dir; }
 	public void setX(int i) { x=i; }
 	public void setY(int i) { y=i; }
-	public void setDirection(int dir) { 
-		dir = dir %6;
-		while (dir<0) {dir += 6;}
-		this.dir = dir; 
-	}
+	public void setDirection(Direction dir) { this.dir = dir; }
 	
-	public void setPosition(int x, int y, int d) {
+	public void setPosition(int x, int y, Direction d) {
 		this.x =x;
 		this.y =y;
 		this.dir = d;
@@ -34,7 +29,7 @@ public class Position implements Serializable {
 		this.y =y;
 	}
 	
-	public void setPosition(double x, double y,int dir) {
+	public void setPosition(double x, double y, Direction dir) {
 		setPosition(x,y);
 		setDirection(dir);
 	}
@@ -54,7 +49,7 @@ public class Position implements Serializable {
 
 	public void setPosition(Double p) {
 		this.setPosition(p.getX(),p.getY());
-		this.dir = Tables.NONE;
+		this.dir = null;
 	}
 	
 	public void moveForward () {
@@ -66,12 +61,40 @@ public class Position implements Serializable {
 	}
 	
 	public void facePosition (Position p) {
-		this.setDirection(this.directionTo(p));
+		this.getDirection().setDirectionFromAngle(this.getAngleTo(p));
 	}
 	
-	public void turnLeft () { setDirection((this.getDirection() - 1)  % 6); }
-	public void turnRight () { setDirection((this.getDirection() + 1)  % 6); }
+	public void turnLeft () { dir.turnLeft(); }
+	public void turnRight () { dir.turnRight(); }
 	
+	public double getAngleTo(Position p) {
+		
+		Double diff = this.getSpatialDiff(p);
+		
+		//	System.out.println("tsx: " + this.getSpatialX() + ", tsy: " + this.getSpatialY() + ", psx: " + p.getSpatialX() + ", psy: " +  p.getSpatialY() );
+		
+		if (java.lang.Math.abs (diff.getX()) < 0.001) {
+			
+			if (p.getSpatialY() > this.getSpatialY() ) { return 3 * java.lang.Math.PI / 2; }
+			if (p.getSpatialY() < this.getSpatialY() ) { return java.lang.Math.PI/2; }
+			
+			return 0; // the two points are the same
+		}
+		
+		double angle = java.lang.Math.atan( diff.getY() / diff.getX() );
+				
+		if (diff.getY() < 0 ) {	angle += java.lang.Math.PI; }
+		
+		// convert from trig angle to mapping angles
+		// rotate 90 degrees, 
+		// anticlockwise to clockwise.
+		
+		angle += java.lang.Math.PI/2;
+		return 2*java.lang.Math.PI - angle;
+		
+	}
+	
+	/*
 	public int directionTo(Position p) {
 	
 		Double diff = this.getSpatialDiff(p);
@@ -107,7 +130,7 @@ public class Position implements Serializable {
 
 		
 	}
-
+*/
 	public Double getSpatial() { return new Double(getSpatialX(),getSpatialY()); }
 	public Double getSpatialDiff(Position p) {
 		return new Double(p.getSpatialX() - this.getSpatialX(),
@@ -124,10 +147,11 @@ public class Position implements Serializable {
 
 	public String toString() {
 		
-		if (this.getDirection() == Tables.NONE) {
-			return this.x + "," + this.y;
+		if (dir != null) {
+			return this.x + "," + this.y + "/" + dir;
 		}
-		return this.x + "," + this.y + "/" + this.directionShort[dir];
+		return this.x + "," + this.y;
+
 	}
 	
 	public boolean isIn (Collection<Position> p) {
@@ -146,10 +170,10 @@ public class Position implements Serializable {
 	}
 	
 	public Position () {;}
-	public Position (int x, int y) {this(x,y,0);}
-	public Position (int x, int y, int dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
+	public Position (int x, int y) {this(x,y,null);}
+	public Position (int x, int y, Direction dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
 	public Position (Double p) { this(p.getX(),p.getY()); }
-	public Position (double x, double y) { this(x,y,0); }
-	public Position (double x, double y, int dir) { this.setPosition(x,y,dir);}
+	public Position (double x, double y) { this(x,y,null); }
+	public Position (double x, double y, Direction dir) { this.setPosition(x,y,dir);}
 	public Position (Position p) { this(p.getX(),p.getY(),p.getDirection()); }
 }
