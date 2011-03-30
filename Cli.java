@@ -79,9 +79,9 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	int getDalekDirection (Dalek d) {
+	Direction getDalekDirection (Dalek d) {
 	
-		int dir = -1;
+		Direction dir = new Direction();
 		String input;
 
 		System.out.println (d.toString());
@@ -89,8 +89,8 @@ public class Cli extends UserInterface {
 		do {
 			System.out.print ("Enter direction (N,NE,SE,S,SW,NW): ");
 			input = readln();
-			dir = this.directionFromString(input);
-		} while (dir == -1);
+			dir.setDirectionFromString(input);
+		} while (dir.isNone());
 
 		return dir;
 	}
@@ -99,7 +99,8 @@ public class Cli extends UserInterface {
 	
 		String input;
 		String sValues[];
-		int x=-1,y=-1,dir=-1;
+		int x=-1,y=-1;
+		Direction dir=new Direction();
 		
 		System.out.println (d.toString());
 		do {
@@ -109,14 +110,14 @@ public class Cli extends UserInterface {
 			sValues = input.split(",");
 			
 			if (sValues.length == 3) {
-			dir = this.directionFromString(sValues[2]);
+			dir.setDirectionFromString(sValues[2]);
 
-			try {
-				x = Integer.parseInt(sValues[0]);
-				y = Integer.parseInt(sValues[1]);
-			} catch (NumberFormatException nfe) { x = -1; y = -1;}
+				try {
+					x = Integer.parseInt(sValues[0]);
+					y = Integer.parseInt(sValues[1]);
+				} catch (NumberFormatException nfe) { x = -1; y = -1;}
 			}
-		} while ( (x < 1 || x > getMap().getSizeX() || y < 1 || y > getMap().getSizeY() ) && dir != -1);
+		} while ( (x < 1 || x > getMap().getSizeX() || y < 1 || y > getMap().getSizeY() ) && dir.isNone());
 		
 		x--; y--;
 		return new Position(x,y,dir);

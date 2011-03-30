@@ -18,8 +18,9 @@ public class Direction {
 	static final String[] directionShort = {"N","NE","SE","S","SW","NW"};
 
 	
+	public Direction() { this.dir = NONE; }	
 	public Direction (int d) {
-		this.dir = d;
+		this.setDirection(d);
 	}
 	
 	public void setDirection(int dir) { 
@@ -28,6 +29,40 @@ public class Direction {
 		this.dir = dir; 
 	}
 	
+	public boolean isNone() { return dir == NONE; }
+	public boolean isNorth() { return dir == NORTH; }
+	public boolean isNorthEast() { return dir == NORTHEAST; }
+	public boolean isSouthEast() { return dir == SOUTHEAST; }
+	public boolean isSouth() { return dir == SOUTH; }
+	public boolean isSouthWest() { return dir == SOUTHWEST; }
+	public boolean isNorthWest() { return dir == NORTHWEST; }
+
+	public int getTurnTo(Direction d) {
+	
+		int turn = this.getDirection()  - d.getDirection();
+
+		// condition for wrap around
+		if (java.lang.Math.abs(turn) > 1) {
+			if (turn >1 ) { turn = -1;} 
+			if (turn <-1 ) { turn = 1;} 
+		}
+		return turn;
+	}
+	
+	void setDirectionFromString (String dir) {
+		
+		// lot's of conditional logic
+		if (dir.equalsIgnoreCase("n") ) { this.setDirection(NORTH); }
+		if (dir.equalsIgnoreCase("ne") ) { this.setDirection(NORTHEAST); }
+		if (dir.equalsIgnoreCase("se") ) { this.setDirection(SOUTHEAST); }
+		if (dir.equalsIgnoreCase("s") ) { this.setDirection(SOUTH); }
+		if (dir.equalsIgnoreCase("sw") ) { this.setDirection(SOUTHWEST); }
+		if (dir.equalsIgnoreCase("nw") ) { this.setDirection(NORTHWEST); }
+		this.setDirection(NONE);
+	}
+	
+	
+	public Direction reverseDirection() { return new Direction(this.dir + 3); }
 	public String toString() { return directionShort[dir]; }
 	public int getDirection() { return dir; }
 	public int getDegrees() { return dir * 60; }

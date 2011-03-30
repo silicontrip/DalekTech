@@ -151,15 +151,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 				
 				moveDalekCurrentDir = 0;
-				moveDalekTargetDir = p.getDirection() - dalekImagePosition.get(s).getDirection();
-				// condition for wrap around
-				if (java.lang.Math.abs(moveDalekTargetDir) > 1) {
-					if (moveDalekTargetDir >1 ) { moveDalekTargetDir = -1;} 
-					if (moveDalekTargetDir <-1 ) { moveDalekTargetDir = 1;} 
-
-				}
-				
-				
+				moveDalekTargetDir = p.getDirection().getTurnTo(dalekImagePosition.get(s).getDirection());
+							
 				moveDalekDir = moveDalekTargetDir  / 50.0;
 				// dalekImagePosition.put(moveDalekName,moveDalekPosition);
 				// timer.start();
@@ -196,8 +189,16 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		drawDalekAt(g,dalek,x,y,w,0);
 	}
 	
+	
+	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w,Direction dir) {
+		if (dir != null ) {
+			drawDalekAt(g,dalek,x,y,w,dir.getDirection());
+		} else {
+			drawDalekAt(g,dalek,x,y,w,0);
+		}
+	}
+	
 	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w,double dir) {
-		
 		
 		int h = (int)  (dalek.getHeight(null) * w / dalek.getWidth(null)  );
 		
@@ -294,7 +295,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 								 (int)this.calX(pos.getSpatialX()+moveDalekCurrentX), 
 								 (int)this.calY(pos.getSpatialY()+moveDalekCurrentY), 
 								 (int)(getMap().getRegScaleX() * scale * dalekScale),
-								 pos.getDirection() + moveDalekCurrentDir);
+								 pos.getDirection().getDirection() + moveDalekCurrentDir);
 			} else {
 
 				this.drawDalekAt(g,dalekImage.get(n),
@@ -503,9 +504,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
 
 			if (posDalek == null) {
-				posDalek = new Position(x,y,0);
+				posDalek = new Position(x,y);
 			} else {
-				posDalek.setPosition(x,y,0);
+				posDalek.setPosition(x,y);
 			}
 			//System.out.println ("x: " + x + ", y: " + y);
 			this.repaint();

@@ -17,7 +17,7 @@ public class Dalek implements Serializable  {
 	
 	Position pos;
 	Position old;
-	int facing;
+	Direction facing;
 	int movement;
 	boolean moved;
 	boolean twist;
@@ -28,16 +28,13 @@ public class Dalek implements Serializable  {
 	String getName() { return name; }
 	void setPosition (Position p) {pos = p;}
 	Position getPosition () { return pos; }
-	void setDirection (int d) {
+	void setDirection (Direction d) {
 		this.getPosition().setDirection(d);  // position direction has out of bounds detector
 		this.setFacing(d); 
 	}
-	void setFacing(int d) { 
-		while (d<0) {d += 6;}
-		d = d % 6;
-		this.facing = d; 
-	}
-	int getDirection() { return this.getPosition().getDirection(); }
+	void setFacing(Direction d) { this.facing = d; }
+	Direction getFacing() { return facing; }
+	Direction getDirection() { return this.getPosition().getDirection(); }
 	void setMovement (int m) {movement = m;}
 	int getMovement() { return movement; }
 	void setWalk (int w) {walk = w;}
@@ -114,17 +111,20 @@ public class Dalek implements Serializable  {
 		old.setPosition(pos);
 	}
 	
-	Position newForwardsPosition() { return newPosition(this.getDirection()); }
-	Position newBackwardsPosition() { return newPosition(Tables.oppositeDirection(this.getDirection())); }
-	Position newPosition(int d) { return Tables.newPosition(this.getPosition(),d); }
+	Position newForwardsPosition() { return this.getPosition().newForwardsPosition(); }
+	Position newBackwardsPosition() { return this.getPosition().newBackwardsPosition(); }
 
-	boolean canMove(int d) { return this.getHex().getMovementCost(this.getHexAtNewPosition(d)) + movement <= this.getRun() && this.getHex().canMove(this.getHexAtNewPosition(d)); }
+//	Position newBackwardsPosition() { return newPosition(Tables.oppositeDirection(this.getDirection())); }
+
+	Position newPosition(Direction d) { return this.getPosition().newPosition(d); }
+
+	boolean canMove(Direction d) { return this.getHex().getMovementCost(this.getHexAtNewPosition(d)) + movement <= this.getRun() && this.getHex().canMove(this.getHexAtNewPosition(d)); }
 	boolean canMoveForwards() { return this.canMove(this.getDirection()); }
-	boolean canMoveBackwards() { return this.canMove(Tables.oppositeDirection(this.getDirection())); }
+	boolean canMoveBackwards() { return this.canMove(this.getDirection().reverseDirection()); }
 	boolean canTurn() { return movement < this.getRun(); }
 	
 	boolean moveForwards () { return this.moveDalekDirection(this.getDirection()); }
-	boolean moveBackwards () { return this.moveDalekDirection(Tables.oppositeDirection(this.getDirection())); }
+	boolean moveBackwards () { return this.moveDalekDirection(this.getDirection().reverseDirection()); }
 	
 	void faceDalek(int d) {
 		
@@ -153,7 +153,7 @@ public class Dalek implements Serializable  {
 		return false;
 	}
 	
-	boolean moveDalekDirection(int d) {
+	boolean moveDalekDirection(Direction d) {
 		boolean r = this.canMove(d);
 		if (r) {
 			movement += this.getHex().getMovementCost(this.getHexAtNewPosition(d));
@@ -165,7 +165,7 @@ public class Dalek implements Serializable  {
 	
 	boolean turnLeft () { 			
 		if (this.canTurn()) {
-			setDirection(this.getDirection() - 1);
+			this.getDirection().turnLeft();
 			movement ++;
 			return true;
 		}
@@ -174,7 +174,7 @@ public class Dalek implements Serializable  {
 	
 	boolean turnRight () { 			
 		if (this.canTurn()) {
-			setDirection(this.getDirection() + 1);
+			this.getDirection().turnRight();
 			movement ++;
 			return true;
 		}
@@ -182,8 +182,15 @@ public class Dalek implements Serializable  {
 
 	}
 	
-	void faceLeft() { setFacing(this.getDirection() - 1); }
-	void faceRight() { setFacing(this.getDirection() + 1); }
+	void faceLeft() { 
+		setFacing(this.getDirection());
+		getFacing().turnLeft();
+	}
+	void faceRight() { 
+		setFacing(this.getDirection());
+		getFacing().turnRight();
+
+	}
 	
 	
 	double distanceMoved() { return this.getPosition().distanceTo(this.old); }
@@ -192,7 +199,7 @@ public class Dalek implements Serializable  {
 	int getHeight() { return this.getHex().getElevation() + 1; } // Daleks stand 1 unit heigher than the ground
 	Hex getHex() { return this.getHexAt(this.getPosition()); }
 	Hex getHexAt(Position p) { return getMap().getHexAt(p); }
-	Hex getHexAtNewPosition(int d) { return this.getHexAt(this.newPosition(d)); }
+	Hex getHexAtNewPosition(Direction d) { return this.getHexAt(this.newPosition(d)); }
 	Hex getForwardsHex() { return this.getHexAt(this.newForwardsPosition()); }
 	Hex getBackwardsHex() { return this.getHexAt(this.newBackwardsPosition()); }
 
@@ -263,8 +270,8 @@ public class Dalek implements Serializable  {
 		this.locationArray = new ArrayList<DalekSection>();
 		this.locationMap = new HashMap<String,DalekSection>();
 		
-		this.pos = new Position(-1,-1,Tables.NONE);
-		this.old = new Position(-1,-1,Tables.NONE);
+		this.pos = new Position(-1,-1);
+		this.old = new Position(-1,-1);
 		this.reset();
 	}
 	

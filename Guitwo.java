@@ -24,7 +24,7 @@ public class Guitwo extends Cli {
 	
 	ArrayList<Integer> selectedDaleks = null;
 	Position selectedPosition;
-	int selectedDirection = -1;
+	Direction selectedDirection = null;
 	int selectedMovement;
 	
 	BufferedImage statusImage;
@@ -74,7 +74,7 @@ public class Guitwo extends Cli {
 	
 	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) { this.selectedDaleks = selectedDaleks; }
 	void setSelectedPosition(Position p) { this.selectedPosition = p; }
-	void setSelectedDirection(int d) { this.selectedDirection = d; }
+	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
 	void setSelectedMovement(int d) { this.selectedMovement = d; }
 	
 	void setInterfaceMessage(String s) { getMapPanel().setInterfaceMessage(s); }
@@ -96,12 +96,12 @@ public class Guitwo extends Cli {
 		return selectedPosition;
 	}
 	
-	int getDalekDirection (Dalek d) {
+	Direction getDalekDirection (Dalek d) {
 		
-		selectedDirection  = -1;
+		selectedDirection  = null;
 		getMapPanel().directDalek(dalekImage(d.getName()),d.getPosition());
 		
-		while (selectedDirection == -1) {
+		while (selectedDirection == null) {
 			try {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
@@ -122,10 +122,10 @@ public class Guitwo extends Cli {
 			} catch (InterruptedException ie) { ; }
 		}
 		
-		selectedDirection  = -1;
+		selectedDirection  = null;
 		getMapPanel().directDalek(dalekImage(d.getName()),selectedPosition);
 		
-		while (selectedDirection == -1) {
+		while (selectedDirection == null) {
 			try {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }

@@ -49,7 +49,7 @@ public class Position implements Serializable {
 
 	public void setPosition(Double p) {
 		this.setPosition(p.getX(),p.getY());
-		this.dir = null;
+		// this.dir = null;
 	}
 	
 	public void moveForward () {
@@ -61,6 +61,7 @@ public class Position implements Serializable {
 	}
 	
 	public void facePosition (Position p) {
+		if (getDirection() == null) { setDirection(new Direction()); }
 		this.getDirection().setDirectionFromAngle(this.getAngleTo(p));
 	}
 	
@@ -168,6 +169,37 @@ public class Position implements Serializable {
 	public boolean equalsIgnoreDirection (Position p) {
 		return p.getX() == this.getX() && p.getY() == this.getY();
 	}
+	
+	public Position newForwardsPosition() { return this.newPosition(this.getDirection()); }
+	public Position newBackwardsPosition() { return this.newPosition(this.getDirection().reverseDirection()); }
+
+	public Position newPosition(Direction direction) {
+		int col;
+		
+		if (direction.isNorth()) {
+			return new Position(this.getX(),this.getY()-1,this.getDirection());
+		}
+		if (direction.isSouth()) {
+			return new Position(this.getX(),this.getY()+1,this.getDirection());
+		}
+		
+		col=this.getX() % 2;
+		
+		if (direction.isNorthWest()) {
+			return new Position(this.getX()-1,this.getY()+col-1,this.getDirection());
+		}
+		if (direction.isNorthEast()) {
+			return new Position(this.getX()+1,this.getY()+col-1,this.getDirection());
+		}
+		if (direction.isSouthWest()) {
+			return new Position(this.getX()-1,this.getY()+col,this.getDirection());
+		}
+		if (direction.isSouthEast()) {
+			return new Position(this.getX()+1,this.getY()+col,this.getDirection());
+		}
+		return this;
+	}
+	
 	
 	public Position () {;}
 	public Position (int x, int y) {this(x,y,null);}
