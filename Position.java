@@ -204,9 +204,21 @@ public class Position implements Serializable {
 		}
 		return this;
 	}
+
+	private void writeObject(java.io.ObjectOutputStream stream) throws IOException  {
+		stream.writeInt(x);
+		stream.writeInt(y);
+		stream.writeInt(dir.getDirection());
+	}
+
+private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException { 
+	x = stream.readInt();
+	y = stream.readInt();
+	dir = new Direction(stream.readInt()); 
+}
 	
 	
-	public Position () {;}
+	public Position () { this.x = -1 ; this.y = -1 ; this.dir = null; }
 	public Position (int x, int y) {this(x,y,null);}
 	public Position (int x, int y, Direction dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
 	public Position (Double p) { this(p.getX(),p.getY()); }

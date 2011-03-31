@@ -19,9 +19,7 @@ public class Direction {
 
 	
 	public Direction() { this.dir = NONE; }	
-	public Direction (int d) {
-		this.setDirection(d);
-	}
+	public Direction (int d) { this.setDirection(d); }
 	
 	public void setDirection(int dir) { 
 		dir = dir %6;

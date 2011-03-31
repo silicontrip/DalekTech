@@ -25,6 +25,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 	int mouseState = 0;
 	
+	Integer targetCost = null;
 	String interfaceMessage = null;
 	
 	String moveDalekName=null;
@@ -245,10 +246,52 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	void directDalek (Image dalek, Position pos) { 
-		
 		this.setDirectDalek();
 		this.posDalekImage = dalek;
 		this.posDalek = pos;
+	}
+	
+	public void setTargetCost(Integer i) { targetCost = i; }
+	public int getTargetCost() { return targetCost.intValue(); }
+	
+	public void paintCost (Graphics g, int x, int y) {
+	
+		int xscale = 8;
+		int yscale = -2;
+		
+		int prob[] = { 1,3,6,10,15,21,26,30,33,35,36 };
+		int end = prob.length -1;
+		int cost = getTargetCost();
+
+		Polygon pg = new Polygon();
+		
+		cost -= 2;			
+		g.setColor(java.awt.Color.ORANGE);
+
+		if (cost >= prob.length) { 
+			g.setColor(java.awt.Color.RED);
+			cost = end; 
+		}
+
+		if (cost < 5) { g.setColor(java.awt.Color.GREEN); }
+		
+		for (int i=0; i<= cost; i++) {
+			pg.addPoint(i*xscale+x, prob[i] * yscale + y);
+		}
+		pg.addPoint(cost*xscale+x,y);
+		pg.addPoint(x,y);
+		
+		g.fillPolygon(pg);
+		g.setColor(java.awt.Color.WHITE);
+
+		for (int i=1; i< prob.length; i++) {
+			g.drawLine((i-1)*xscale +x, prob[i-1] * yscale + y, xscale*i+x, yscale*prob[i] + y);
+		}
+		
+		g.drawLine(x+cost*xscale,y,x+cost*xscale,prob[cost]*yscale + y);
+		g.drawLine(x,y,x+end*xscale,y);
+		g.drawLine(x+end*xscale,y,x+end*xscale,y+prob[end]*yscale);
+		
 	}
 	
 	public void paintComponent (Graphics g) {
@@ -314,6 +357,12 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 							 (int)this.calY(this.posDalek.getSpatialY()), 
 							 (int)(getMap().getRegScaleY() * scale * dalekScale),
 							 this.posDalek.getDirection());		
+		}
+		
+		if (targetCost != null ) {
+		
+			paintCost(g,500,100);
+			
 		}
 		
 		if (interfaceMessage != null) {

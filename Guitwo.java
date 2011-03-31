@@ -17,6 +17,7 @@ public class Guitwo extends Cli {
 	mapPanel mapp;
 	selectFactoryDaleksPanel factoryPanel;
 	statusPanel statusp;
+	// mapOverlayPanel mop;
 	
 	HashMap<String,Image> dalekImages;
 	HashMap<String,Image> dalekDamageImages;
@@ -45,6 +46,7 @@ public class Guitwo extends Cli {
 		// TODO: listener class
 
 		statusp = new statusPanel();
+		// mop = new mapOverlayPanel();
 		
 		statusp.setDamageImages (dalekDamageImages);
 		statusp.setTacticalImages (dalekImages);
@@ -55,8 +57,13 @@ public class Guitwo extends Cli {
 		
 		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
 		
+		
+
+		
 		// for testing the selector registration...
 		// mapp.setSelectorPosition(new Position(0,0));
+		mapp.setTargetCost(7);
+		
 		
 		frame.getContentPane().add(BorderLayout.WEST, statusp);
 		//frame.pack();
@@ -70,6 +77,7 @@ public class Guitwo extends Cli {
 	
 	mapPanel getMapPanel() { return mapp; }
 	statusPanel getStatusPanel() { return statusp; }
+	// mapOverlayPanel getMapOverlayPanel() { return mop; }
 	
 	
 	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) { this.selectedDaleks = selectedDaleks; }
@@ -252,8 +260,13 @@ public class Guitwo extends Cli {
 		
 		do {
 			getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+			getMapPanel().setTargetCost(targetCost.get(currentSelection));
+			// getMapPanel().setLOS();
+			// getMapPanel().setTarget();
 			getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
 			getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+			
+	
 
 			getMapPanel().repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");

@@ -17,8 +17,8 @@ public class Dalek implements Serializable  {
 	transient int movementDivisor;
 	Position position;
 	transient Position old;
-	transient Direction facing;
-	transient int movement;
+	Direction facing;
+	int movement;
 	transient boolean moved;
 	transient boolean twist;
 	transient boolean fired;
