@@ -83,7 +83,7 @@ public class Map implements Serializable {
 		double scale = p1.distanceTo(p2) * 2;
 		Position here; 
 		Position there;
-		Double delta = new Double ((espatial.getX() - spatial.getX()) / scale, (espatial.getY() - espatial.getY())/scale);
+		Double delta = new Double ((espatial.getX() - spatial.getX()) / scale, (espatial.getY() - spatial.getY() ) / scale);
 		int index=0;
 		
 		ArrayList<Hex> h = new ArrayList<Hex>();
@@ -91,14 +91,17 @@ public class Map implements Serializable {
 		here = new Position(p1);
 		there = new Position(p1);
 		h.add(getHexAt(here));
-		while (!here.equals(p2)) {
+		while (!here.equalsIgnoreDirection(p2)) {
 			
-			while (here.equals(there)) {
+			while (here.equalsIgnoreDirection(there)) {
 				spatial.setLocation(
 					spatial.getX() + delta.getX(),
 					spatial.getY() + delta.getY());
 				here = new Position(spatial);
 			}
+			
+			//System.out.println("add @" +here + " to: " + p2 + " delta " + delta);
+			
 			h.add(getHexAt(here));
 			there.setPosition(here);
 		}

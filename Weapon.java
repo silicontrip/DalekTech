@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Weapon implements Serializable {
 	
@@ -65,6 +66,7 @@ public void setAmmo(int i) { this.ammo = i; }
 	boolean canFire () { return !fired && ammo != 0; }
 	boolean inRange(Dalek d) { return this.distanceTo(d) < longRange; }
 	double distanceTo(Dalek d) { return this.getDalek().distanceTo(d); }
+	ArrayList<Hex> getLineOfSight(Dalek d) { return this.getDalek().getLineOfSight(d); }
 	
 	void destroy() { ammo = 0; } // cheats way to disable the weapon
 	

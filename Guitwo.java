@@ -57,12 +57,9 @@ public class Guitwo extends Cli {
 		
 		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
 		
-		
-
-		
 		// for testing the selector registration...
 		// mapp.setSelectorPosition(new Position(0,0));
-		mapp.setTargetCost(7);
+		// mapp.setTargetCost(7);
 		
 		
 		frame.getContentPane().add(BorderLayout.WEST, statusp);
@@ -154,6 +151,8 @@ public class Guitwo extends Cli {
 		
 		getStatusPanel().repaint();
 
+		mapp.setMovementCost(d.getPosition(),new Integer(forwardCost), new Integer(backwardCost),forward,backward);
+
 		
 		mapp.setFocusable(true);
 		mapp.requestFocus();
@@ -169,7 +168,8 @@ public class Guitwo extends Cli {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 		}
-		
+		mapp.setMovementCost(null,null,null,null,null);
+
 		return selectedMovement;
 		
 	}
@@ -216,6 +216,8 @@ public class Guitwo extends Cli {
 			
 			do {
 				getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+				getStatusPanel().repaint();
+				getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
 				getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
 				getMapPanel().repaint();
 				//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
@@ -247,24 +249,27 @@ public class Guitwo extends Cli {
 		
 	}
 	
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> dalekList, ArrayList<Integer> targetCost) {
+	//int selectTargetDalek (Dalek d, ArrayList<Dalek> dalekList, ArrayList<Integer> targetCost) 
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
+	{
 		
 		int currentSelection = 0;
-		int dalekSize = dalekList.size();
+		int dalekSize = targetList.size();
 		
-		getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+		getMapPanel().centreOn(targetList.get(currentSelection).getPosition());
 
 		
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
 		
 		do {
-			getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+			getStatusPanel().setDalekName(targetList.get(currentSelection).getName());
 			getMapPanel().setTargetCost(targetCost.get(currentSelection));
-			// getMapPanel().setLOS();
+			getMapPanel().setTargetDistance(distance.get(currentSelection));
+			getMapPanel().setLineOfSight(los.get(currentSelection));
 			// getMapPanel().setTarget();
-			getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
-			getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+			getMapPanel().setSelectorPosition(targetList.get(currentSelection).getPosition());
+			getMapPanel().centreOn(targetList.get(currentSelection).getPosition());
 			
 	
 
@@ -289,7 +294,13 @@ public class Guitwo extends Cli {
 			}
 		} while (selectedMovement != Tables.NONE) ;
 		
+		
+		getMapPanel().setTargetCost(null);
+		getMapPanel().setTargetDistance(null);
+		getMapPanel().setLineOfSight(null);
+		
 		getMapPanel().setSelectorPosition(null);
+		getMapPanel().repaint();
 		return currentSelection;
 		
 	}

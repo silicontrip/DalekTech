@@ -213,6 +213,7 @@ public class Dalek implements Serializable  {
 	Hex getForwardsHex() { return this.getHexAt(this.newForwardsPosition()); }
 	Hex getBackwardsHex() { return this.getHexAt(this.newBackwardsPosition()); }
 
+	ArrayList<Hex> getLineOfSight (Dalek d) { return getMap().getLineOfHex(this.getPosition(),d.getPosition()); }
 	
 	int terrainLineCost (Dalek d) {
 	

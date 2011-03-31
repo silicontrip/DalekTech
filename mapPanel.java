@@ -25,7 +25,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 	int mouseState = 0;
 	
+	Integer forwardCost = null;
+	Integer backwardCost = null;
+	Position costPosition = null;
+	Boolean forwardMove = null;
+	Boolean backwardMove = null;
+	
 	Integer targetCost = null;
+	Double targetDistance = null;
+	ArrayList<Hex> lineSight = null;
 	String interfaceMessage = null;
 	
 	String moveDalekName=null;
@@ -251,10 +259,27 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		this.posDalek = pos;
 	}
 	
+	public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {
+		costPosition=p;
+		forwardCost=forward;
+		backwardCost=backward;
+		
+		this.forwardMove = forwardMove;
+		this.backwardMove = backwardMove;
+	}
+	
+	Position getMovementCostPosition() { return costPosition; }
+	
+	public void setTargetDistance (Double d) { this.targetDistance = d; }
+	public double getTargetDistance () { return targetDistance.doubleValue(); }
+	
+	public void setLineOfSight (ArrayList<Hex> los) { this.lineSight = los; }
+	public ArrayList<Hex> getLineOfSight () { return lineSight; }
+	
 	public void setTargetCost(Integer i) { targetCost = i; }
 	public int getTargetCost() { return targetCost.intValue(); }
 	
-	public void paintCost (Graphics g, int x, int y) {
+	public void paintTargetCost (Graphics g, int x, int y) {
 	
 		int xscale = 8;
 		int yscale = -2;
@@ -262,7 +287,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		int prob[] = { 1,3,6,10,15,21,26,30,33,35,36 };
 		int end = prob.length -1;
 		int cost = getTargetCost();
-
+		int difficulty = 0;
+		
 		Polygon pg = new Polygon();
 		
 		cost -= 2;			
@@ -271,8 +297,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		if (cost >= prob.length) { 
 			g.setColor(java.awt.Color.RED);
 			cost = end; 
+			difficulty = 100;
+		} else {
+			difficulty = 100 * prob[cost] / 36;
 		}
-
+		
 		if (cost < 5) { g.setColor(java.awt.Color.GREEN); }
 		
 		for (int i=0; i<= cost; i++) {
@@ -291,6 +320,28 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		g.drawLine(x+cost*xscale,y,x+cost*xscale,prob[cost]*yscale + y);
 		g.drawLine(x,y,x+end*xscale,y);
 		g.drawLine(x+end*xscale,y,x+end*xscale,y+prob[end]*yscale);
+		
+		g.setFont( new Font("Eurostile",0,12));
+		
+		g.drawString(difficulty +"%", x,y+20);
+
+		
+	}
+	
+	void paintMovementCost(Graphics g) {
+	
+		g.setFont( new Font("Eurostile",0,24));
+		g.setColor(java.awt.Color.WHITE);
+
+		if (this.forwardMove) {
+			g.drawString(forwardCost.toString(),(int)this.calX(getMovementCostPosition().newForwardsPosition().getSpatialX()),
+						 (int)this.calY(getMovementCostPosition().newForwardsPosition().getSpatialY()));
+		}
+		if (this.backwardMove) {
+			g.drawString(backwardCost.toString(),(int)this.calX(getMovementCostPosition().newBackwardsPosition().getSpatialX()),
+						 (int)this.calY(getMovementCostPosition().newBackwardsPosition().getSpatialY()));
+		}
+
 		
 	}
 	
@@ -359,11 +410,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 							 this.posDalek.getDirection());		
 		}
 		
-		if (targetCost != null ) {
-		
-			paintCost(g,500,100);
-			
+		if (costPosition != null ) {
+			paintMovementCost(g);
 		}
+		
+		if (targetCost != null ) { paintTargetCost(g,500,100); }
 		
 		if (interfaceMessage != null) {
 			

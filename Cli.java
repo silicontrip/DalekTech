@@ -217,14 +217,17 @@ public class Cli extends UserInterface {
 	}
 		
 	
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost) {
+	// int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost) 
+	
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
+	{
 	
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
 		
 		for (i=0; i< targetList.size(); i++) {
 			int difficulty  = targetCost.get(i);
-			choiceList.add(difficulty + " = " + targetList.get(i).toString());
+			choiceList.add(difficulty + " = " + targetList.get(i).toString() + " " + distance.get(i).toString() + " auds");
 		}					
 		choiceList.add ("End");
 		choice = choose(choiceList);

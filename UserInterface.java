@@ -14,7 +14,7 @@ public abstract class UserInterface {
 	
 	// Show and ask user selections
 	abstract ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList);
-	abstract int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost);
+	abstract int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los);
 	abstract int selectWeapon(ArrayList<Weapon> w);
 	abstract int selectDalek(ArrayList<Dalek> dalekList);
 	abstract int selectDalekWithExit(ArrayList<Dalek> dalekList);

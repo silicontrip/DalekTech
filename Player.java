@@ -240,14 +240,20 @@ public class Player {
 					int selectDalek;
 					weap = weaponArray.get(select);
 					ArrayList<Integer> cost = new ArrayList<Integer>();
+					ArrayList<Double> dist = new ArrayList<Double>();
+					ArrayList<ArrayList<Hex>> los = new ArrayList<ArrayList<Hex>>();
 					
 					for (int i=0; i< targetDaleks.size(); i++) {
                         // calculate difficulty of shot
 						cost.add(new Integer(weap.costFire(targetDaleks.get(i))));
+							// need distance and LOS
+						dist.add(new Double(weap.distanceTo(targetDaleks.get(i))));
+						los.add(weap.getLineOfSight(targetDaleks.get(i)));
+					
 					}                                       
 					getUI().setInterfaceMessage("Target");
 
-					target=getUI().selectTargetDalek(dal,targetDaleks,cost);
+					target=getUI().selectTargetDalek(dal,targetDaleks,cost,dist,los);
 					if (target != -1) {
 						fireMap.put(weap, targetDaleks.get(target));
 					}
