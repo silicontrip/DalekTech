@@ -7,18 +7,26 @@ import java.util.*;
 
 public class statusPanel extends JPanel {
 
+	
+	static final int DAMAGE = 1;
+	static final int TACTICAL = 2;
 	String name;
 	
 	HashMap<String,Image> dalekDamageImages;
 	HashMap<String,Image> dalekTacticalImages;
-	HashMap<String,ArrayList<Integer>> dalekDamageValue;
-	HashMap<String,ArrayList<Point>> dalekdamageRegistration; // this needs a composite key
+	// HashMap<String,ArrayList<Integer>> dalekDamageValue;
+	HashMap<String,ArrayList<Point>> dalekSpotRegistration; // this needs a composite key
+	HashMap<String,ArrayList<Point>> dalekDamageRegistration;
 	
-
+	int displayFlag;
+	
 	Image panelBackground;
 	
 	Image dalekTacticalImage;
 	Image dalekDamageImage;
+	ArrayList<Point> dalekSpot;
+	ArrayList<Point> dalekSpotDamage;
+	ArrayList<Color> dalekSpotColour;
 	Image dalekImage;
 	Integer engineCurrent;
 	Integer engineWalk;
@@ -39,6 +47,8 @@ public class statusPanel extends JPanel {
 		
 		name = null;
 		
+		displayFlag = TACTICAL;
+		
 		techFont = new Font("Eurostile",0,16);
 		
 	}
@@ -58,6 +68,10 @@ public class statusPanel extends JPanel {
 	}
 	void setDamageImage(Image i) { this.dalekDamageImage = i; }
 	void setTacticalImage(Image i) { this.dalekTacticalImage = i; }
+	void setSpotColour(ArrayList<Color> c) { this.dalekSpotColour = c; }
+	void setSpot(ArrayList<Point> p) { this.dalekSpot = p; }
+	void setSpotDamage(ArrayList<Point> p) { this.dalekSpotDamage = p; }
+
 	
 	Image getTacticalImageFromName (String s) { return dalekTacticalImages.get(name); }
 	
@@ -73,8 +87,8 @@ public class statusPanel extends JPanel {
 	Integer getEngineRun() { return this.engineRun; }
 
 
-	void tacticalView() { dalekImage = this.dalekTacticalImage; }
-	void damageView() { dalekImage = this.dalekDamageImage; }
+	void tacticalView() { dalekImage = this.dalekTacticalImage;  displayFlag = TACTICAL;}
+	void damageView() { dalekImage = this.dalekDamageImage; displayFlag = DAMAGE; }
 
 	public Dimension getPreferredSize() { return new Dimension(panelWidth,panelHeight); }
 	
@@ -116,6 +130,35 @@ public class statusPanel extends JPanel {
 		
 	}
 	
+	void paintDamage (Graphics g,int x,int y, double scale) {
+		
+		
+		Iterator<Point> itd;
+		Point paintPoint;
+		
+		int size = (int) (20 * scale);
+		
+		if (dalekSpotDamage != null ) {
+		
+		itd = this.dalekSpotDamage.iterator();
+
+		while (itd.hasNext()) {
+			paintPoint = itd.next();
+			// translate point
+			g.fillOval ((int)(paintPoint.getX()*scale) + x - size / 2 ,(int)(paintPoint.getY()*scale)+y - size / 2,size,size);
+		}
+		}
+		if (dalekSpot != null ) {
+		itd = this.dalekSpot.iterator();
+		while (itd.hasNext()) {
+			paintPoint = itd.next();
+			// translate point
+			g.drawOval  ((int)(paintPoint.getX()*scale) + x - size / 2 ,(int)(paintPoint.getY()*scale)+y - size /2 ,size,size);
+		}
+		}
+		
+	}
+	
 	public void paintComponent (Graphics g) {
 		super.paintComponent(g);
 		//g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -129,11 +172,18 @@ public class statusPanel extends JPanel {
 			int w = 100;
 			int h = (int)  (dalekImage.getHeight(null) * w / dalekImage.getWidth(null)  );
 			
+			double scale =  1.0 * w / dalekImage.getWidth(null);
+			
 			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2D.drawImage(dalekImage,0, 0, w, h, null);
 			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
+			if (displayFlag == DAMAGE) {
+				// draw damage
+				paintDamage(g,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16,scale);
+			}
+			
 		}
 		
 		if (this.getEngineRun() > 0) {

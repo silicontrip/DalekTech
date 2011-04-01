@@ -19,6 +19,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	int startx, starty;
 	Guitwo callback;
 	
+	ProbabilityUI probUI;
+	
 	
 	Image posDalekImage = null;
 	Position posDalek=null;
@@ -61,6 +63,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		dalekImagePosition = new HashMap<String,Position>();
 		dalekImage = new HashMap<String,Image>();
 
+		
+		probUI = new ProbabilityUI ();
+		probUI.setScale(8,-2);
+		probUI.setFont(new Font("Eurostile",0,12));
+		probUI.setFontYOffset(20);
+		probUI.setLocation(500,100);
+							  
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
 		addMouseListener(this);
@@ -96,15 +105,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 		moveXpos = (mapPanelWidth/2  - this.calX(p.getSpatialX())) / 50.0;
 		moveYpos = (mapPanelHeight/2 - this.calY(p.getSpatialY())) / 50.0;
-		
-		/*
-		if (moveXpos > 0 && moveXpos<1) {moveXpos = 1; }
-		if (moveYpos > 0 && moveYpos<1 ) {moveYpos = 1; }
-
-		if (moveXpos < 0 && moveXpos>-1) {moveXpos = -1; }
-		if (moveYpos < 0 && moveYpos>-1 ) {moveYpos = -1; }
-		 */
-		
+				
 		moveXYpos = new Position (p);		
 		
 		timer.start();
@@ -276,58 +277,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void setLineOfSight (ArrayList<Hex> los) { this.lineSight = los; }
 	public ArrayList<Hex> getLineOfSight () { return lineSight; }
 	
-	public void setTargetCost(Integer i) { targetCost = i; }
-	public int getTargetCost() { return targetCost.intValue(); }
-	
-	public void paintTargetCost (Graphics g, int x, int y) {
-	
-		int xscale = 8;
-		int yscale = -2;
+	public void setTargetCost(Integer i) { probUI.setTargetCost(i); }	
 		
-		int prob[] = { 1,3,6,10,15,21,26,30,33,35,36 };
-		int end = prob.length -1;
-		int cost = getTargetCost();
-		int difficulty = 0;
-		
-		Polygon pg = new Polygon();
-		
-		cost -= 2;			
-		g.setColor(java.awt.Color.ORANGE);
-
-		if (cost >= prob.length) { 
-			g.setColor(java.awt.Color.RED);
-			cost = end; 
-			difficulty = 100;
-		} else {
-			difficulty = 100 * prob[cost] / 36;
-		}
-		
-		if (cost < 5) { g.setColor(java.awt.Color.GREEN); }
-		
-		for (int i=0; i<= cost; i++) {
-			pg.addPoint(i*xscale+x, prob[i] * yscale + y);
-		}
-		pg.addPoint(cost*xscale+x,y);
-		pg.addPoint(x,y);
-		
-		g.fillPolygon(pg);
-		g.setColor(java.awt.Color.WHITE);
-
-		for (int i=1; i< prob.length; i++) {
-			g.drawLine((i-1)*xscale +x, prob[i-1] * yscale + y, xscale*i+x, yscale*prob[i] + y);
-		}
-		
-		g.drawLine(x+cost*xscale,y,x+cost*xscale,prob[cost]*yscale + y);
-		g.drawLine(x,y,x+end*xscale,y);
-		g.drawLine(x+end*xscale,y,x+end*xscale,y+prob[end]*yscale);
-		
-		g.setFont( new Font("Eurostile",0,12));
-		
-		g.drawString(difficulty +"%", x,y+20);
-
-		
-	}
-	
 	void paintMovementCost(Graphics g) {
 	
 		g.setFont( new Font("Eurostile",0,24));
@@ -414,7 +365,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			paintMovementCost(g);
 		}
 		
-		if (targetCost != null ) { paintTargetCost(g,500,100); }
+		probUI.paintComponent(g); 
 		
 		if (interfaceMessage != null) {
 			

@@ -17,6 +17,7 @@ public class Guitwo extends Cli {
 	mapPanel mapp;
 	selectFactoryDaleksPanel factoryPanel;
 	statusPanel statusp;
+	DalekSectionUI dsui;
 	// mapOverlayPanel mop;
 	
 	HashMap<String,Image> dalekImages;
@@ -45,6 +46,8 @@ public class Guitwo extends Cli {
 
 		// TODO: listener class
 
+		dsui = new DalekSectionUI();
+		
 		statusp = new statusPanel();
 		// mop = new mapOverlayPanel();
 		
@@ -74,6 +77,7 @@ public class Guitwo extends Cli {
 	
 	mapPanel getMapPanel() { return mapp; }
 	statusPanel getStatusPanel() { return statusp; }
+	DalekSectionUI getDalekSectionUI() { return dsui; }
 	// mapOverlayPanel getMapOverlayPanel() { return mop; }
 	
 	
@@ -216,7 +220,13 @@ public class Guitwo extends Cli {
 			
 			do {
 				getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+				getDalekSectionUI().setFromSections(dalekList.get(currentSelection).getSections());
+				
+				getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
+				getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
+				getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
 				getStatusPanel().repaint();
+				
 				getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
 				getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
 				getMapPanel().repaint();
@@ -270,9 +280,6 @@ public class Guitwo extends Cli {
 			// getMapPanel().setTarget();
 			getMapPanel().setSelectorPosition(targetList.get(currentSelection).getPosition());
 			getMapPanel().centreOn(targetList.get(currentSelection).getPosition());
-			
-	
-
 			getMapPanel().repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 			
@@ -392,6 +399,13 @@ public class Guitwo extends Cli {
 	
 	void notifyDalekPosition(Dalek d) {
 		getMapPanel().notifyDalek(d.getName(),dalekImage(d.getName()),d.getPosition());
+		getDalekSectionUI().setFromSections(d.getSections());
+		getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
+		getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
+		getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
+		
+		getStatusPanel().repaint();
+		
 	}
 	
 	void notifyEnd(boolean destroyed) {
@@ -399,6 +413,16 @@ public class Guitwo extends Cli {
 		if (!destroyed) { this.setInterfaceMessage("Enemy Daleks Destroyed - Mission Accomplished"); }
 	}
 	
+	void notifyDamage(Dalek d) {
+	
+		getDalekSectionUI().setFromSections(d.getSections());
+		getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
+		getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
+		getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
+		
+		getStatusPanel().repaint();
+
+	}
 	
 	Image dalekImage(String name) {
 	
