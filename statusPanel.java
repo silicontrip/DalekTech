@@ -169,10 +169,14 @@ public class statusPanel extends JPanel {
 		
 		
 		if ( dalekImage != null) {
-			int w = 100;
-			int h = (int)  (dalekImage.getHeight(null) * w / dalekImage.getWidth(null)  );
+			// int w = 100;
+			// int h = (int)  (dalekImage.getHeight(null) * w / dalekImage.getWidth(null)  );
 			
-			double scale =  1.0 * w / dalekImage.getWidth(null);
+			int h = 200;
+			int w = (int) (dalekImage.getWidth(null) * h / dalekImage.getHeight(null));
+			
+			
+			double scale =  1.0 *  h / dalekImage.getHeight(null);
 			
 			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();

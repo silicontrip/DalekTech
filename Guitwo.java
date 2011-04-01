@@ -371,13 +371,13 @@ public class Guitwo extends Cli {
 		
 		HashMap<String,Image> imageMap = new HashMap<String,Image>();
 		
-		imageMap.put("Black Renegade",getImageWithFilename("Images/BlackRenegadeDamage.png"));
+		imageMap.put("Black Renegade",getImageWithFilename("Images/RenegadeDamage.png"));
 		imageMap.put("Black Supreme",getImageWithFilename("Images/InvasionDamage.png"));
 		imageMap.put("Blue Drone",getImageWithFilename("Images/InvasionDamage.png"));
 		imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWarDamage.png"));
 		imageMap.put("Gold Supreme",getImageWithFilename("Images/GoldSupremeDamage.png"));
 		imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWardamage.png"));
-		imageMap.put("Grey Renegade",getImageWithFilename("Images/GreyRenegadeDamage.png"));
+		imageMap.put("Grey Renegade",getImageWithFilename("Images/RenegadeDamage.png"));
 		imageMap.put("Imperial",getImageWithFilename("Images/ImperialDamage.png"));
 		imageMap.put("Red Commander",getImageWithFilename("Images/InvasionDamage.png"));
 		imageMap.put("Red Saucer Pilot",getImageWithFilename("Images/RedSaucerDamage.png"));
