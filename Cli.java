@@ -329,6 +329,7 @@ public class Cli extends UserInterface {
 		System.out.println (d.getName() + ": " + d.getPosition().toString());
 	}
 	
+	// Damage to my dalek
 	void notifyDamage(Dalek d) {
 	
 		Collection<DalekSection> c = d.getSections().values();
@@ -347,6 +348,7 @@ public class Cli extends UserInterface {
 		System.out.println (d.getName());
 	}
 	
+	//Damage to other Dalek.
 	void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
 		System.out.println (d.getName() + " " + d.getLocation(location) + " ** " + damage + " **");
 	}

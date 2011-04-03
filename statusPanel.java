@@ -6,7 +6,7 @@ import java.util.*;
 
 
 public class statusPanel extends JPanel {
-
+	
 	
 	static final int DAMAGE = 1;
 	static final int TACTICAL = 2;
@@ -14,16 +14,13 @@ public class statusPanel extends JPanel {
 	
 	HashMap<String,Image> dalekDamageImages;
 	HashMap<String,Image> dalekTacticalImages;
-	// HashMap<String,ArrayList<Integer>> dalekDamageValue;
-	HashMap<String,ArrayList<Point>> dalekSpotRegistration; // this needs a composite key
-	HashMap<String,ArrayList<Point>> dalekDamageRegistration;
 	
 	int displayFlag;
 	
 	Image panelBackground;
 	
 	Image dalekTacticalImage;
-	Image dalekDamageImage;
+	DamageUI dalekDamageImage;
 	ArrayList<Point> dalekSpot;
 	ArrayList<Point> dalekSpotDamage;
 	ArrayList<Color> dalekSpotColour;
@@ -31,10 +28,10 @@ public class statusPanel extends JPanel {
 	Integer engineCurrent;
 	Integer engineWalk;
 	Integer engineRun;
-
+	
 	public static final int panelWidth = 160;
 	public static final int panelHeight = 480;
-
+	
 	Font techFont;
 	
 	public statusPanel () {
@@ -57,7 +54,7 @@ public class statusPanel extends JPanel {
 	
 	int getPanelHeight() { return panelHeight; }
 	int getPanelWidth() { return panelWidth; }
-
+	
 	void setTacticalImages(HashMap<String,Image> hm) { dalekTacticalImages = hm; }
 	void setDamageImages(HashMap<String,Image> hm) { dalekDamageImages = hm; }
 	
@@ -71,7 +68,7 @@ public class statusPanel extends JPanel {
 	void setSpotColour(ArrayList<Color> c) { this.dalekSpotColour = c; }
 	void setSpot(ArrayList<Point> p) { this.dalekSpot = p; }
 	void setSpotDamage(ArrayList<Point> p) { this.dalekSpotDamage = p; }
-
+	
 	
 	Image getTacticalImageFromName (String s) { return dalekTacticalImages.get(name); }
 	
@@ -85,19 +82,18 @@ public class statusPanel extends JPanel {
 	Integer getEngineCurrent() { return this.engineCurrent; }
 	Integer getEngineWalk() { return this.engineWalk; }
 	Integer getEngineRun() { return this.engineRun; }
-
-
+	
+	
 	void tacticalView() { dalekImage = this.dalekTacticalImage;  displayFlag = TACTICAL;}
 	void damageView() { dalekImage = this.dalekDamageImage; displayFlag = DAMAGE; }
-
+	
 	public Dimension getPreferredSize() { return new Dimension(panelWidth,panelHeight); }
 	
 	void drawEngineAt(Graphics g,int x, int y,Integer walk, Integer run, Integer current) {
-	
-		  final int engineWidth = 128;
-		  final int engineHeight = 16;
-
-
+		
+		final int engineWidth = 128;
+		final int engineHeight = 16;
+		
 		int walkLocation = walk * engineWidth / run;
 		int currentLocation = current * engineWidth / run;
 		
@@ -124,45 +120,17 @@ public class statusPanel extends JPanel {
 		
 		g.drawString(run.toString(),x+engineWidth-4,y-engineHeight-2);
 		g.drawString(walk.toString(),x+walkLocation-4,y-engineHeight-2);
-
+		
 		g.drawString ("Speed",x,y-engineHeight-2);
 		
 		
 	}
 	
-	void paintDamage (Graphics g,int x,int y, double scale) {
-		
-		
-		Iterator<Point> itd;
-		Point paintPoint;
-		
-		int size = (int) (20 * scale);
-		
-		if (dalekSpotDamage != null ) {
-		
-		itd = this.dalekSpotDamage.iterator();
-
-		while (itd.hasNext()) {
-			paintPoint = itd.next();
-			// translate point
-			g.fillOval ((int)(paintPoint.getX()*scale) + x - size / 2 ,(int)(paintPoint.getY()*scale)+y - size / 2,size,size);
-		}
-		}
-		if (dalekSpot != null ) {
-		itd = this.dalekSpot.iterator();
-		while (itd.hasNext()) {
-			paintPoint = itd.next();
-			// translate point
-			g.drawOval  ((int)(paintPoint.getX()*scale) + x - size / 2 ,(int)(paintPoint.getY()*scale)+y - size /2 ,size,size);
-		}
-		}
-		
-	}
 	
 	public void paintComponent (Graphics g) {
 		super.paintComponent(g);
 		//g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
+		
 		if (panelBackground != null) {
 			g.drawImage(panelBackground, 0,0,getPanelWidth(), getPanelHeight(), null);			
 		}
@@ -182,11 +150,13 @@ public class statusPanel extends JPanel {
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2D.drawImage(dalekImage,0, 0, w, h, null);
-			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
+			/*
 			if (displayFlag == DAMAGE) {
 				// draw damage
-				paintDamage(g,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16,scale);
+				paintDamage(graphics2D,scale);
 			}
+			*/
+			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
 			
 		}
 		

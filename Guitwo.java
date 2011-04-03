@@ -18,7 +18,6 @@ public class Guitwo extends Cli {
 	selectFactoryDaleksPanel factoryPanel;
 	statusPanel statusp;
 	DalekSectionUI dsui;
-	// mapOverlayPanel mop;
 	
 	HashMap<String,Image> dalekImages;
 	HashMap<String,Image> dalekDamageImages;
@@ -220,11 +219,8 @@ public class Guitwo extends Cli {
 			
 			do {
 				getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
-				getDalekSectionUI().setFromSections(dalekList.get(currentSelection).getSections());
+				getStatusPanel().setFromSections(dalekList.get(currentSelection).getSections());
 				
-				getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
-				getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
-				getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
 				getStatusPanel().repaint();
 				
 				getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
@@ -267,13 +263,12 @@ public class Guitwo extends Cli {
 		int dalekSize = targetList.size();
 		
 		getMapPanel().centreOn(targetList.get(currentSelection).getPosition());
-
 		
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
 		
 		do {
-			getStatusPanel().setDalekName(targetList.get(currentSelection).getName());
+			// getStatusPanel().setDalekName(targetList.get(currentSelection).getName());
 			getMapPanel().setTargetCost(targetCost.get(currentSelection));
 			getMapPanel().setTargetDistance(distance.get(currentSelection));
 			getMapPanel().setLineOfSight(los.get(currentSelection));
@@ -393,19 +388,10 @@ public class Guitwo extends Cli {
 		getStatusPanel().setEngineRun(run);
 		
 		getStatusPanel().repaint();
-		
-		
 	}
 	
 	void notifyDalekPosition(Dalek d) {
 		getMapPanel().notifyDalek(d.getName(),dalekImage(d.getName()),d.getPosition());
-		getDalekSectionUI().setFromSections(d.getSections());
-		getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
-		getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
-		getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
-		
-		getStatusPanel().repaint();
-		
 	}
 	
 	void notifyEnd(boolean destroyed) {
@@ -415,10 +401,11 @@ public class Guitwo extends Cli {
 	
 	void notifyDamage(Dalek d) {
 	
-		getDalekSectionUI().setFromSections(d.getSections());
-		getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
-		getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
-		getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
+		getStatusPanel().setDalekName(d.getName());
+		getStatusPanel().setFromSections(d.getSections());
+		//getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
+		//getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
+		//getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
 		
 		getStatusPanel().repaint();
 
@@ -455,53 +442,5 @@ public class Guitwo extends Cli {
 	
 	
 	
-	/*
-	public void mouseReleased(MouseEvent e) { 		
-		System.out.println("Action: " + e);
-	}
-	
-	public void mousePressed(MouseEvent e) { 		
-		System.out.println("Action: " + e);
-	} 
-
-	public void mouseEntered(MouseEvent e)
-	{
-		System.out.println("Action: " + e);
-		
-		//e.getComponent().setFocusable(true);
-	}
-	
-	public void mouseExited(MouseEvent e)
-	{
-		System.out.println("Action: " + e);
-	}
-	
-	public void mouseClicked(MouseEvent e)
-	{
-		System.out.println("Action: " + e);
-	}
-	public void mouseDragged(MouseEvent e)  {
-		System.out.println("Action: " + e);
-	}
-	
-	public void mouseMoved(MouseEvent e) {
-		System.out.println("Action: " + e);
-	}
-	
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("Action: " + e);
-	}
-	
-	public void keyPressed(KeyEvent e) {
-		System.out.println("Action: " + e);
-    }
-	
-	public void keyReleased(KeyEvent e) {
-		System.out.println("Action: " + e);
-    }
-	public void keyTyped(KeyEvent e) {
-		System.out.println("Action: " + e);
-    }
-	*/
 	
 }

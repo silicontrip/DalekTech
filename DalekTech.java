@@ -159,14 +159,15 @@ public class DalekTech {
 		// until all daleks twist
 			} while (!Game.allDaleksTwist());
 			
-			HashMap<Weapon,Dalek> firing = new  HashMap<Weapon,Dalek>();
-			
+			HashMap<Weapon,Dalek> firing0 = new  HashMap<Weapon,Dalek>();
+			HashMap<Weapon,Dalek> firing1 = new  HashMap<Weapon,Dalek>();
+
 		// repeat
 			do {
 		// player x fires weapons of 1 dalek at another dalek
 				
-				firing.putAll(playerOrder.get(0).fireDalek(playerOrder.get(1).getDaleks()));				
-				firing.putAll(playerOrder.get(1).fireDalek(playerOrder.get(0).getDaleks()));
+				firing0.putAll(playerOrder.get(0).fireDalek(playerOrder.get(1).getDaleks()));				
+				firing1.putAll(playerOrder.get(1).fireDalek(playerOrder.get(0).getDaleks()));
 
 		// player 3-x fires weapons of 1 dalek at another dalek
 		// until all daleks fired.
@@ -175,35 +176,8 @@ public class DalekTech {
 		// until all daleks fired
 			} while (!Game.allDaleksFired());
 			
-			Set<Weapon> w = firing.keySet();
-			Iterator<Weapon> wit = w.iterator();
-			while (wit.hasNext()) {
-			
-				Weapon weap = wit.next();
-				// get cost to hit
-				int cost = weap.costFire(firing.get(weap));
-				
-				// roll to hit
-				int roll = Game.twodsix();
-				
-				Dalek dal = firing.get(weap);
-
-				// damage 
-				if (roll >= cost) {
-					//notify players
-					int location = Game.twodsix() -2 ;
-					int damage = weap.getDamage(weap.getDalekSection().getDalek().distanceTo(firing.get(weap)));
-					
-					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,weap,damage);
-					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,weap,damage);
-					
-					dal.damageLocation(location,damage);
-				} else {
-					playerOrder.get(0).getUI().notifyMiss(dal,weap);
-					playerOrder.get(1).getUI().notifyMiss(dal,weap);
-				}
-				
-			}
+			fire(firing0,0);
+			fire(firing1,1);
 			
 			playerOrder.get(0).allReset();
 			playerOrder.get(1).allReset();
@@ -217,5 +191,44 @@ public class DalekTech {
 
 		
 	}
+	
+	public void fire(HashMap<Weapon,Dalek> firing, int player) {
+		Set<Weapon> w = firing.keySet();
+		Iterator<Weapon> wit = w.iterator();
+		while (wit.hasNext()) {
+			
+			Weapon weap = wit.next();
+			// get cost to hit
+			int cost = weap.costFire(firing.get(weap));
+			
+			// roll to hit
+			int roll = Game.twodsix();
+			
+			Dalek dal = firing.get(weap);
+			
+			// damage 
+			if (roll >= cost) {
+				//notify players
+				int location = Game.twodsix() -2 ;
+				int damage = weap.getDamage(weap.getDalekSection().getDalek().distanceTo(firing.get(weap)));
+				
+				if (player == 0) {
+					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,weap,damage);
+					playerOrder.get(1).getUI().notifyDamage(dal,location,weap,damage);
+
+				} else {
+					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,weap,damage);
+					playerOrder.get(0).getUI().notifyDamage(dal,location,weap,damage);
+				}
+				
+				dal.damageLocation(location,damage);
+			} else {
+				playerOrder.get(0).getUI().notifyMiss(dal,weap);
+				playerOrder.get(1).getUI().notifyMiss(dal,weap);
+			}
+			
+		}
+	}
+	
 	
 }

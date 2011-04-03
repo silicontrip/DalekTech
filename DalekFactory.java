@@ -180,8 +180,8 @@ public class DalekFactory {
 		Dalek dalek = new Dalek(new String("Black Renegade"), 6, 9, 4);		
 		DalekSection neck = new DalekSection ("Neck",8);
 		DalekSectionDome dome = new DalekSectionDome("Dome",8,neck);
-		DalekSection rightShoulder = new DalekSection ("Right Shoulder",10,neck,new Weapon("Plunger",0,1, 0, 2, 6, 6, 6,-1));
-		DalekSection leftShoulder = new DalekSection ("Left Shoulder",10,neck,new Weapon("Large Laser", 0,5,10,15, 8, 8, 8,-1));
+		DalekSection rightShoulder = new DalekSection ("Right Shoulder",9,neck,new Weapon("Plunger",0,1, 0, 2, 6, 6, 6,-1));
+		DalekSection leftShoulder = new DalekSection ("Left Shoulder",9,neck,new Weapon("Large Laser", 0,5,10,15, 8, 8, 8,-1));
 		DalekSectionSkirt rightSkirt = new DalekSectionSkirt ("Right Skirt", 16, rightShoulder,new Weapon("Auto Bomb/10",0,1,2,3,10,10,10,1));
 		DalekSectionSkirt leftSkirt = new DalekSectionSkirt ("Left Skirt", 16, leftShoulder,new Weapon("Auto Bomb/10",0,1,2,3,10,10,10,1));
 		
