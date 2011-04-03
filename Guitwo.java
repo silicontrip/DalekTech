@@ -55,7 +55,7 @@ public class Guitwo extends Cli {
 		mapp = new mapPanel(mapImage,m,this);
 		
 		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
-		mapp.setArrowImage(getImageWithFilename("Images/arrow.png"));
+		mapp.setArrowImage(getImageWithFilename("Images/Arrow.png"));
 
 		// for testing the selector registration...
 		// mapp.setSelectorPosition(new Position(0,0));
