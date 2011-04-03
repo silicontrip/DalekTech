@@ -4,15 +4,13 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 
-
 public class statusPanel extends JPanel {
-	
 	
 	static final int DAMAGE = 1;
 	static final int TACTICAL = 2;
 	String name;
 	
-	HashMap<String,Image> dalekDamageImages;
+	HashMap<String,DamageUI> dalekDamageImages;
 	HashMap<String,Image> dalekTacticalImages;
 	
 	int displayFlag;
@@ -47,7 +45,6 @@ public class statusPanel extends JPanel {
 		displayFlag = TACTICAL;
 		
 		techFont = new Font("Eurostile",0,16);
-		
 	}
 	
 	void setBackground (Image i)  { this.panelBackground = i; }
@@ -56,25 +53,31 @@ public class statusPanel extends JPanel {
 	int getPanelWidth() { return panelWidth; }
 	
 	void setTacticalImages(HashMap<String,Image> hm) { dalekTacticalImages = hm; }
-	void setDamageImages(HashMap<String,Image> hm) { dalekDamageImages = hm; }
+	void setDamageImages(HashMap<String,DamageUI> hm) { dalekDamageImages = hm; }
 	
 	void setDalekName(String s) { 
 		this.name = new String(s);
-		setDamageImage(getDamageImageFromName(s));
-		setTacticalImage(getTacticalImageFromName(s));
+		setDamageImage(getDamageImageFromName());
+		setTacticalImage(getTacticalImageFromName());
 	}
-	void setDamageImage(Image i) { this.dalekDamageImage = i; }
+	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; }
 	void setTacticalImage(Image i) { this.dalekTacticalImage = i; }
 	void setSpotColour(ArrayList<Color> c) { this.dalekSpotColour = c; }
 	void setSpot(ArrayList<Point> p) { this.dalekSpot = p; }
 	void setSpotDamage(ArrayList<Point> p) { this.dalekSpotDamage = p; }
 	
+	public void setFromSections(HashMap<String,DalekSection> hm) {
+		getDamageImageFromName().setFromSections(hm);
+	}
 	
-	Image getTacticalImageFromName (String s) { return dalekTacticalImages.get(name); }
+	Image getTacticalImageFromName () { return dalekTacticalImages.get(name); }
+	DamageUI getDamageImageFromName () { return dalekDamageImages.get(name); }
 	
-	Image getDamageImageFromName (String s) { return dalekDamageImages.get(name); }
-	
-	
+	void setEngine(int current, int walk, int run) {
+		this.setEngineCurrent(current);
+		this.setEngineWalk(walk);
+		this.setEngineRun(run);
+	}
 	void setEngineCurrent (int i) { this.engineCurrent = new Integer(i); }
 	void setEngineWalk (int i) { this.engineWalk = new Integer(i); }
 	void setEngineRun (int i) { this.engineRun = new Integer(i); }

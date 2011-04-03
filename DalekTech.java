@@ -159,15 +159,15 @@ public class DalekTech {
 		// until all daleks twist
 			} while (!Game.allDaleksTwist());
 			
-			HashMap<Weapon,Dalek> firing0 = new  HashMap<Weapon,Dalek>();
-			HashMap<Weapon,Dalek> firing1 = new  HashMap<Weapon,Dalek>();
+			playerOrder.get(0).setFiring(new  HashMap<Weapon,Dalek>());
+			playerOrder.get(1).setFiring(new  HashMap<Weapon,Dalek>());
 
 		// repeat
 			do {
 		// player x fires weapons of 1 dalek at another dalek
 				
-				firing0.putAll(playerOrder.get(0).fireDalek(playerOrder.get(1).getDaleks()));				
-				firing1.putAll(playerOrder.get(1).fireDalek(playerOrder.get(0).getDaleks()));
+				playerOrder.get(0).getFiring().putAll(playerOrder.get(0).fireDalek(playerOrder.get(1).getDaleks()));				
+				playerOrder.get(1).getFiring().putAll(playerOrder.get(1).fireDalek(playerOrder.get(0).getDaleks()));
 
 		// player 3-x fires weapons of 1 dalek at another dalek
 		// until all daleks fired.
@@ -176,8 +176,8 @@ public class DalekTech {
 		// until all daleks fired
 			} while (!Game.allDaleksFired());
 			
-			fire(firing0,0);
-			fire(firing1,1);
+			Game.fire(playerOrder.get(0),playerOrder.get(1));
+			Game.fire(playerOrder.get(1),playerOrder.get(0));
 			
 			playerOrder.get(0).allReset();
 			playerOrder.get(1).allReset();
@@ -192,7 +192,10 @@ public class DalekTech {
 		
 	}
 	
-	public void fire(HashMap<Weapon,Dalek> firing, int player) {
+	public void fire(Player p1, Player p2) {
+		
+		HashMap<Weapon,Dalek> firing = p1.getFiring();
+		
 		Set<Weapon> w = firing.keySet();
 		Iterator<Weapon> wit = w.iterator();
 		while (wit.hasNext()) {
@@ -202,29 +205,25 @@ public class DalekTech {
 			int cost = weap.costFire(firing.get(weap));
 			
 			// roll to hit
-			int roll = Game.twodsix();
+			int roll = this.twodsix();
 			
 			Dalek dal = firing.get(weap);
 			
 			// damage 
 			if (roll >= cost) {
 				//notify players
-				int location = Game.twodsix() -2 ;
+				int location = this.twodsix() -2 ;
 				int damage = weap.getDamage(weap.getDalekSection().getDalek().distanceTo(firing.get(weap)));
 				
-				if (player == 0) {
-					playerOrder.get(0).getUI().notifyDalekDamage(dal,location,weap,damage);
-					playerOrder.get(1).getUI().notifyDamage(dal,location,weap,damage);
-
-				} else {
-					playerOrder.get(1).getUI().notifyDalekDamage(dal,location,weap,damage);
-					playerOrder.get(0).getUI().notifyDamage(dal,location,weap,damage);
-				}
-				
 				dal.damageLocation(location,damage);
+
+				
+				p1.getUI().notifyDalekDamage(dal,location,weap,damage);
+				p2.getUI().notifyDamage(dal);
+				
 			} else {
-				playerOrder.get(0).getUI().notifyMiss(dal,weap);
-				playerOrder.get(1).getUI().notifyMiss(dal,weap);
+				p1.getUI().notifyMiss(dal,weap);
+				p2.getUI().notifyMiss(dal,weap);
 			}
 			
 		}

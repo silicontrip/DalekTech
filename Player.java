@@ -8,20 +8,29 @@ public class Player {
 	ArrayList<Dalek> daleks;
 	Map map;
 	DalekTech game;
+	HashMap<Weapon,Dalek> firing;
+	
+	public Player () {
+		daleks = new ArrayList<Dalek>();
+		// firing = new HashMap<Weapon,Dalek>();
+	}
 	
 	public  Player (UserInterface ui, UserInterface ui2, DalekTech game) {
+		this();
 		this.ui = ui;
 		this.oui = ui2;
 		this.game = game;
 		
-		daleks = new ArrayList<Dalek>();
 	}
 	
 	void setUI (UserInterface ui) { this.ui = ui; }
 	UserInterface getUI() { return ui; }
 	void setOtherUI (UserInterface ui) { this.oui = ui; }
 	UserInterface getOtherUI() { return oui; }
-
+	
+	public void setFiring(HashMap<Weapon,Dalek> hm) { this.firing = hm; } 
+	public HashMap<Weapon,Dalek> getFiring() { return this.firing; }
+	
 	Map getMap() { return getGame().getMap(); }
 	ArrayList<Dalek> getDaleks() { return daleks; }
 	
@@ -140,6 +149,7 @@ public class Player {
 			
 			// tell both interfaces where the new dalek is.
 			getUI().notifyDalekPosition(dal);
+			getUI().notifyDamage(dal);
 			getOtherUI().notifyDalekPosition(dal);
 		}
 		getUI().setInterfaceMessage(null);

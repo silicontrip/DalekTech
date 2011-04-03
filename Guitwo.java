@@ -20,7 +20,7 @@ public class Guitwo extends Cli {
 	DalekSectionUI dsui;
 	
 	HashMap<String,Image> dalekImages;
-	HashMap<String,Image> dalekDamageImages;
+	HashMap<String,DamageUI> dalekDamageImages;
 
 	
 	ArrayList<Integer> selectedDaleks = null;
@@ -43,10 +43,7 @@ public class Guitwo extends Cli {
 		frame = new JFrame();
 		frame.setTitle("Dalek Battle");
 
-		// TODO: listener class
-
 		dsui = new DalekSectionUI();
-		
 		statusp = new statusPanel();
 		// mop = new mapOverlayPanel();
 		
@@ -58,7 +55,8 @@ public class Guitwo extends Cli {
 		mapp = new mapPanel(mapImage,m,this);
 		
 		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
-		
+		mapp.setArrowImage(getImageWithFilename("Images/arrow.png"));
+
 		// for testing the selector registration...
 		// mapp.setSelectorPosition(new Position(0,0));
 		// mapp.setTargetCost(7);
@@ -98,9 +96,7 @@ public class Guitwo extends Cli {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 		}
-		
-		// getMapPanel().addArray(d.getName(),dalekImage(d.getName()),selectedPosition);
-		
+				
 		return selectedPosition;
 	}
 	
@@ -148,20 +144,15 @@ public class Guitwo extends Cli {
 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
 		
 		getStatusPanel().setDalekName(d.getName());
-		getStatusPanel().setEngineCurrent(currentMove);
-		getStatusPanel().setEngineWalk(walk);
-		getStatusPanel().setEngineRun(run);
-		
+		getStatusPanel().setEngine(currentMove,walk,run);
 		getStatusPanel().repaint();
+
+		// not sure where to put forward/backward cost.
 
 		mapp.setMovementCost(d.getPosition(),new Integer(forwardCost), new Integer(backwardCost),forward,backward);
 
-		
 		mapp.setFocusable(true);
 		mapp.requestFocus();
-
-
-		// not sure where to put forward/backward cost.
 		
 	//	getMapPanel().moveDalek(d.getName());
 		selectedMovement = -2;
@@ -179,11 +170,9 @@ public class Guitwo extends Cli {
 	
 	int getDalekTwist(Dalek d) {
 
-		
 		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().repaint();
-		
-		
+				
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
 		
@@ -358,25 +347,28 @@ public class Guitwo extends Cli {
 		imageMap.put("Red Commander",getImageWithFilename("Images/RedCommander.png"));
 		imageMap.put("Red Saucer Pilot",getImageWithFilename("Images/RedSaucerPilot.png"));
 		imageMap.put("Special Weapon",getImageWithFilename("Images/SpecialWeapon.png"));
+		
 					 
 		return imageMap;
 	}
 	
-	HashMap<String,Image> InitDalekImageDamage() {
+	HashMap<String,DamageUI> InitDalekImageDamage() {
 		
-		HashMap<String,Image> imageMap = new HashMap<String,Image>();
+		HashMap<String,DamageUI> imageMap = new HashMap<String,DamageUI>();
 		
-		imageMap.put("Black Renegade",getImageWithFilename("Images/RenegadeDamage.png"));
-		imageMap.put("Black Supreme",getImageWithFilename("Images/InvasionDamage.png"));
-		imageMap.put("Blue Drone",getImageWithFilename("Images/InvasionDamage.png"));
-		imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWarDamage.png"));
-		imageMap.put("Gold Supreme",getImageWithFilename("Images/GoldSupremeDamage.png"));
-		imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWardamage.png"));
-		imageMap.put("Grey Renegade",getImageWithFilename("Images/RenegadeDamage.png"));
-		imageMap.put("Imperial",getImageWithFilename("Images/ImperialDamage.png"));
-		imageMap.put("Red Commander",getImageWithFilename("Images/InvasionDamage.png"));
-		imageMap.put("Red Saucer Pilot",getImageWithFilename("Images/RedSaucerDamage.png"));
-		imageMap.put("Special Weapon",getImageWithFilename("Images/SpecialWeaponDamage.png"));
+		
+		imageMap.put("Black Renegade",new BlackRenegadeDamage());
+		imageMap.put("Black Supreme",new InvasionDamage());
+		imageMap.put("Blue Drone",new InvasionDamage());
+		// imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWar.png"));
+		imageMap.put("Gold Supreme",new GoldSupremeDamage());
+		// imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWar.png"));
+		imageMap.put("Grey Renegade",new GreyRenegadeDamage());
+		imageMap.put("Imperial",new ImperialDamage());
+		imageMap.put("Red Commander",new InvasionDamage());
+		imageMap.put("Red Saucer Pilot",new RedSaucerDamage());
+		imageMap.put("Special Weapon",new SpecialWeaponDamage());
+		
 		
 		return imageMap;
 	}
@@ -400,13 +392,8 @@ public class Guitwo extends Cli {
 	}
 	
 	void notifyDamage(Dalek d) {
-	
 		getStatusPanel().setDalekName(d.getName());
-		getStatusPanel().setFromSections(d.getSections());
-		//getStatusPanel().setSpotColour (getDalekSectionUI().getDamageColour());
-		//getStatusPanel().setSpot (getDalekSectionUI().getUndamaged());
-		//getStatusPanel().setSpotDamage (getDalekSectionUI().getDamaged());
-		
+		getStatusPanel().setFromSections(d.getSections());		
 		getStatusPanel().repaint();
 
 	}
@@ -430,7 +417,7 @@ public class Guitwo extends Cli {
 	}
 	
 	
-	Image getImageWithFilename (String fn) {
+	public static Image getImageWithFilename (String fn) {
 		URL imageURL = DalekTech.class.getResource(fn);
 		if (imageURL != null) {
 			return new ImageIcon(imageURL).getImage();

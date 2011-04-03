@@ -19,8 +19,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	int startx, starty;
 	Guitwo callback;
 	
-	ProbabilityUI probUI;
+	Image arrowImage = null;
+	Position forwardPosition = null;
+	Position backwardPosition = null;
 	
+	ProbabilityUI probUI;
 	
 	Image posDalekImage = null;
 	Position posDalek=null;
@@ -53,7 +56,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public static final int mapPanelWidth = 640;
 	public static final int mapPanelHeight = 480;
 
-	
 	public mapPanel (Image map, Map m, Guitwo ui) {
 		super();
 		this.map = map;
@@ -89,6 +91,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 			
 	void setSelectorImage(Image i) { this.selectorImage = i; }
+	void setArrowImage(Image i) { this.arrowImage = i; }
+
 	void setSelectorPosition(Position p) { this.selectorPosition = p; }
 	Position getSelectorPosition() { return this.selectorPosition; }
 	
@@ -280,11 +284,24 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void setTargetCost(Integer i) { probUI.setTargetCost(i); }	
 		
 	void paintMovementCost(Graphics g) {
-	
+
+		int h = arrowImage.getHeight(null);
+		
 		g.setFont( new Font("Eurostile",0,24));
 		g.setColor(java.awt.Color.WHITE);
 
+		BufferedImage thumbImage = new BufferedImage(h*2, h*2, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D graphics2D = thumbImage.createGraphics();
+		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		
+		
 		if (this.forwardMove) {
+			AffineTransform newXform =  AffineTransform.getRotateInstance(getMovementCostPosition().getDirection().getAngle(),h,h);
+			graphics2D.setTransform(newXform);
+			graphics2D.drawImage(arrowImage,0,0,null);	
+			g.drawImage(thumbImage,(int)this.calX(getMovementCostPosition().newForwardsPosition().getSpatialX()),
+						(int)this.calY(getMovementCostPosition().newForwardsPosition().getSpatialY()),null);
+			
 			g.drawString(forwardCost.toString(),(int)this.calX(getMovementCostPosition().newForwardsPosition().getSpatialX()),
 						 (int)this.calY(getMovementCostPosition().newForwardsPosition().getSpatialY()));
 		}

@@ -64,6 +64,7 @@ public class Direction {
 	public Direction reverseDirection() { return new Direction(this.dir + 3); }
 	public String toString() { return directionShort[dir]; }
 	public int getDirection() { return dir; }
+	public double getAngle() { return dir * PI3; }
 	public int getDegrees() { return dir * 60; }
 	public boolean isDirection() { return dir != NONE; }
 	
