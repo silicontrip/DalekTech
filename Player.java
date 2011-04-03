@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class Player {
-
+	
 	UserInterface ui;
 	UserInterface oui;
 	ArrayList<Dalek> daleks;
@@ -153,7 +153,7 @@ public class Player {
 			getOtherUI().notifyDalekPosition(dal);
 		}
 		getUI().setInterfaceMessage(null);
-
+		
 	}
 	
 	
@@ -171,7 +171,7 @@ public class Player {
 	void moveDalek () {
 		
 		getUI().setInterfaceMessage("Move");
-
+		
 		
 		if (!this.allMoved()) {
 			int dir;
@@ -183,34 +183,38 @@ public class Player {
 			
 			if (select != -1) {
 				dal = havent.get(select);
-
-			dal.setMoved(true);
-			
-			do {
-				getUI().notifyDalekPosition(dal);
-				getOtherUI().notifyDalekPosition(dal);
+				
+				dal.setMoved(true);
+				
+				do {
+					getUI().notifyDalekPosition(dal);
+					getOtherUI().notifyDalekPosition(dal);
+					getUI().notifyEngine(dal.getMovement(),
+										 dal.getWalk(),
+										 dal.getRun());
+					
+					dir = getUI().getDalekMove(dal,
+											   dal.getMovement(),
+											   dal.getWalk(),
+											   dal.getRun(),
+											   dal.getHex().getMovementCost(dal.getForwardsHex()),
+											   dal.getHex().getMovementCost(dal.getBackwardsHex()),
+											   dal.canMoveForwards(),
+											   dal.canMoveBackwards(),
+											   dal.canTurn()
+											   );
+				} while (dal.moveDalek(dir) && dal.canTurn());
 				getUI().notifyEngine(dal.getMovement(),
 									 dal.getWalk(),
 									 dal.getRun());
-									 
-			dir = getUI().getDalekMove(dal,
-									dal.getMovement(),
-									dal.getWalk(),
-									dal.getRun(),
-									dal.getHex().getMovementCost(dal.getForwardsHex()),
-									dal.getHex().getMovementCost(dal.getBackwardsHex()),
-									dal.canMoveForwards(),
-									dal.canMoveBackwards(),
-									dal.canTurn()
-				);
-			} while (dal.moveDalek(dir) && dal.canTurn());
+				
 				getUI().notifyDalekPosition(dal);
 				getOtherUI().notifyDalekPosition(dal);
-
+				
 			}		
 		}
 		getUI().setInterfaceMessage(null);
-
+		
 	}
 	
 	void twistDalek () {
@@ -225,14 +229,14 @@ public class Player {
 			dal.faceDalek( getUI().getDalekTwist(dal) );
 		}
 		getUI().setInterfaceMessage(null);
-
+		
 	}
 	
 	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
 		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
 		
 		getUI().setInterfaceMessage("Fire");
-
+		
 		if (!this.allFired()) {
 			ArrayList<Weapon> weaponArray;
 			Weapon weap;
@@ -240,7 +244,7 @@ public class Player {
 			Dalek dal;
 			ArrayList<Dalek> havent = getHaventFired();
 			int select;
-
+			
 			dal = havent.get(getUI().selectDalek(havent));
 			dal.setFired(true);
 			weaponArray = dal.getWeaponArray();
@@ -256,13 +260,13 @@ public class Player {
 					for (int i=0; i< targetDaleks.size(); i++) {
                         // calculate difficulty of shot
 						cost.add(new Integer(weap.costFire(targetDaleks.get(i))));
-							// need distance and LOS
+						// need distance and LOS
 						dist.add(new Double(weap.distanceTo(targetDaleks.get(i))));
 						los.add(weap.getLineOfSight(targetDaleks.get(i)));
-					
+						
 					}                                       
 					getUI().setInterfaceMessage("Target");
-
+					
 					target=getUI().selectTargetDalek(dal,targetDaleks,cost,dist,los);
 					if (target != -1) {
 						fireMap.put(weap, targetDaleks.get(target));
@@ -271,12 +275,12 @@ public class Player {
 			} while (select != -1);
 		}
 		getUI().setInterfaceMessage(null);
-
+		
 		return fireMap;
 	}
 	
 	void endGame () {
 		getUI().notifyEnd(allDestroyed());
 	}
-
+	
 }
