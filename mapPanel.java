@@ -359,6 +359,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		BufferedImage thumbImage = new BufferedImage(mapPanelWidth, mapPanelHeight, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D graphics2D = thumbImage.createGraphics();
 		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		map.repaint();
 		graphics2D.drawImage(map, xpos, ypos, w, h, null);
 		g.drawImage(thumbImage,0,0,null);
 		 
