@@ -120,144 +120,35 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		// scroll map display to position.
 		
 		this.centreOn(p);
-		
-		//System.out.println("Animate: " + moveXpos + ","+moveYpos+" : " + moveXYpos);
-		
-		if (dalekImagePosition.containsKey(s)) {
 			
-			map.moveDalek(s,p);
-			/*
-			// dalek exists 
-			// animate to new position.
-			
-			// System.out.println("Animating: "+s + " from: " + dalekImagePosition.get(s) +" to " + p);
-
-			double distance = dalekImagePosition.get(s).distanceTo(p);
-			if (distance > 0.0) {
-
-				moveDalekName = s;
-				moveDalekPosition = new Position(p);
-				moveDalekCurrentX = 0;
-				moveDalekCurrentY = 0;
-
-				moveDalekDir = 0;
-				moveDalekTargetDir = 0;
-				
-				moveDalekTargetX = p.getSpatialX() -  dalekImagePosition.get(s).getSpatialX() ;
-				moveDalekTargetY = p.getSpatialY() -  dalekImagePosition.get(s).getSpatialY();
-
-				moveDalekX = moveDalekTargetX / (distance * 50.0);
-				moveDalekY = moveDalekTargetY / (distance * 50.0);
-			
-				// System.out.println("Target: " + moveDalekTargetX + "," + moveDalekTargetY +" Delta: " + moveDalekX + "," + moveDalekY);
-			
-				// timer.start();
-			} else if ( p.getDirection() != dalekImagePosition.get(s).getDirection()) {
-				
-				// reposition dalek incase of rotation.
-				// want to animate
-				
-				moveDalekName = s;
-				moveDalekPosition = new Position(p);
-
-				moveDalekCurrentX = 0;
-				moveDalekCurrentY = 0;
-				moveDalekTargetX = 0;
-				moveDalekTargetY = 0;
-				moveDalekX = 0;
-				moveDalekY = 0;
-
-				
-				moveDalekCurrentDir = 0;
-				moveDalekTargetDir = p.getDirection().getTurnTo(dalekImagePosition.get(s).getDirection());
-							
-				moveDalekDir = moveDalekTargetDir  / 50.0;
-				// dalekImagePosition.put(moveDalekName,moveDalekPosition);
-				// timer.start();
-
-			}
-			 */
+		if (getMapImage().hasDalek(s)) {
+			System.out.println("Move Dalek - " + p);
+			getMapImage().moveDalek(this,s,p);
 		} else {
-			map.addDalek(s,i,p);
-			/*
-			// System.out.println("**** adding dalek at " + p +" ****");
-				// simply add the new dalek
-			dalekImagePosition.put(s,new Position(p));
-			dalekImage.put(s,i);
-			this.repaint();
-			 */
+			getMapImage().addDalek(s,i,p);
 		}
 		timer.start();
 	}
-	/*
-	void removeArray (String s) {
-		dalekImagePosition.remove(s);
-		dalekImage.remove(s);
-	}
-	int sizeArray () {
-		
-		if (dalekImagePosition.size() != dalekImage.size() ) {
-			System.out.println ("mapPanel: internal inconsistancy error\n");
-		}
-		return dalekImagePosition.size();
-	}
-	 */
+
 	public Dimension getPreferredSize() {
         return new Dimension(mapPanelWidth,mapPanelHeight);
     }
 
 	int getMapHeight() { return (int)(map.getHeight(null) * scale); }
 	int getMapWidth() { return (int)(map.getWidth(null) * scale); }
-
-	/*
-	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w) {
-		drawDalekAt(g,dalek,x,y,w,0);
-	}
-	
-	
-	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w,Direction dir) {
-		if (dir != null ) {
-			drawDalekAt(g,dalek,x,y,w,dir.getDirection());
-		} else {
-			drawDalekAt(g,dalek,x,y,w,0);
-		}
-	}
-	
-	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w,double dir) {
-		
-		int h = (int)  (dalek.getHeight(null) * w / dalek.getWidth(null)  );
-		
-		if (g.hitClip(x-h,y-h/2,h*2, h)) {
-	//	if (x>-h && x< mapPanelWidth+h && y>-h&& y < mapPanelHeight+h) {
-
-			BufferedImage thumbImage = new BufferedImage(h*2, h, BufferedImage.TYPE_4BYTE_ABGR);
-			Graphics2D graphics2D = thumbImage.createGraphics();
-			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			if (dir != 0 ) {
-				AffineTransform newXform =  AffineTransform.getRotateInstance(Math.toRadians(dir * 60),h,h/2);
-				// newXform.rotate(Math.toRadians(dir * 60));
-				graphics2D.setTransform(newXform);
-			}
-			graphics2D.drawImage(dalek, h - w/2, 0, w, h, null);
-		
-			g.drawImage(thumbImage,x-h,y-h/2,null);
-		}
-	}
-	*/
 	
 	void setNothing() {
-		System.out.println("setNothing()");
+		//System.out.println("setNothing()");
 		mouseState = 0;
 	}
 	
 	void setPositionDalek() {
-		System.out.println("setPosition()");
-
+		//System.out.println("setPosition()");
 		mouseState = 1;
 	}
 		
 	void setDirectDalek() {
-		System.out.println("setDirect()");
+		//System.out.println("setDirect()");
 		mouseState = 2;
 	}
 	
@@ -272,28 +163,12 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	void directDalek (Image dalek, Position pos) { 
-		
-		
 		this.setDirectDalek();
-		
 		getMapImage().setTemporaryDalek(dalek,pos);
-		/*
-		this.posDalekImage = dalek;
-		this.posDalek = pos;
-		 */
 	}
 	
-	public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {
-		
+	public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {		
 		getMapImage().setMovementCost(p,forward,backward,forwardMove,backwardMove);
-		/*
-		costPosition=p;
-		forwardCost=forward;
-		backwardCost=backward;
-		
-		this.forwardMove = forwardMove;
-		this.backwardMove = backwardMove;
-		 */
 	}
 	
 	Position getMovementCostPosition() { return costPosition; }
@@ -367,67 +242,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		graphics2D.drawImage(map, xpos, ypos, w, h, null);
 		g.drawImage(thumbImage,0,0,null);
 		 
-		
-		// drawn in the MapImage class
-		/* 
-		if (getSelectorPosition() != null) {
-			// arg horrible registration values.
-			g.drawImage(selectorImage, 
-						(int)this.calX(getSelectorPosition().getSpatialX() - 0.57),
-						(int)this.calY(getSelectorPosition().getSpatialY() - 0.50), 
-						(int)(getMap().getRegScaleX() * scale * 1.175),
-						(int)(getMap().getRegScaleY() * scale * 1.025 ),
-						null);
-		}
-		
-		
-	//	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		// g.drawImage(map,xpos,ypos,w,h,null);  // doesn't do antialiased scaling.
-		
-		
-		Iterator<String> it = dalekImagePosition.keySet().iterator();
-		
-		while (it.hasNext()){
-			
-			String n = it.next();
-			
-			Position pos= dalekImagePosition.get(n);
-			
-
-			// This is for the dalek animated movement
-			if (moveDalekName != null && moveDalekName.equals(n)) {
-				// System.out.println("**** dalek " + n + " at " + pos +" ****");
-
-				this.drawDalekAt(g,dalekImage.get(n),
-								 (int)this.calX(pos.getSpatialX()+moveDalekCurrentX), 
-								 (int)this.calY(pos.getSpatialY()+moveDalekCurrentY), 
-								 (int)(getMap().getRegScaleX() * scale * dalekScale),
-								 pos.getDirection().getDirection() + moveDalekCurrentDir);
-			} else {
-
-				this.drawDalekAt(g,dalekImage.get(n),
-								 (int)this.calX(pos.getSpatialX()), 
-								 (int)this.calY(pos.getSpatialY()), 
-								 (int)(getMap().getRegScaleX() * scale * dalekScale),
-								 pos.getDirection());	
-			
-			}
-		}
-		
-		// temporary dalek image (for positioning and direction)
-		if (this.posDalekImage != null && this.posDalek != null) {
-			this.drawDalekAt(g,posDalekImage,
-							 (int)this.calX(this.posDalek.getSpatialX()), 
-							 (int)this.calY(this.posDalek.getSpatialY()), 
-							 (int)(getMap().getRegScaleY() * scale * dalekScale),
-							 this.posDalek.getDirection());		
-		}
-		
-		if (costPosition != null ) {
-			paintMovementCost(g);
-		}
-		*/
-		
 		probUI.paintComponent(g); 
 		
 		if (interfaceMessage != null) {
@@ -446,33 +260,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	public void actionPerformed(ActionEvent e) {
 		
-		// more dalek sliding
-		/*
-		if (moveDalekName != null) {
-			
-			// 	System.out.println ("**** Animating movement ****");
-			
-			moveDalekCurrentX += moveDalekX;
-			moveDalekCurrentY += moveDalekY;
-			moveDalekCurrentDir += moveDalekDir;
-			
-			if (java.lang.Math.abs(moveDalekCurrentX - moveDalekTargetX) < 0.01 &&
-				java.lang.Math.abs(moveDalekCurrentY - moveDalekTargetY) < 0.01 && 
-				java.lang.Math.abs(moveDalekCurrentDir - moveDalekTargetDir) < 0.01) {
-				
-				// System.out.println ("**** Dalek at Target ****");
-				
-				dalekImagePosition.put(moveDalekName,moveDalekPosition);
-				moveDalekCurrentX = 0;
-				moveDalekCurrentY = 0;
-				moveDalekCurrentDir=0;
-				moveDalekDir = 0;
-				moveDalekPosition = null;
-				moveDalekName = null;
-				//	timer.stop();
-			}
-		}
-		 */
 		if (moveXYpos != null) {
 			
 			int txpos = xpos + (int)moveXpos;

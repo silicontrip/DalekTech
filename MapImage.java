@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 public class MapImage extends BufferedImage implements ActionListener {
 	
 	Image baseImage;
+	mapPanel mapp;
 	
 	// Temporary Dalek
 	Image tempDalekImage=null;
@@ -84,13 +85,16 @@ public class MapImage extends BufferedImage implements ActionListener {
 	// dalek start position
 	// dalek end position
 	
-	public void moveDalek(String name, Position p) {
+	public void moveDalek(mapPanel mapp, String name, Position p) {
 		
+		this.mapp = mapp;
 		setPercent(0);
 		dalekImageEndPosition.put(name,p);
 		timer.start();
 		
 	}
+	
+	public boolean hasDalek (String name) { return dalekImagePosition.containsKey(name); }
 	
 	// dalek percent movement
 	
@@ -172,7 +176,13 @@ public class MapImage extends BufferedImage implements ActionListener {
 					if (dalekImageEndPosition.containsKey(n)) {
 						epos = dalekImageEndPosition.get(n);
 						// rotation...
+						
+						AffineTransform oldXform = canvas.getTransform();
+						AffineTransform newXform = AffineTransform.getRotateInstance(imageAnglePercent(pos,epos),imageXPercent(pos,epos),imageYPercent(pos,epos));
+						canvas.setTransform(newXform);
 						canvas.drawImage(dalek,imageXPercent(pos,epos)-w/2,imageYPercent(pos,epos)-h/2,w,h,null);
+						canvas.setTransform(oldXform);
+
 					} else {
 						AffineTransform oldXform = canvas.getTransform();
 						AffineTransform newXform = AffineTransform.getRotateInstance(pos.getAngle(),imageX(pos),imageY(pos));
@@ -205,7 +215,6 @@ public class MapImage extends BufferedImage implements ActionListener {
 
 			}
 			
-			
 			// layer 4 temporary dalek
 			
 			if (this.hasTemporaryDalek()) {
@@ -226,14 +235,17 @@ public class MapImage extends BufferedImage implements ActionListener {
 		
 		public void actionPerformed(ActionEvent e) {
 			this.setPercent(this.getPercent() + 2);
-			
+			mapp.repaint();
 			if (this.endPercent()) {
+				
+				setPercent(0);
+				timer.stop();
+				
 				Iterator<String> it = dalekImageEndPosition.keySet().iterator();
 				while (it.hasNext()){
 					String n = it.next();
 					dalekImagePosition.put(n,dalekImageEndPosition.get(n));
 					dalekImageEndPosition.remove(n);
-					timer.stop();
 				}
 			}
 		}
