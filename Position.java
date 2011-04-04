@@ -224,11 +224,11 @@ private void readObject(java.io.ObjectInputStream stream) throws IOException, Cl
 }
 	
 	
-	public Position () { this.x = -1 ; this.y = -1 ; this.dir = null; }
-	public Position (int x, int y) {this(x,y,null);}
+	public Position () { this.x = -1 ; this.y = -1 ; setDirection(new Direction()); }
+	public Position (int x, int y) {this(x,y,new Direction());}
 	public Position (int x, int y, Direction dir) {this.setX(x); this.setY(y); this.setDirection(dir);}
 	public Position (Double p) { this(p.getX(),p.getY()); }
-	public Position (double x, double y) { this(x,y,null); }
+	public Position (double x, double y) { this(x,y,new Direction()); }
 	public Position (double x, double y, Direction dir) { this.setPosition(x,y,dir);}
 	public Position (Position p) { this(p.getX(),p.getY(),p.getDirection()); }
 }

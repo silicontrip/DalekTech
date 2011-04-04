@@ -244,14 +244,18 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	void setNothing() {
+		System.out.println("setNothing()");
 		mouseState = 0;
 	}
 	
 	void setPositionDalek() {
+		System.out.println("setPosition()");
+
 		mouseState = 1;
 	}
 		
 	void setDirectDalek() {
+		System.out.println("setDirect()");
 		mouseState = 2;
 	}
 	
@@ -261,14 +265,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 	
 	void positionDalek (Image dalek) {
-	
 		this.setPositionDalek();
-		
-		map.setTemporaryDalekImage(dalek);
-/*		
-		this.posDalekImage = dalek;
-		this.posDalek = null;
-*/		
+		getMapImage().setTemporaryDalekImage(dalek);
 	}
 	
 	void directDalek (Image dalek, Position pos) { 
@@ -276,7 +274,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 		this.setDirectDalek();
 		
-		map.setTemporaryDalek(dalek,pos);
+		getMapImage().setTemporaryDalek(dalek,pos);
 		/*
 		this.posDalekImage = dalek;
 		this.posDalek = pos;
@@ -534,7 +532,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void mouseEntered(MouseEvent e)
 	{
 		// System.out.println("mouseEntered: " + e);
-		
 		//e.getComponent().setFocusable(true);
 	}
 	
@@ -548,14 +545,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		// System.out.println("mouseClicked: " + e);
 		
 		if (isPositionDalek()) {
-			if (posDalek != null) {
-
-				this.setNothing();
-				callback.setSelectedPosition(posDalek);
+			this.setNothing();
+			callback.setSelectedPosition(getMapImage().getTemporaryDalekPosition());
 			
-				this.posDalekImage = null;
-				this.posDalek = null;
-			}
+			getMapImage().setTemporaryDalek(null,null);
 		}
 		if (isDirectDalek()) {
 			// I want to merge this with the above code.
@@ -567,9 +560,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			*/
 			this.setNothing();
 			
-			callback.setSelectedDirection(this.posDalek.getDirection()); 
-			this.posDalekImage = null;
-			this.posDalek = null;
+			callback.setSelectedDirection(getMapImage().getTemporaryDalekPosition().getDirection()); 
+			getMapImage().setTemporaryDalek(null,null);
 			
 			this.repaint();
 						
@@ -603,9 +595,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	public void mouseMoved(MouseEvent e) {
-		// System.out.println("Action: " + e);
-		
-	//	System.out.println("mouseState: " + mouseState);
+		 //System.out.println("Action: " + e + " mouseState: " + mouseState);
+		//System.out.println("mouseState: " + mouseState);
 
 		
 		if (isPositionDalek()) {
@@ -616,14 +607,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
 
 			getMapImage().setTemporaryDalekPosition(new Position(x,y));
-			/*
-			if (posDalek == null) {
-				posDalek = new Position(x,y);
-			} else {
-				posDalek.setPosition(x,y);
-			}
-			//System.out.println ("x: " + x + ", y: " + y);
-			 */
 			this.repaint();
 
 		}
@@ -633,7 +616,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			
 			Position p = new Position (x,y);
 		
-			posDalek.facePosition(p);
+			//posDalek.facePosition(p);
+			getMapImage().faceTemporaryDalekPosition(p);
 		//	dalekImagePosition.get(this.dirDalekName).facePosition(p);
 			
 			this.repaint();

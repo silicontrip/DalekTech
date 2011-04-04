@@ -18,7 +18,7 @@ public class Direction {
 	static final String[] directionShort = {"N","NE","SE","S","SW","NW"};
 
 	
-	public Direction() { this.dir = NONE; }	
+	public Direction() { this.dir = NORTH; }	
 	public Direction (int d) { this.setDirection(d); }
 	
 	public void setDirection(int dir) { 
