@@ -92,7 +92,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			
 	MapImage getMapImage() { return map; }
 	void setSelectorImage(Image i) { this.getMapImage().setSelectorImage(i); }
-	void setArrowImage(Image i) { this.arrowImage = i; }
+	void setArrowImage(Image i) { this.getMapImage().setMovementImage(i); }
 
 	void setSelectorPosition(Position p) { this.getMapImage().setSelectorPosition(p); }
 //	Position getSelectorPosition() { return this.selectorPosition; }
@@ -209,6 +209,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	int getMapHeight() { return (int)(map.getHeight(null) * scale); }
 	int getMapWidth() { return (int)(map.getWidth(null) * scale); }
 
+	/*
 	void drawDalekAt (Graphics g, Image dalek, int x, int y, int w) {
 		drawDalekAt(g,dalek,x,y,w,0);
 	}
@@ -242,6 +243,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			g.drawImage(thumbImage,x-h,y-h/2,null);
 		}
 	}
+	*/
 	
 	void setNothing() {
 		System.out.println("setNothing()");
@@ -282,12 +284,16 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {
+		
+		getMapImage().setMovementCost(p,forward,backward,forwardMove,backwardMove);
+		/*
 		costPosition=p;
 		forwardCost=forward;
 		backwardCost=backward;
 		
 		this.forwardMove = forwardMove;
 		this.backwardMove = backwardMove;
+		 */
 	}
 	
 	Position getMovementCostPosition() { return costPosition; }
@@ -545,10 +551,12 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		// System.out.println("mouseClicked: " + e);
 		
 		if (isPositionDalek()) {
-			this.setNothing();
-			callback.setSelectedPosition(getMapImage().getTemporaryDalekPosition());
-			
-			getMapImage().setTemporaryDalek(null,null);
+			if (getMapImage().getTemporaryDalekPosition() != null) {
+				this.setNothing();
+				callback.setSelectedPosition(getMapImage().getTemporaryDalekPosition());
+				
+				getMapImage().setTemporaryDalek(null,null);
+			}
 		}
 		if (isDirectDalek()) {
 			// I want to merge this with the above code.
