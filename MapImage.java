@@ -49,7 +49,6 @@ public class MapImage extends BufferedImage implements ActionListener {
 		timer.setCoalesce(false);
 		timer.setRepeats(true);		
 		
-		
 		this.setBaseImage(baseImage);
 		this.setMap(map);
 	}
@@ -155,7 +154,10 @@ public class MapImage extends BufferedImage implements ActionListener {
 				int w = this.getSelectorImage().getWidth(null) * h / this.getSelectorImage().getHeight(null);
 				//int h = this.getSelectorImage().getWidth(null);
 				
-				canvas.drawImage(this.getSelectorImage(),this.imageX(getSelectorPosition())-w/2,this.imageX(getSelectorPosition())-h/2,null);
+				canvas.drawImage(this.getSelectorImage(),
+								 this.imageX(getSelectorPosition())-w/2,
+								 this.imageY(getSelectorPosition())-h/2,
+								 w,h,null);
 			}
 			
 			// layer 2 dalek positions

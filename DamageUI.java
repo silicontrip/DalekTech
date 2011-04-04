@@ -78,7 +78,7 @@ public abstract class DamageUI extends BufferedImage {
 					canvas.setColor(Color.RED);
 				}
 				
-				System.out.println("Armour: " + armour + " " + this.getWidth(null) + "," + this.getHeight(null) + " size:"+size);
+				// System.out.println("Armour: " + armour + " " + this.getWidth(null) + "," + this.getHeight(null) + " size:"+size);
 
 				
 				for (int y=0; y<r.getHeight() ; y++) {
