@@ -12,7 +12,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	double scale;
 	double dalekScale = 0.5;
 	int xpos, ypos;
-	Image map;
+	MapImage map;
 	Image selectorImage=null;
 	Position selectorPosition=null;
 	Map gridMap;
@@ -58,7 +58,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 	public mapPanel (Image map, Map m, Guitwo ui) {
 		super();
-		this.map = map;
+		this.map = new MapImage(map,m);
 		this.gridMap = m;
 		this.callback = ui;
 		
@@ -90,11 +90,12 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 	}
 			
-	void setSelectorImage(Image i) { this.selectorImage = i; }
+	MapImage getMapImage() { return map; }
+	void setSelectorImage(Image i) { this.getMapImage().setSelectorImage(i); }
 	void setArrowImage(Image i) { this.arrowImage = i; }
 
-	void setSelectorPosition(Position p) { this.selectorPosition = p; }
-	Position getSelectorPosition() { return this.selectorPosition; }
+	void setSelectorPosition(Position p) { this.getMapImage().setSelectorPosition(p); }
+//	Position getSelectorPosition() { return this.selectorPosition; }
 	
 	void setInterfaceMessage(String s) { interfaceMessage = s; }
 		
@@ -123,6 +124,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		//System.out.println("Animate: " + moveXpos + ","+moveYpos+" : " + moveXYpos);
 		
 		if (dalekImagePosition.containsKey(s)) {
+			
+			map.moveDalek(s,p);
+			/*
 			// dalek exists 
 			// animate to new position.
 			
@@ -172,15 +176,20 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				// timer.start();
 
 			}
+			 */
 		} else {
+			map.addDalek(s,i,p);
+			/*
 			// System.out.println("**** adding dalek at " + p +" ****");
 				// simply add the new dalek
 			dalekImagePosition.put(s,new Position(p));
 			dalekImage.put(s,i);
 			this.repaint();
+			 */
 		}
 		timer.start();
 	}
+	/*
 	void removeArray (String s) {
 		dalekImagePosition.remove(s);
 		dalekImage.remove(s);
@@ -192,6 +201,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		}
 		return dalekImagePosition.size();
 	}
+	 */
 	public Dimension getPreferredSize() {
         return new Dimension(mapPanelWidth,mapPanelHeight);
     }
@@ -253,15 +263,24 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	void positionDalek (Image dalek) {
 	
 		this.setPositionDalek();
+		
+		map.setTemporaryDalekImage(dalek);
+/*		
 		this.posDalekImage = dalek;
 		this.posDalek = null;
-		
+*/		
 	}
 	
 	void directDalek (Image dalek, Position pos) { 
+		
+		
 		this.setDirectDalek();
+		
+		map.setTemporaryDalek(dalek,pos);
+		/*
 		this.posDalekImage = dalek;
 		this.posDalek = pos;
+		 */
 	}
 	
 	public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {
@@ -292,16 +311,21 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		g.setFont( new Font("Eurostile",0,24));
 		g.setColor(java.awt.Color.WHITE);
 
-		BufferedImage thumbImage = new BufferedImage(h*2, w*2, BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D graphics2D = thumbImage.createGraphics();
-		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		BufferedImage thumb1 = new BufferedImage(h*2, w*2, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D canvas1 = thumb1.createGraphics();
+		canvas1.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		
+		
+		BufferedImage thumb2 = new BufferedImage(h*2, w*2, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D canvas2 = thumb2.createGraphics();
+		canvas2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		
 		
 		if (this.forwardMove) {
 			AffineTransform newXform =  AffineTransform.getRotateInstance(getMovementCostPosition().getDirection().getAngle(),h,w);
-			graphics2D.setTransform(newXform);
-			graphics2D.drawImage(arrowImage,h,w,w/3,h/3,null);	
-			g.drawImage(thumbImage,(int)this.calX(getMovementCostPosition().newForwardsPosition().getSpatialX())-w/2,
+			canvas1.setTransform(newXform);
+			canvas1.drawImage(arrowImage,h,w,w/3,h/3,null);	
+			g.drawImage(thumb1,(int)this.calX(getMovementCostPosition().newForwardsPosition().getSpatialX())-w/2,
 						(int)this.calY(getMovementCostPosition().newForwardsPosition().getSpatialY())-h/2,null);
 			
 			g.drawString(forwardCost.toString(),(int)this.calX(getMovementCostPosition().newForwardsPosition().getSpatialX()),
@@ -309,7 +333,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		}
 		if (this.backwardMove) {
 			
-			g.drawImage(thumbImage,(int)this.calX(getMovementCostPosition().newBackwardsPosition().getSpatialX()),
+			AffineTransform newXform =  AffineTransform.getRotateInstance(getMovementCostPosition().getDirection().getReverseAngle(),h,w);
+			canvas2.setTransform(newXform);
+			canvas2.drawImage(arrowImage,h,w,w/3,h/3,null);	
+			
+			g.drawImage(thumb2,(int)this.calX(getMovementCostPosition().newBackwardsPosition().getSpatialX()),
 						(int)this.calY(getMovementCostPosition().newBackwardsPosition().getSpatialY()),null);
 
 			
@@ -334,6 +362,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		graphics2D.drawImage(map, xpos, ypos, w, h, null);
 		g.drawImage(thumbImage,0,0,null);
 		 
+		
+		// drawn in the MapImage class
+		/* 
 		if (getSelectorPosition() != null) {
 			// arg horrible registration values.
 			g.drawImage(selectorImage, 
@@ -344,8 +375,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 						null);
 		}
 		
+		
 	//	g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		// g.drawImage(map,xpos,ypos,w,h,null);  // doesn't do antialiased scaling.
+		
 		
 		Iterator<String> it = dalekImagePosition.keySet().iterator();
 		
@@ -388,6 +421,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		if (costPosition != null ) {
 			paintMovementCost(g);
 		}
+		*/
 		
 		probUI.paintComponent(g); 
 		
@@ -408,6 +442,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void actionPerformed(ActionEvent e) {
 		
 		// more dalek sliding
+		/*
 		if (moveDalekName != null) {
 			
 			// 	System.out.println ("**** Animating movement ****");
@@ -432,6 +467,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 				//	timer.stop();
 			}
 		}
+		 */
 		if (moveXYpos != null) {
 			
 			int txpos = xpos + (int)moveXpos;
@@ -578,12 +614,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
 			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
 
+			getMapImage().setTemporaryDalekPosition(new Position(x,y));
+			/*
 			if (posDalek == null) {
 				posDalek = new Position(x,y);
 			} else {
 				posDalek.setPosition(x,y);
 			}
 			//System.out.println ("x: " + x + ", y: " + y);
+			 */
 			this.repaint();
 
 		}

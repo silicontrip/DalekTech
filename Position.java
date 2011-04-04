@@ -100,6 +100,12 @@ public class Position implements Serializable {
 		
 	}
 	
+	
+	public double getReverseAngle() { return dir.reverseDirection().getAngle(); }
+	public double getAngle() { return dir.getAngle(); }
+	public int getDegrees() { return dir.getDegrees(); }
+	
+	
 	/*
 	public int directionTo(Position p) {
 	
