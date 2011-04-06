@@ -76,28 +76,13 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	}
 	*/
 	
-	statusPanel getStatusPanel() {
-		return this.getCallbackUI().getStatusPanel();
-	}
 	
-	Image dalekImage(String name) {
-// I think I'd rather it throw an exception
-		// there should be no case where not found is valid
-//		if (dalekImages.containsKey(name)) {
-			return dalekImages.get(name);
-//		}
-//		System.out.println("Canot find: "+ name);
-//		return null;
-	}
+	Image dalekImage(String name) { return dalekImages.get(name); }
 	
 	
-	public Dimension getPreferredSize() {
-        return new Dimension(640,480);
-    }
+	public Dimension getPreferredSize() { return new Dimension(640,480); }
 	
-	public void setDalekList(ArrayList<Dalek> dalekList) {
-		this.dalekList = dalekList;
-	}
+	public void setDalekList(ArrayList<Dalek> dalekList) { this.dalekList = dalekList; }
 	
 	void drawDalekAt (Graphics g, String name, int x, int y, int w) {
 	
@@ -128,7 +113,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 				getStatusPanel().setEngineWalk(dalekList.get(select).getWalk());
 				getStatusPanel().setEngineRun(dalekList.get(select).getRun());
 
-				getStatusPanel().damageView();
+				// getStatusPanel().damageView();
 				getStatusPanel().repaint();
 			}
 			
@@ -208,6 +193,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		
 		int kc = e.getKeyCode();
 		
+		// want each keypress to return to Guitwo.
 		if (kc == KeyEvent.VK_LEFT) {
 			slideDelta = -5;
 			timer.start();

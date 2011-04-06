@@ -6,6 +6,14 @@ public class ImperialDamage extends DamageUI {
 		super(Guitwo.getImageWithFilename ("Images/ImperialDamage.png"));
 	}
 	
+	public ImperialDamage(String imageName, boolean white) {
+		super(Guitwo.getImageWithFilename (imageName));
+		if (white) {
+			enableWhite();
+		}
+	}
+	
+	
 	public Rectangle getDome() { return new Rectangle (120,35,4,2); }
 	public Rectangle getNeck() { return new Rectangle (120,90,3,2); }
 	public Rectangle getRightShoulder() { return new Rectangle(80,173,2,4); }

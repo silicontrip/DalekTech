@@ -60,9 +60,6 @@ public class MapImage extends BufferedImage implements ActionListener {
 	public Image getBaseImage() { return baseImage; }
 	public void setBaseImage(Image i) { baseImage = i; }
 	
-	
-	
-	
 	int imageX (Position p) { return (int)((getMap().getRegScaleX() *p.getSpatialX() + getMap().getRegTLX()) ); }
 	int imageY (Position p) { return (int)((getMap().getRegScaleY() *p.getSpatialY() + getMap().getRegTLY()) ); }
 	int imageXPercent (Position p1, Position p2) { return (int)((getMap().getRegScaleX() * (p1.getSpatialX() * this.getInversePercentAsDouble() + p2.getSpatialX() * this.getPercentAsDouble()) + getMap().getRegTLX()) ); }
@@ -70,6 +67,12 @@ public class MapImage extends BufferedImage implements ActionListener {
 	double imageAngle(Position p) { return p.getAngle(); }
 	double imageAnglePercent(Position p1, Position p2) { 
 		// do we turn clockwise or anti-clockwise
+		
+		double angle1 = p1.getAngle();
+		double angle2 = p2.getAngle();
+
+		if (angle1 - angle2 > java.lang.Math.PI) { angle2 += 2 * java.lang.Math.PI; }
+		if (angle2 - angle1 > java.lang.Math.PI) { angle2 += 2 * java.lang.Math.PI; }
 		return  (p1.getAngle() * this.getInversePercentAsDouble() + p2.getAngle() * this.getPercentAsDouble()); 
 	}
 	
@@ -203,17 +206,20 @@ public class MapImage extends BufferedImage implements ActionListener {
 				Position forwardPosition = getMovementPosition().newForwardsPosition();
 				Position backwardPosition = getMovementPosition().newBackwardsPosition();
 				
-				AffineTransform oldXform = canvas.getTransform();
-				AffineTransform newXform = AffineTransform.getRotateInstance(forwardPosition.getAngle(),imageX(forwardPosition),imageY(forwardPosition));
-				canvas.setTransform(newXform);
-				canvas.drawImage(getMovementImage(),imageX(forwardPosition)-w/2,imageY(forwardPosition)-h/2,w,h,null);
-				canvas.setTransform(oldXform);
-				
-				oldXform = canvas.getTransform();
-				newXform = AffineTransform.getRotateInstance(backwardPosition.getReverseAngle(),imageX(backwardPosition),imageY(backwardPosition));
-				canvas.setTransform(newXform);
-				canvas.drawImage(getMovementImage(),imageX(backwardPosition)-w/2,imageY(backwardPosition)-h/2,w,h,null);
-				canvas.setTransform(oldXform);
+				if (forwardMove) {
+					AffineTransform oldXform = canvas.getTransform();
+					AffineTransform newXform = AffineTransform.getRotateInstance(forwardPosition.getAngle(),imageX(forwardPosition),imageY(forwardPosition));
+					canvas.setTransform(newXform);
+					canvas.drawImage(getMovementImage(),imageX(forwardPosition)-w/2,imageY(forwardPosition)-h/2,w,h,null);
+					canvas.setTransform(oldXform);
+				}
+				if (backwardMove) {
+					AffineTransform oldXform = canvas.getTransform();
+					AffineTransform newXform = AffineTransform.getRotateInstance(backwardPosition.getReverseAngle(),imageX(backwardPosition),imageY(backwardPosition));
+					canvas.setTransform(newXform);
+					canvas.drawImage(getMovementImage(),imageX(backwardPosition)-w/2,imageY(backwardPosition)-h/2,w,h,null);
+					canvas.setTransform(oldXform);
+				}
 
 			}
 			

@@ -21,6 +21,7 @@ public class Guitwo extends Cli {
 	
 	HashMap<String,Image> dalekImages;
 	HashMap<String,DamageUI> dalekDamageImages;
+	HashMap<String,DamageUI> dalekRemoteImages;
 
 	
 	ArrayList<Integer> selectedDaleks = null;
@@ -39,7 +40,8 @@ public class Guitwo extends Cli {
 		
 		dalekImages = InitDalekImage();
 		dalekDamageImages = InitDalekImageDamage();
-		
+		dalekRemoteImages = InitDalekImageRemote();
+
 		frame = new JFrame();
 		frame.setTitle("Dalek Battle");
 
@@ -47,8 +49,8 @@ public class Guitwo extends Cli {
 		statusp = new statusPanel();
 		// mop = new mapOverlayPanel();
 		
-		statusp.setDamageImages (dalekDamageImages);
-		statusp.setTacticalImages (dalekImages);
+		// statusp.setDamageImages (dalekDamageImages);
+		// statusp.setTacticalImages (dalekImages);
 		statusp.setBackground(getImageWithFilename("Images/statusPanel.png"));
 		
 		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
@@ -61,11 +63,9 @@ public class Guitwo extends Cli {
 		// mapp.setSelectorPosition(new Position(0,0));
 		// mapp.setTargetCost(7);
 		
-		
 		frame.getContentPane().add(BorderLayout.WEST, statusp);
 		//frame.pack();
 		//frame.setVisible(true);
-		
 		
 		frame.setSize(800,480); // phone resolution
 		frame.setVisible(true);
@@ -76,7 +76,6 @@ public class Guitwo extends Cli {
 	statusPanel getStatusPanel() { return statusp; }
 	DalekSectionUI getDalekSectionUI() { return dsui; }
 	// mapOverlayPanel getMapOverlayPanel() { return mop; }
-	
 	
 	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) { this.selectedDaleks = selectedDaleks; }
 	void setSelectedPosition(Position p) { this.selectedPosition = p; }
@@ -149,10 +148,10 @@ public class Guitwo extends Cli {
 
 		// not sure where to put forward/backward cost.
 
-		mapp.setMovementCost(d.getPosition(),new Integer(forwardCost), new Integer(backwardCost),forward,backward);
+		getMapPanel().setMovementCost(d.getPosition(),new Integer(forwardCost), new Integer(backwardCost),forward,backward);
 
-		mapp.setFocusable(true);
-		mapp.requestFocus();
+		getMapPanel().setFocusable(true);
+		getMapPanel().requestFocus();
 		
 	//	getMapPanel().moveDalek(d.getName());
 		selectedMovement = -2;
@@ -162,7 +161,7 @@ public class Guitwo extends Cli {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 		}
-		mapp.setMovementCost(null,null,null,null,null);
+		getMapPanel().setMovementCost(null,null,null,null,null);
 
 		return selectedMovement;
 		
@@ -199,17 +198,27 @@ public class Guitwo extends Cli {
 		
 		int currentSelection = 0;
 		int dalekSize = dalekList.size();
+		DamageUI dalekStatus;
 		
 		getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
-		
+		getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+		dalekStatus = dalekDamageImages.get(dalekList.get(currentSelection).getName());
+		dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
+		getStatusPanel().setDamageImage(dalekStatus);
+		getStatusPanel().repaint();
+
 		if (dalekSize > 1) {
 			getMapPanel().setFocusable(true);
 			getMapPanel().requestFocus();
 			
 			do {
 				getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
-				getStatusPanel().setFromSections(dalekList.get(currentSelection).getSections());
 				
+				dalekStatus = dalekDamageImages.get(dalekList.get(currentSelection).getName());
+				dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
+				getStatusPanel().setDamageImage(dalekStatus);
+				
+				// getStatusPanel().setFromSections(dalekList.get(currentSelection).getSections());
 				getStatusPanel().repaint();
 				
 				getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
@@ -245,11 +254,13 @@ public class Guitwo extends Cli {
 	}
 	
 	//int selectTargetDalek (Dalek d, ArrayList<Dalek> dalekList, ArrayList<Integer> targetCost) 
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost, ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
 	{
 		
 		int currentSelection = 0;
 		int dalekSize = targetList.size();
+		DamageUI remoteImage;
+		// ProbabilityUI probImage;
 		
 		getMapPanel().centreOn(targetList.get(currentSelection).getPosition());
 		
@@ -258,10 +269,15 @@ public class Guitwo extends Cli {
 		
 		do {
 			// getStatusPanel().setDalekName(targetList.get(currentSelection).getName());
-			getMapPanel().setTargetCost(targetCost.get(currentSelection));
+			
+			getMapPanel().setProbabilityUI(new ProbabilityUI(targetCost.get(currentSelection)));
 			getMapPanel().setTargetDistance(distance.get(currentSelection));
 			getMapPanel().setLineOfSight(los.get(currentSelection));
-			// getMapPanel().setTarget();
+			
+			remoteImage = dalekRemoteImages.get(targetList.get(currentSelection).getName());
+			remoteImage.setFromSections(targetList.get(currentSelection).getSections());
+			
+			getMapPanel().setTarget(remoteImage);
 			getMapPanel().setSelectorPosition(targetList.get(currentSelection).getPosition());
 			getMapPanel().centreOn(targetList.get(currentSelection).getPosition());
 			getMapPanel().repaint();
@@ -286,9 +302,11 @@ public class Guitwo extends Cli {
 		} while (selectedMovement != Tables.NONE) ;
 		
 		
-		getMapPanel().setTargetCost(null);
+		getMapPanel().setProbabilityUI(null);
 		getMapPanel().setTargetDistance(null);
 		getMapPanel().setLineOfSight(null);
+		getMapPanel().setTarget(null);
+
 		
 		getMapPanel().setSelectorPosition(null);
 		getMapPanel().repaint();
@@ -306,6 +324,7 @@ public class Guitwo extends Cli {
 		factoryPanel.setOverlayImage(getImageWithFilename("Images/selectionOverlay.png"));
 
 
+		// want this to return each keypress.
 		frame.getContentPane().add(BorderLayout.EAST, factoryPanel);
 		
 		factoryPanel.requestFocus();
@@ -373,6 +392,28 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
+	HashMap<String,DamageUI> InitDalekImageRemote() {
+		
+		HashMap<String,DamageUI> imageMap = new HashMap<String,DamageUI>();
+		
+		
+		imageMap.put("Black Renegade",new BlackRenegadeDamage("Images/RenegadeRemote.png",true));
+		imageMap.put("Black Supreme",new InvasionDamage("Images/InvasionRemote.png",true));
+		imageMap.put("Blue Drone",new InvasionDamage("Images/InvasionRemote.png",true));
+		// imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWar.png"));
+		imageMap.put("Gold Supreme",new GoldSupremeDamage("Images/GoldSupremeRemote.png",true));
+		// imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWar.png"));
+		imageMap.put("Grey Renegade",new GreyRenegadeDamage("Images/RenegadeRemote.png",true));
+		imageMap.put("Imperial",new ImperialDamage("Images/ImperialRemote.png",true));
+		imageMap.put("Red Commander",new InvasionDamage("Images/InvasionRemote.png",true));
+		imageMap.put("Red Saucer Pilot",new RedSaucerDamage("Images/RedSaucerRemote.png",true));
+		imageMap.put("Special Weapon",new SpecialWeaponDamage("Images/SpecialWeaponRemote.png",true));
+		
+		
+		return imageMap;
+	}
+	
+	
 	void notifyEngine (int current, int walk, int run) {
 		
 		getStatusPanel().setEngineCurrent(current);
@@ -392,8 +433,17 @@ public class Guitwo extends Cli {
 	}
 	
 	void notifyDamage(Dalek d) {
+		
+		DamageUI dalekStatus;
+		
 		getStatusPanel().setDalekName(d.getName());
-		getStatusPanel().setFromSections(d.getSections());		
+		
+		dalekStatus = dalekDamageImages.get(d.getName());
+		dalekStatus.setFromSections(d.getSections());
+		getStatusPanel().setDamageImage(dalekStatus);
+		
+		
+//		getStatusPanel().setFromSections(d.getSections());		
 		getStatusPanel().repaint();
 
 	}
@@ -407,7 +457,7 @@ public class Guitwo extends Cli {
 		return null;
 	}
 	
-	Image getDamageImage(String name) {
+	DamageUI getDamageImage(String name) {
 		
 		if (dalekImages.containsKey(name)) {
 			return dalekDamageImages.get(name);

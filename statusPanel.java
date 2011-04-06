@@ -9,20 +9,13 @@ public class statusPanel extends JPanel {
 	static final int DAMAGE = 1;
 	static final int TACTICAL = 2;
 	String name;
-	
-	HashMap<String,DamageUI> dalekDamageImages;
-	HashMap<String,Image> dalekTacticalImages;
-	
-	int displayFlag;
-	
+		
 	Image panelBackground;
 	
 	Image dalekTacticalImage;
 	DamageUI dalekDamageImage;
-	ArrayList<Point> dalekSpot;
-	ArrayList<Point> dalekSpotDamage;
-	ArrayList<Color> dalekSpotColour;
 	Image dalekImage;
+	
 	Integer engineCurrent;
 	Integer engineWalk;
 	Integer engineRun;
@@ -41,9 +34,7 @@ public class statusPanel extends JPanel {
 		dalekImage = null;
 		
 		name = null;
-		
-		displayFlag = TACTICAL;
-		
+				
 		techFont = new Font("Eurostile",0,16);
 	}
 	
@@ -52,27 +43,24 @@ public class statusPanel extends JPanel {
 	int getPanelHeight() { return panelHeight; }
 	int getPanelWidth() { return panelWidth; }
 	
+	/*
 	void setTacticalImages(HashMap<String,Image> hm) { dalekTacticalImages = hm; }
 	void setDamageImages(HashMap<String,DamageUI> hm) { dalekDamageImages = hm; }
-	
+	*/
 	void setDalekName(String s) { 
 		this.name = new String(s);
-		setDamageImage(getDamageImageFromName());
-		setTacticalImage(getTacticalImageFromName());
+	//	setDamageImage(getDamageImageFromName());
+	//	setTacticalImage(getTacticalImageFromName());
 	}
-	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; }
+	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; dalekImage = i; }
 	void setTacticalImage(Image i) { this.dalekTacticalImage = i; }
-	void setSpotColour(ArrayList<Color> c) { this.dalekSpotColour = c; }
-	void setSpot(ArrayList<Point> p) { this.dalekSpot = p; }
-	void setSpotDamage(ArrayList<Point> p) { this.dalekSpotDamage = p; }
 	
+	/*
 	public void setFromSections(HashMap<String,DalekSection> hm) {
 		getDamageImageFromName().setFromSections(hm);
 	}
-	
-	Image getTacticalImageFromName () { return dalekTacticalImages.get(name); }
-	DamageUI getDamageImageFromName () { return dalekDamageImages.get(name); }
-	
+	*/
+		
 	void setEngine(int current, int walk, int run) {
 		this.setEngineCurrent(current);
 		this.setEngineWalk(walk);
@@ -86,13 +74,16 @@ public class statusPanel extends JPanel {
 	Integer getEngineWalk() { return this.engineWalk; }
 	Integer getEngineRun() { return this.engineRun; }
 	
-	
+	/*
 	void tacticalView() { dalekImage = this.dalekTacticalImage;  displayFlag = TACTICAL;}
 	void damageView() { dalekImage = this.dalekDamageImage; displayFlag = DAMAGE; }
+	*/
 	
 	public Dimension getPreferredSize() { return new Dimension(panelWidth,panelHeight); }
 	
 	void drawEngineAt(Graphics g,int x, int y,Integer walk, Integer run, Integer current) {
+		
+		// Move this to a buffered Image
 		
 		final int engineWidth = 128;
 		final int engineHeight = 16;
@@ -146,23 +137,20 @@ public class statusPanel extends JPanel {
 			int h = 200;
 			int w = (int) (dalekImage.getWidth(null) * h / dalekImage.getHeight(null));
 			
-			
-			double scale =  1.0 *  h / dalekImage.getHeight(null);
-			
+	
 			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			graphics2D.drawImage(dalekImage,0, 0, w, h, null);
-			/*
-			if (displayFlag == DAMAGE) {
-				// draw damage
-				paintDamage(graphics2D,scale);
-			}
-			*/
+			
 			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
+			
+			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), 32 ,null);
+
 			
 		}
 		
+		// Move to Buffered Image
 		if (this.getEngineRun() > 0) {
 			this.drawEngineAt(g,16,256,this.getEngineWalk(), this.getEngineRun(), this.getEngineCurrent());
 		}

@@ -36,10 +36,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Boolean forwardMove = null;
 	Boolean backwardMove = null;
 	
+
+	
 	Integer targetCost = null;
 	Double targetDistance = null;
 	ArrayList<Hex> lineSight = null;
 	String interfaceMessage = null;
+	DamageUI targetDalek;
 	
 	String moveDalekName=null;
 	Position moveDalekPosition=null;
@@ -66,11 +69,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		dalekImage = new HashMap<String,Image>();
 
 		
-		probUI = new ProbabilityUI ();
-		probUI.setScale(8,-2);
-		probUI.setFont(new Font("Eurostile",0,12));
-		probUI.setFontYOffset(20);
-		probUI.setLocation(500,100);
+		//probUI = new ProbabilityUI ();
+		// probUI.setScale(8,-2);
+		//probUI.setFont(new Font("Eurostile",0,64));
+		// probUI.setFontYOffset(20);
+		//probUI.setLocation(500,100);
 							  
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
@@ -93,6 +96,8 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	MapImage getMapImage() { return map; }
 	void setSelectorImage(Image i) { this.getMapImage().setSelectorImage(i); }
 	void setArrowImage(Image i) { this.getMapImage().setMovementImage(i); }
+	
+	void setProbabilityUI(ProbabilityUI pui) { this.probUI = pui; }
 
 	void setSelectorPosition(Position p) { this.getMapImage().setSelectorPosition(p); }
 //	Position getSelectorPosition() { return this.selectorPosition; }
@@ -122,7 +127,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		this.centreOn(p);
 			
 		if (getMapImage().hasDalek(s)) {
-			System.out.println("Move Dalek - " + p);
+			// System.out.println("Move Dalek - " + p);
 			getMapImage().moveDalek(this,s,p);
 		} else {
 			getMapImage().addDalek(s,i,p);
@@ -179,8 +184,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void setLineOfSight (ArrayList<Hex> los) { this.lineSight = los; }
 	public ArrayList<Hex> getLineOfSight () { return lineSight; }
 	
-	public void setTargetCost(Integer i) { probUI.setTargetCost(i); }	
-		
+	// public void setTargetCost(Integer i) { probUI.setTargetCost(i); }	
+	
+	public void setTarget(DamageUI i) { targetDalek = i; }
+	
+	/*
 	void paintMovementCost(Graphics g) {
 
 		int h = arrowImage.getHeight(null);
@@ -226,7 +234,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 		
 	}
-	
+	*/
 	public void paintComponent (Graphics g) {
 		
 		super.paintComponent(g);       
@@ -236,21 +244,31 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 		
 		BufferedImage thumbImage = new BufferedImage(mapPanelWidth, mapPanelHeight, BufferedImage.TYPE_4BYTE_ABGR);
-		Graphics2D graphics2D = thumbImage.createGraphics();
-		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		Graphics2D canvas  = thumbImage.createGraphics();
+		canvas.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		
 		map.repaint();
-		graphics2D.drawImage(map, xpos, ypos, w, h, null);
-		g.drawImage(thumbImage,0,0,null);
+		canvas.drawImage(map, xpos, ypos, w, h, null);
 		 
-		probUI.paintComponent(g); 
+		// need proportional scaling
+		if (targetDalek != null) {
+			canvas.drawImage(targetDalek,500,200,targetDalek.scaleWidth(128),128,null);
+		}
+		
+		// I may move this to a BufferedImage
+		// probUI.paintComponent(canvas); 
+		
+		canvas.drawImage(probUI,500,64,64,64,null);
 		
 		if (interfaceMessage != null) {
 			
-			g.setColor(java.awt.Color.WHITE);
-			g.setFont( new Font("Eurostile",0,24));
-			g.drawString(interfaceMessage,32,32);
+			canvas.setColor(java.awt.Color.WHITE);
+			canvas.setFont( new Font("Eurostile",0,24));
+			canvas.drawString(interfaceMessage,32,32);
 		}
-			
+		
+		g.drawImage(thumbImage,0,0,null);
+
 
 	}
 	

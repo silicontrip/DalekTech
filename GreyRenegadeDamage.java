@@ -6,6 +6,14 @@ public class GreyRenegadeDamage extends DamageUI {
 		super(Guitwo.getImageWithFilename ("Images/RenegadeDamage.png"));
 	}
 	
+	public GreyRenegadeDamage(String imageName, boolean white) {
+		super(Guitwo.getImageWithFilename (imageName));
+		if (white) {
+			enableWhite();
+		}
+	}
+	
+	
 	public Rectangle getDome() { return new Rectangle (125,39,4,2); }
 	public Rectangle getNeck() { return new Rectangle (125,94,3,2); }
 	public Rectangle getRightShoulder() { return new Rectangle(84,182,2,4); }

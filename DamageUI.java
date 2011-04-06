@@ -5,10 +5,11 @@ import java.util.*;
 import java.awt.*;
 
 public abstract class DamageUI extends BufferedImage {
-
+	
 	Image baseImage;
 	int spacing;
 	int size;
+	boolean white;
 	
 	public abstract Rectangle getDome();
 	public abstract Rectangle getNeck();
@@ -17,14 +18,15 @@ public abstract class DamageUI extends BufferedImage {
 	public abstract Rectangle getRightShoulder();
 	public abstract Rectangle getLeftSkirt();
 	public abstract Rectangle getRightSkirt();
-	 
+	
 	public DamageUI(Image baseImage) {
 		super (baseImage.getWidth(null),baseImage.getHeight(null),BufferedImage.TYPE_4BYTE_ABGR);
 		this.setBaseImage(baseImage);
 		this.setSize(17);
 		this.setSpacing(23);
+		this.disableWhite();
 	}
-		
+	
 	public DamageUI(int size, int spacing, Image baseImage) {
 		this(baseImage);
 		this.setSize(size);
@@ -37,7 +39,15 @@ public abstract class DamageUI extends BufferedImage {
 	public void setSize (int i) { size = i; }
 	public int getSize() { return size; }
 	private int getSizeOn2() { return size/2; }
+	
+	public void enableWhite() { this.white = true; }
+	public void disableWhite() { this.white = false; }
+	public boolean isWhite() { return this.white; }
+	
+	public int scaleHeight(int width) { return width * this.getHeight() / this.getWidth(); }
+	public int scaleWidth(int height) { return height * this.getWidth() / this.getHeight(); }
 
+	
 	public void setFromSections( HashMap<String,DalekSection> sections) { 
 		
 		Set<String> s = sections.keySet();
@@ -51,7 +61,7 @@ public abstract class DamageUI extends BufferedImage {
 		canvas.drawImage(getBaseImage(),0, 0, null);
 		
 		it = s.iterator();
-				
+		
 		while (it.hasNext()) {
 			String sectionName = it.next();
 			
@@ -70,16 +80,20 @@ public abstract class DamageUI extends BufferedImage {
 			
 			if (r != null) {
 				// test r is not null
-				canvas.setColor(Color.ORANGE);
-				if (armour == sections.get(sectionName).getArmour()) {
-					canvas.setColor(Color.GREEN);
-				}
-				if (armour == 0) { 
-					canvas.setColor(Color.RED);
+				if (this.isWhite()) {
+					canvas.setColor(Color.WHITE);
+				} else {
+					canvas.setColor(Color.ORANGE);
+					if (armour == sections.get(sectionName).getArmour()) {
+						canvas.setColor(Color.GREEN);
+					}
+					if (armour == 0) { 
+						canvas.setColor(Color.RED);
+					}
 				}
 				
 				// System.out.println("Armour: " + armour + " " + this.getWidth(null) + "," + this.getHeight(null) + " size:"+size);
-
+				
 				
 				for (int y=0; y<r.getHeight() ; y++) {
 					for (int x=0; x<r.getWidth() ; x++) {
