@@ -108,14 +108,14 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 			int xl = -128;
 			String dalekName;
 			
-			if (slide == 0) {
-				getStatusPanel().setDalekName(dalekList.get(select).getName());
-				getStatusPanel().setEngineWalk(dalekList.get(select).getWalk());
-				getStatusPanel().setEngineRun(dalekList.get(select).getRun());
+			// if (slide == 0) {
+			//	getStatusPanel().setDalekName(dalekList.get(select).getName());
+			//	getStatusPanel().setEngineWalk(dalekList.get(select).getWalk());
+			//	getStatusPanel().setEngineRun(dalekList.get(select).getRun());
 
 				// getStatusPanel().damageView();
-				getStatusPanel().repaint();
-			}
+			//	getStatusPanel().repaint();
+			// }
 			
 			
 			for (int d=select-3;d<=select+3;d++) {
