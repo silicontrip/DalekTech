@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.Set;
+
 import java.io.*;
 
 public class Dalek implements Serializable  {
@@ -92,9 +94,28 @@ public class Dalek implements Serializable  {
 		
 		while (it.hasNext()) {
 			w = it.next().getWeapon();
-			if (w != null) { weapons.add(w); } // some sections don't have weapons
+			if (w != null) {
+				if (w.canFire()) {
+					weapons.add(w); 
+				}
+			} // some sections don't have weapons
 		}
 		return weapons;
+	}
+	HashMap<String,Boolean> canFireMap () {
+		
+		HashMap<String,Boolean> fireMap = new HashMap<String,Boolean>();
+		Set<String> s = getSections().keySet();
+		Iterator<String> it;
+
+		it = s.iterator();
+		while (it.hasNext()) {
+			String sectionName = it.next();
+			if (getSections().get(sectionName).getWeapon() != null) {
+				fireMap.put (sectionName,getSections().get(sectionName).getWeapon().canFire());
+			}
+		}
+		return fireMap;
 	}
 	
 	DalekSection getLocation (int l) { return locationArray.get(l); }

@@ -22,6 +22,7 @@ public class Guitwo extends Cli {
 	HashMap<String,Image> dalekImages;
 	HashMap<String,DamageUI> dalekDamageImages;
 	HashMap<String,DamageUI> dalekRemoteImages;
+	HashMap<String,TacticalUI> dalekTacticalImages;
 
 	
 	ArrayList<Integer> selectedDaleks = null;
@@ -41,7 +42,8 @@ public class Guitwo extends Cli {
 		dalekImages = InitDalekImage();
 		dalekDamageImages = InitDalekImageDamage();
 		dalekRemoteImages = InitDalekImageRemote();
-
+		dalekTacticalImages = InitDalekImageTactical();
+		
 		frame = new JFrame();
 		frame.setTitle("Dalek Battle");
 
@@ -199,12 +201,18 @@ public class Guitwo extends Cli {
 		int currentSelection = 0;
 		int dalekSize = dalekList.size();
 		DamageUI dalekStatus;
+		TacticalUI dalekWeapon;
 		
 		getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
 		getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
 		dalekStatus = dalekDamageImages.get(dalekList.get(currentSelection).getName());
 		dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
 		getStatusPanel().setDamageImage(dalekStatus);
+		
+		dalekWeapon = dalekTacticalImages.get(dalekList.get(currentSelection).getName());
+		dalekWeapon.setFromSections(dalekList.get(currentSelection).canFireMap());
+		getStatusPanel().setTacticalImage(dalekWeapon);
+		
 		getStatusPanel().repaint();
 
 		if (dalekSize > 1) {
@@ -413,6 +421,28 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
+	HashMap<String,TacticalUI> InitDalekImageTactical() {
+		
+		HashMap<String,TacticalUI> imageMap = new HashMap<String,TacticalUI>();
+		
+		
+		imageMap.put("Black Renegade",new RenegadeTactical());
+		imageMap.put("Black Supreme",new InvasionTactical());
+		imageMap.put("Blue Drone",new InvasionTactical());
+		// imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWar.png"));
+		imageMap.put("Gold Supreme",new GoldSupremeTactical());
+		// imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWar.png"));
+		imageMap.put("Grey Renegade",new RenegadeTactical());
+		imageMap.put("Imperial",new ImperialTactical());
+		imageMap.put("Red Commander",new InvasionTactical());
+		imageMap.put("Red Saucer Pilot",new RedSaucerTactical());
+		imageMap.put("Special Weapon",new SpecialWeaponTactical());
+		
+		
+		return imageMap;
+	}
+	
+	
 	
 	void notifyEngine (int current, int walk, int run) {
 		
@@ -435,12 +465,17 @@ public class Guitwo extends Cli {
 	void notifyDamage(Dalek d) {
 		
 		DamageUI dalekStatus;
+		TacticalUI dalekWeapon;
 		
 		getStatusPanel().setDalekName(d.getName());
 		
 		dalekStatus = dalekDamageImages.get(d.getName());
 		dalekStatus.setFromSections(d.getSections());
 		getStatusPanel().setDamageImage(dalekStatus);
+		
+		dalekWeapon = dalekTacticalImages.get(d.getName());
+		dalekWeapon.setFromSections(d.canFireMap());
+		getStatusPanel().setTacticalImage(dalekWeapon);
 		
 		
 //		getStatusPanel().setFromSections(d.getSections());		

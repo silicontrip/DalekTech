@@ -12,7 +12,7 @@ public class statusPanel extends JPanel {
 		
 	Image panelBackground;
 	
-	Image dalekTacticalImage;
+	TacticalUI dalekTacticalImage;
 	DamageUI dalekDamageImage;
 	Image dalekImage;
 	
@@ -52,8 +52,8 @@ public class statusPanel extends JPanel {
 	//	setDamageImage(getDamageImageFromName());
 	//	setTacticalImage(getTacticalImageFromName());
 	}
-	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; dalekImage = i; }
-	void setTacticalImage(Image i) { this.dalekTacticalImage = i; }
+	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; }
+	void setTacticalImage(TacticalUI i) { this.dalekTacticalImage = i; }
 	
 	/*
 	public void setFromSections(HashMap<String,DalekSection> hm) {
@@ -130,25 +130,42 @@ public class statusPanel extends JPanel {
 		}
 		
 		
-		if ( dalekImage != null) {
+		if ( dalekDamageImage != null) {
 			// int w = 100;
 			// int h = (int)  (dalekImage.getHeight(null) * w / dalekImage.getWidth(null)  );
 			
 			int h = 200;
-			int w = (int) (dalekImage.getWidth(null) * h / dalekImage.getHeight(null));
+			int w = dalekDamageImage.scaleWidth(h);			
 			
 	
 			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			graphics2D.drawImage(dalekImage,0, 0, w, h, null);
+			graphics2D.drawImage(dalekDamageImage,0, 0, w, h, null);
 			
 			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
 			
-			g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), 32 ,null);
+		//	g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), 32 ,null);
 
 			
 		}
+		if ( dalekTacticalImage != null) {
+			
+			int h = 200;
+			int w = dalekTacticalImage.scaleWidth(h);			
+			
+			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
+			Graphics2D graphics2D = thumbImage.createGraphics();
+			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			graphics2D.drawImage(dalekTacticalImage,0, 0, w, h, null);
+			
+			// g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
+			
+				g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), 32 ,null);
+			
+			
+		}
+		
 		
 		// Move to Buffered Image
 		if (this.getEngineRun() > 0) {

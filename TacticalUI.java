@@ -7,6 +7,7 @@ import java.awt.*;
 
 public abstract class TacticalUI extends BufferedImage {
 	
+	Image baseImage;
 	
 	public abstract Rectangle getDome();
 	public abstract Rectangle getNeck();
@@ -55,9 +56,10 @@ public abstract class TacticalUI extends BufferedImage {
 			if (sectionName.equalsIgnoreCase("right skirt") ) { r = getRightSkirt(); }
 			if (sectionName.equalsIgnoreCase("left skirt") ) { r = getLeftSkirt(); }			
 			
-			//  System.out.println("setFromSections() - " + sectionName);
 			
 			if (r != null) {
+				System.out.println("setFromSections() not null - " + sectionName);
+
 				// test r is not null
 				if (sectionAvail) {
 					canvas.setColor(Color.GREEN);
@@ -66,9 +68,9 @@ public abstract class TacticalUI extends BufferedImage {
 				}
 				
 				// make composite
-				canvas.setComposite()
+				canvas.setComposite(AddComposite.DEFAULT);
 				// draw rect
-				canvas.fillrect()
+				canvas.fillRect((int)r.getX(),(int)r.getY(),(int)r.getWidth(),(int)r.getHeight());
 				
 			}
 		}

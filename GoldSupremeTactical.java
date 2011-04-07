@@ -2,7 +2,7 @@ import java.awt.Rectangle;
 
 public class GoldSupremeTactical extends TacticalUI {
 	
-	public GoldSupremeDamage() {
+	public GoldSupremeTactical() {
 		super(Guitwo.getImageWithFilename ("Images/GoldSupremeTactical.png"));
 	}
 

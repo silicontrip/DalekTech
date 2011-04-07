@@ -10,11 +10,19 @@ all: Cli.class Dalek.class DalekFactory.class DalekSection.class \
 	statusPanel.class Direction.class ProbabilityUI.class \
 	BlackRenegadeDamage.class GreyRenegadeDamage.class  InvasionDamage.class  SpecialWeaponDamage.class \
 	GoldSupremeDamage.class  ImperialDamage.class  RedSaucerDamage.class \
-	MapImage.class AddComposite.class TacticalUI.java
+	MapImage.class AddComposite.class TacticalUI.class \
+	GoldSupremeTactical.class ImperialTactical.class InvasionTactical.class \
+	RedSaucerTactical.class RenegadeTactical.class SpecialWeaponTactical.class
+
 
 
 RenegadeTactical.class: TacticalUI.java RenegadeTactical.java
 GoldSupremeTactical.class: TacticalUI.java GoldSupremeTactical.java
+ImperialTactical.class: TacticalUI.java ImperialTactical.java
+InvasionTactical.class: TacticalUI.java InvasionTactical.java
+RedSaucerTactical.class: TacticalUI.java RedSaucerTactical.java
+SpecialWeaponTactical.class: TacticalUI.java SpecialWeaponTactical.java
+
 BlackRenegadeDamage.class: BlackRenegadeDamage.java DamageUI.java
 GreyRenegadeDamage.class:  DamageUI.java
 InvasionDamage.class: DamageUI.java
