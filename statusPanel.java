@@ -151,17 +151,17 @@ public class statusPanel extends JPanel {
 		}
 		if ( dalekTacticalImage != null) {
 			
-			int h = 200;
+			int h = 400;
 			int w = dalekTacticalImage.scaleWidth(h);			
 			
-			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
+			BufferedImage thumbImage = new BufferedImage(w/2, h/2, BufferedImage.TYPE_4BYTE_ABGR);
 			Graphics2D graphics2D = thumbImage.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			graphics2D.drawImage(dalekTacticalImage,0, 0, w, h, null);
+			graphics2D.drawImage(dalekTacticalImage,-w/4, -h/4, w, h, null);
 			
 			// g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
 			
-				g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), 32 ,null);
+				g.drawImage(thumbImage,getPanelWidth()/2 - (w/4), 32 ,null);
 			
 			
 		}

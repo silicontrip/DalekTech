@@ -20,7 +20,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	
 	ArrayList<Dalek> dalekList;
 	ArrayList<Integer> selectedDaleks;
-	int select;
+	int select, endSelect;
 	HashMap<String,Image> dalekImages;
 	
 
@@ -99,6 +99,30 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	}
 	
 	
+	public void addDalek(int i) {
+		selectedDaleks.add(i);
+	}
+	
+	public void centreOn(int i) {
+
+		int direction = i - select;
+		
+		if (direction == 1 || direction < -1) {
+			slide = getDalekWidth();
+			slideDelta = -5;
+		}
+		if (direction == -1 || direction > 1) {
+			slide = -getDalekWidth();
+			slideDelta = 5;
+		}
+		
+		//System.out.println ("Select: " + select + "  I: " + i) ;
+		
+		select = i;
+		timer.start();
+
+	}
+	
 	public void paintComponent (Graphics g) {
 		
 		super.paintComponent(g);       
@@ -124,7 +148,6 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 				
 				dalekName = dalekList.get(dal).getName();
 				this.drawDalekAt(g,dalekName,xl+slide,360,getDalekWidth());
-				
 
 				xl += getDalekWidth();
 			}	
@@ -163,62 +186,55 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		//System.out.println ("Action Event");
 		
 		if (slideDelta != 0 ) {
-		slide += slideDelta;
-		if (slide < -128) {
-			select ++ ;
-			select = select % dalekList.size();
-
-			slide = 0;
-			timer.stop();
+			slide += slideDelta;
 			
-		}
-		if (slide > 128) {
-			
-			select -- ;
-			if (select < 0) { select += dalekList.size();}
-			slide = 0;
-
-			timer.stop();
-			
-		}
+			if (java.lang.Math.abs(slide) < 5) {
+				slide = 0;
+				slideDelta = 0;
+				timer.stop();			
+			}
 		
-		this.repaint();
+			this.repaint();
 		}
 
 		
 	}
 	
+
 	public void keyPressed(KeyEvent e) {
-	//	System.out.println("Action: " + e);
+		//System.out.println("Action: " + e);
 		
 		int kc = e.getKeyCode();
 		
-		// want each keypress to return to Guitwo.
 		if (kc == KeyEvent.VK_LEFT) {
-			slideDelta = -5;
-			timer.start();
+			callback.setSelectedMovement(Tables.LEFT);
 		}
 		
 		if (kc == KeyEvent.VK_RIGHT) {
-			slideDelta = 5;
+			callback.setSelectedMovement(Tables.RIGHT);
 			
-		//	select ++ ;
-		//	select = select % dalekList.size();
-			timer.start();
 		}
 		
+		if (kc == KeyEvent.VK_UP) {
+			callback.setSelectedMovement(Tables.FORWARD);
+		}
+		
+		if (kc == KeyEvent.VK_DOWN) {
+			callback.setSelectedMovement(Tables.BACKWARD);
+			
+		}
+		
+		
 		if (kc == KeyEvent.VK_SPACE) {
-			selectedDaleks.add(new Integer(select));
-			this.repaint();
+			callback.setSelectedMovement(Tables.SELECT);
 		}
 		
 		if (kc == KeyEvent.VK_ENTER) {
-			if (selectedDaleks.size() > 0) {
-				this.getCallbackUI().setSelectedDaleks(selectedDaleks);
-			}
+			callback.setSelectedMovement(Tables.DONE);
 		}
 		
     }
+	
 	
 	public void keyReleased(KeyEvent e) {
 	//	System.out.println("Action: " + e);

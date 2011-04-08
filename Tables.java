@@ -5,11 +5,14 @@
 // All return values are constants.
 public class Tables {
 	
+	public static final int DONE = -2;
 	public static final int NONE = -1;
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
 	public static final int FORWARD =2;
 	public static final int BACKWARD =3;
+	public static final int SELECT = 4;
+
 	
 	public static final int NORTH = 0;
 	public static final int NORTHEAST = 1;

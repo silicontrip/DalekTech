@@ -25,7 +25,6 @@ public class Guitwo extends Cli {
 	HashMap<String,TacticalUI> dalekTacticalImages;
 
 	
-	ArrayList<Integer> selectedDaleks = null;
 	Position selectedPosition;
 	Direction selectedDirection = null;
 	int selectedMovement;
@@ -79,7 +78,6 @@ public class Guitwo extends Cli {
 	DalekSectionUI getDalekSectionUI() { return dsui; }
 	// mapOverlayPanel getMapOverlayPanel() { return mop; }
 	
-	void setSelectedDaleks(ArrayList<Integer> selectedDaleks) { this.selectedDaleks = selectedDaleks; }
 	void setSelectedPosition(Position p) { this.selectedPosition = p; }
 	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
 	void setSelectedMovement(int d) { this.selectedMovement = d; }
@@ -325,7 +323,13 @@ public class Guitwo extends Cli {
 	
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 
+		int currentSelection = 0;
+		DamageUI dalekStatus;
+		int dalekSize = dalekList.size();
+		ArrayList<Integer> selectedDaleks = new ArrayList<Integer>();
+		
 		factoryPanel = new selectFactoryDaleksPanel(dalekImages,dalekList,this);
+
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
 		factoryPanel.setSelectorImage(getImageWithFilename("Images/statusPanel.png"));
@@ -335,18 +339,57 @@ public class Guitwo extends Cli {
 		// want this to return each keypress.
 		frame.getContentPane().add(BorderLayout.EAST, factoryPanel);
 		
+		
+		getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+		dalekStatus = dalekDamageImages.get(dalekList.get(currentSelection).getName());
+		dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
+		getStatusPanel().setDamageImage(dalekStatus);
+		
+		
 		factoryPanel.requestFocus();
 		
 		frame.pack();
 		frame.setVisible(true);
 		factoryPanel.setFocusable(true);
 
+		do {
+			getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
+			
+			dalekStatus = dalekDamageImages.get(dalekList.get(currentSelection).getName());
+			dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
+			getStatusPanel().setDamageImage(dalekStatus);
+			
+			// getStatusPanel().setFromSections(dalekList.get(currentSelection).getSections());
+			getStatusPanel().repaint();
+			
+			factoryPanel.centreOn(currentSelection);
+			// getMapPanel().setSelectorPosition(dalekList.get(currentSelection).getPosition());
+			factoryPanel.repaint();
+			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
+			
+			selectedMovement = Tables.NONE;
+			
+			while (selectedMovement == Tables.NONE) {
+				try {
+					Thread.sleep(250); 
+				} catch (InterruptedException ie) { ; }
+			}
+			
+			if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+				currentSelection --;
+				if (currentSelection < 0 ) { currentSelection += dalekSize; }
+			}
+			if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+				currentSelection++;
+				if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
+			}
+			if (selectedMovement == Tables.SELECT) {
+				selectedDaleks.add(currentSelection);
+				factoryPanel.addDalek(currentSelection);
+				factoryPanel.repaint();
+			}
+		} while (selectedMovement != Tables.DONE) ;
 		
-		while (selectedDaleks == null) { 	
-			try {
-				Thread.sleep(250); 
-			} catch (InterruptedException ie) { ; }
-		}
 		frame.getContentPane().remove (factoryPanel);
 		
 		frame.getContentPane().add(BorderLayout.EAST, mapp);
@@ -356,7 +399,7 @@ public class Guitwo extends Cli {
 		// mapp.addArray(dalekImage("Black Renegade"),new Position(0,0));
 	
 		
-		return this.selectedDaleks;
+		return selectedDaleks;
 	}
 	
 	HashMap<String,Image> InitDalekImage() {
