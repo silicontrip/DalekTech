@@ -12,7 +12,8 @@ all: Cli.class Dalek.class DalekFactory.class DalekSection.class \
 	GoldSupremeDamage.class  ImperialDamage.class  RedSaucerDamage.class \
 	MapImage.class AddComposite.class TacticalUI.class \
 	GoldSupremeTactical.class ImperialTactical.class InvasionTactical.class \
-	RedSaucerTactical.class RenegadeTactical.class SpecialWeaponTactical.class
+	RedSaucerTactical.class RenegadeTactical.class SpecialWeaponTactical.class \
+	WeaponUI.class
 
 
 

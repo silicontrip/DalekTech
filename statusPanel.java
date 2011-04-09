@@ -12,7 +12,7 @@ public class statusPanel extends JPanel {
 		
 	Image panelBackground;
 	
-	TacticalUI dalekTacticalImage;
+	ArrayList<WeaponUI> dalekTacticalImage;
 	DamageUI dalekDamageImage;
 	Image dalekImage;
 	
@@ -53,7 +53,7 @@ public class statusPanel extends JPanel {
 	//	setTacticalImage(getTacticalImageFromName());
 	}
 	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; }
-	void setTacticalImage(TacticalUI i) { this.dalekTacticalImage = i; }
+	void setTacticalImage(ArrayList<WeaponUI> i) { this.dalekTacticalImage = i; }
 	
 	/*
 	public void setFromSections(HashMap<String,DalekSection> hm) {
@@ -115,6 +115,7 @@ public class statusPanel extends JPanel {
 		g.drawString(run.toString(),x+engineWidth-4,y-engineHeight-2);
 		g.drawString(walk.toString(),x+walkLocation-4,y-engineHeight-2);
 		
+		g.setFont( new Font("Eurostile",0,12));
 		g.drawString ("Speed",x,y-engineHeight-2);
 		
 		
@@ -151,18 +152,22 @@ public class statusPanel extends JPanel {
 		}
 		if ( dalekTacticalImage != null) {
 			
-			int h = 400;
-			int w = dalekTacticalImage.scaleWidth(h);			
+			//int h = 400;
+			//int w = dalekTacticalImage.scaleWidth(h);			
 			
-			BufferedImage thumbImage = new BufferedImage(w/2, h/2, BufferedImage.TYPE_4BYTE_ABGR);
-			Graphics2D graphics2D = thumbImage.createGraphics();
-			graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			graphics2D.drawImage(dalekTacticalImage,-w/4, -h/4, w, h, null);
+		//	BufferedImage thumbImage = new BufferedImage(w/2, h/2, BufferedImage.TYPE_4BYTE_ABGR);
+		//	Graphics2D graphics2D = thumbImage.createGraphics();
+		//	graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		//	graphics2D.drawImage(dalekTacticalImage,-w/4, -h/4, w, h, null);
 			
 			// g.drawImage(thumbImage,getPanelWidth()/2 - (w/2), getPanelHeight() - h - 16 ,null);
 			
-				g.drawImage(thumbImage,getPanelWidth()/2 - (w/4), 32 ,null);
-			
+			Iterator<WeaponUI> it = dalekTacticalImage.iterator();
+			int y = 32;
+			while (it.hasNext()) {
+				g.drawImage(it.next(),0, y ,null);
+				y += 40; // really want height of WeaponUI.
+			}
 			
 		}
 		

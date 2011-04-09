@@ -64,6 +64,14 @@ public class Guitwo extends Cli {
 		// mapp.setSelectorPosition(new Position(0,0));
 		// mapp.setTargetCost(7);
 		
+		ArrayList<WeaponUI> weaponTestArray = new ArrayList<WeaponUI>();
+		weaponTestArray.add( WeaponUI.factory ("Red Commander","Medium Laser"));
+		weaponTestArray.add(WeaponUI.factory ("Red Commander","Pincer"));
+		weaponTestArray.add(WeaponUI.factory ("Red Commander","Auto Bomb/10"));
+		weaponTestArray.add(WeaponUI.factory ("Red Commander","Auto Bomb/10"));
+
+		statusp.setTacticalImage(weaponTestArray);
+		
 		frame.getContentPane().add(BorderLayout.WEST, statusp);
 		//frame.pack();
 		//frame.setVisible(true);
@@ -207,9 +215,9 @@ public class Guitwo extends Cli {
 		dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
 		getStatusPanel().setDamageImage(dalekStatus);
 		
-		dalekWeapon = dalekTacticalImages.get(dalekList.get(currentSelection).getName());
-		dalekWeapon.setFromSections(dalekList.get(currentSelection).canFireMap());
-		getStatusPanel().setTacticalImage(dalekWeapon);
+		//dalekWeapon = dalekTacticalImages.get(dalekList.get(currentSelection).getName());
+		//dalekWeapon.setFromSections(dalekList.get(currentSelection).canFireMap());
+		//getStatusPanel().setTacticalImage(dalekWeapon);
 		
 		getStatusPanel().repaint();
 
@@ -307,13 +315,11 @@ public class Guitwo extends Cli {
 			}
 		} while (selectedMovement != Tables.NONE) ;
 		
-		
 		getMapPanel().setProbabilityUI(null);
 		getMapPanel().setTargetDistance(null);
 		getMapPanel().setLineOfSight(null);
 		getMapPanel().setTarget(null);
 
-		
 		getMapPanel().setSelectorPosition(null);
 		getMapPanel().repaint();
 		return currentSelection;
@@ -388,7 +394,7 @@ public class Guitwo extends Cli {
 				factoryPanel.addDalek(currentSelection);
 				factoryPanel.repaint();
 			}
-		} while (selectedMovement != Tables.DONE) ;
+		} while (selectedMovement != Tables.DONE || selectedDaleks.size() == 0) ;
 		
 		frame.getContentPane().remove (factoryPanel);
 		
@@ -516,9 +522,9 @@ public class Guitwo extends Cli {
 		dalekStatus.setFromSections(d.getSections());
 		getStatusPanel().setDamageImage(dalekStatus);
 		
-		dalekWeapon = dalekTacticalImages.get(d.getName());
-		dalekWeapon.setFromSections(d.canFireMap());
-		getStatusPanel().setTacticalImage(dalekWeapon);
+		//dalekWeapon = dalekTacticalImages.get(d.getName());
+	//	dalekWeapon.setFromSections(d.canFireMap());
+	//	getStatusPanel().setTacticalImage(dalekWeapon);
 		
 		
 //		getStatusPanel().setFromSections(d.getSections());		
