@@ -35,6 +35,7 @@ public class WeaponUI extends BufferedImage {
 	Font large;
 	
 	
+	/*
 	public static WeaponUI factory (String dal, String weapon)  {
 		// a factory style constructor
 	
@@ -54,7 +55,8 @@ public class WeaponUI extends BufferedImage {
 		return null;
 				
 	}
-		
+		*/
+	
 	public WeaponUI (Weapon w, Image base) {
 	
 		this(w.getName(), w.getMin(), w.getShortRange(), w.getMedRange(), w.getLongRange(), w.getShortDamage(), w.getMedDamage(), w.getLongDamage(),base);
@@ -62,11 +64,17 @@ public class WeaponUI extends BufferedImage {
 	}
 	
 	public WeaponUI (String n, int m, int sr, int mr, int lr, int sd, int md, int ld, Image base) {
+		this(n,m,sr,mr,lr,sd,md,ld,base,Color.WHITE);
+	}
+	
+	
+	public WeaponUI (String n, int m, int sr, int mr, int lr, int sd, int md, int ld, Image base, Color c) {
 		super (160,40,BufferedImage.TYPE_4BYTE_ABGR);
 
 		canvas = this.createGraphics();
 		canvas.setStroke (new BasicStroke(4, java.awt.BasicStroke.CAP_ROUND , java.awt.BasicStroke.JOIN_ROUND ));
 		canvas.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		large  = new Font("Eurostile",0,12);
 		small  = new Font("Eurostile",0,9);
 
@@ -80,10 +88,9 @@ public class WeaponUI extends BufferedImage {
 		setMedDamage(md);
 		setLongDamage(ld);
 		setImage(base);
+		setColour(c); 
 		
-		backColour = Color.WHITE;
-		
-		this.repaint();
+		//this.repaint();
 		
 	}
 	
@@ -96,7 +103,8 @@ public class WeaponUI extends BufferedImage {
 	public void setMedDamage (int i) { this.medDamage = i; }
 	public void setLongDamage (int i) { this.longDamage = i; }
 	public void setImage (Image i) { this.baseImage = i; }
-	public void setColor (Color c) { this.backColour = c; }
+	public void setColour (Color c) { this.backColour = c;  this.repaint(); }
+	public Color getColour () { return backColour;}
 
 	public int scaleHeight(int width) { return width * this.getHeight() / this.getWidth(); }
 	public int scaleWidth(int height) { return height * this.getWidth() / this.getHeight(); }
@@ -107,6 +115,7 @@ public class WeaponUI extends BufferedImage {
 		int h = 20; 
 		int w = (int)(h * baseImage.getWidth(null) / baseImage.getHeight(null));
 		
+
 		canvas.setColor(backColour);
 		canvas.fillRect(0,0,this.getWidth() , this.getHeight());
 

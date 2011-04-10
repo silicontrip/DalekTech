@@ -170,7 +170,6 @@ public class Player {
 	
 	void moveDalek () {
 		
-		getUI().setInterfaceMessage("Move");
 		
 		
 		if (!this.allMoved()) {
@@ -179,6 +178,7 @@ public class Player {
 			ArrayList<Dalek> havent = getHaventMoved();
 			int select;
 			
+			getUI().setInterfaceMessage("Select Dalek to Move");
 			select = getUI().selectDalek(havent);
 			
 			if (select != -1) {
@@ -187,12 +187,14 @@ public class Player {
 				dal.setMoved(true);
 				
 				do {
+
 					getUI().notifyDalekPosition(dal);
 					getOtherUI().notifyDalekPosition(dal);
 					getUI().notifyEngine(dal.getMovement(),
 										 dal.getWalk(),
 										 dal.getRun());
 					
+					getUI().setInterfaceMessage("Move");
 					dir = getUI().getDalekMove(dal,
 											   dal.getMovement(),
 											   dal.getWalk(),
@@ -210,22 +212,26 @@ public class Player {
 				
 				getUI().notifyDalekPosition(dal);
 				getOtherUI().notifyDalekPosition(dal);
-				
-			}		
+
+			}	
+			
+			getUI().setInterfaceMessage(null);
+
 		}
-		getUI().setInterfaceMessage(null);
 		
 	}
 	
 	void twistDalek () {
 		
-		getUI().setInterfaceMessage("Twist");
+		getUI().setInterfaceMessage("Select Dalek to Twist");
 		
 		if (!this.allTwist()) {
 			ArrayList<Dalek> havent = getHaventTwist();
 			Dalek dal;
 			dal = havent.get(getUI().selectDalek(havent));
 			dal.setTwist(true);
+			getUI().setInterfaceMessage("Twist");
+
 			dal.faceDalek( getUI().getDalekTwist(dal) );
 		}
 		getUI().setInterfaceMessage(null);
@@ -235,7 +241,6 @@ public class Player {
 	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
 		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
 		
-		getUI().setInterfaceMessage("Fire");
 		
 		if (!this.allFired()) {
 			ArrayList<Weapon> weaponArray;
@@ -245,10 +250,14 @@ public class Player {
 			ArrayList<Dalek> havent = getHaventFired();
 			int select;
 			
+			getUI().setInterfaceMessage("Select Dalek to Fire");
+
 			dal = havent.get(getUI().selectDalek(havent));
 			dal.setFired(true);
 			weaponArray = dal.getWeaponArray();
 			do {
+				getUI().setInterfaceMessage("Select Weapon to Fire");
+
 				select = getUI().selectWeapon(weaponArray);
 				if (select != -1) {
 					int selectDalek;
@@ -265,7 +274,7 @@ public class Player {
 						los.add(weap.getLineOfSight(targetDaleks.get(i)));
 						
 					}                                       
-					getUI().setInterfaceMessage("Target");
+					getUI().setInterfaceMessage("Select Target");
 					
 					target=getUI().selectTargetDalek(dal,targetDaleks,cost,dist,los);
 					if (target != -1) {

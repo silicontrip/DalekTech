@@ -7,70 +7,139 @@ import java.awt.*;
 
 public abstract class TacticalUI extends BufferedImage {
 	
-	Image baseImage;
+	HashMap<String,WeaponUI> weaponMap;
+	ArrayList<WeaponUI> weaponArray;
+	Graphics2D canvas;
 	
-	public abstract Rectangle getDome();
-	public abstract Rectangle getNeck();
-	public abstract Rectangle getShoulder();
-	public abstract Rectangle getLeftShoulder();
-	public abstract Rectangle getRightShoulder();
-	public abstract Rectangle getLeftSkirt();
-	public abstract Rectangle getRightSkirt();
+	public abstract WeaponUI getDome();
+	public abstract WeaponUI getNeck();
+	public abstract WeaponUI getShoulder();
+	public abstract WeaponUI getLeftShoulder();
+	public abstract WeaponUI getRightShoulder();
+	public abstract WeaponUI getLeftSkirt();
+	public abstract WeaponUI getRightSkirt();
 	
 	
-	public TacticalUI(Image baseImage) {
-		super (baseImage.getWidth(null),baseImage.getHeight(null),BufferedImage.TYPE_4BYTE_ABGR);
-		this.setBaseImage(baseImage);
+	public TacticalUI(int weapons) {
+		// these values need to be queried from WeaponUI
+		super (160,weapons * 40 ,BufferedImage.TYPE_4BYTE_ABGR);
+		/*
+		weaponMap = new ArrayList<WeaponUI>();
+		
+		weaponMap.add(getRightShoulder());
+		weaponMap.put(getLeftShoulder());
+		weaponMap.put(getShoulder());
+		weaponMap.put(getRightSkirt());
+		weaponMap.put(getLeftSkirt());
+		*/
+		weaponMap = new HashMap<String,WeaponUI>();
+		weaponMap.put("dome",null);
+		weaponMap.put("neck",null);
+		weaponMap.put("right shoulder",getRightShoulder());
+		weaponMap.put("left shoulder",getLeftShoulder());
+		weaponMap.put("shoulder",getShoulder());
+		weaponMap.put("right skirt",getRightSkirt());
+		weaponMap.put("left skirt",getLeftSkirt());
+		
+		
+		canvas = this.createGraphics();
+		canvas.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		
+		// init the image
+		
+		
+		Collection<WeaponUI> c;
+		Iterator<WeaponUI> it;
+		int y=0;
+		WeaponUI wui = null;
+		
+		c = weaponMap.values();
+		it = c.iterator();
+		
+		weaponArray = new ArrayList<WeaponUI>();
+		
+		while (it.hasNext()) {
+			wui = it.next();
+			if (wui != null) {
+				weaponArray.add (wui);
+				wui.setColour(Color.WHITE);
+				wui.repaint();
+				canvas.drawImage(wui,0,y,null);
+				
+				y += wui.getHeight();
+				
+			}
+		}
+		
+		
 	}
 	
-	private Image getBaseImage() { return baseImage; }
-	public void setBaseImage(Image i) { baseImage = i; }
+	//	private Image getBaseImage() { return baseImage; }
+	//	public void setBaseImage(Image i) { baseImage = i; }
 	
 	public int scaleHeight(int width) { return width * this.getHeight() / this.getWidth(); }
 	public int scaleWidth(int height) { return height * this.getWidth() / this.getHeight(); }
 	
-	public void setFromSections( HashMap<String,Boolean> sections) { 
+	public void setSelected (int s) {
+		Iterator<WeaponUI> it;
+		WeaponUI wui = null;
+		int count = 0;
+		int y = 0;
 		
-		Set<String> s = sections.keySet();
-		Iterator<String> it;
-		int armour;
-		Rectangle r = null;
-		Color c;
-		
-		Graphics2D canvas = this.createGraphics();
-		canvas.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		canvas.drawImage(getBaseImage(),0, 0, null);
-		
-		it = s.iterator();
+		it = weaponArray.iterator();
+
 		
 		while (it.hasNext()) {
-			String sectionName = it.next();
-			Boolean sectionAvail = sections.get(sectionName);
-			
-			// string to dot registration array
-			if (sectionName.equalsIgnoreCase("dome")) { r = getDome(); }
-			if (sectionName.equalsIgnoreCase("neck")) { r = getNeck(); }
-			if (sectionName.equalsIgnoreCase("right shoulder")) { r = getRightShoulder(); }
-			if (sectionName.equalsIgnoreCase("left shoulder") ) { r = getLeftShoulder(); }
-			if (sectionName.equalsIgnoreCase("shoulder") ) { r = getShoulder(); }
-			if (sectionName.equalsIgnoreCase("right skirt") ) { r = getRightSkirt(); }
-			if (sectionName.equalsIgnoreCase("left skirt") ) { r = getLeftSkirt(); }			
-			
-			
-			if (r != null) {
-				System.out.println("setFromSections() not null - " + sectionName);
+			Color c;
+			wui = it.next();
+			c = wui.getColour();
 
-				// test r is not null
-				if (sectionAvail) {
-					canvas.setColor(Color.GREEN);
+			// System.out.println("count: " + count + " select: " + s);
+			
+			if (count == s) {
+				wui.setColour(Color.GREEN);
+			}
+			canvas.drawImage(wui,0,y,null);
+
+			wui.setColour(c);
+
+
+			count++;
+			y += wui.getHeight();
+
+		}
+		
+	}
+	
+	public void setFromWeaponArray( ArrayList<Weapon> weapon) { 
+		
+		Iterator<Weapon> it;
+		int y=0;
+		WeaponUI wui = null;
+		
+		it = weapon.iterator();
+		weaponArray = new ArrayList<WeaponUI>();
+
+		
+		while (it.hasNext()) {
+			Weapon w = it.next();
+			String sectionName = w.getDalekSection().getName();			
+// System.out.println("setFromWeaponArray()  - " + sectionName);
+
+			wui = weaponMap.get(sectionName.toLowerCase());
+			if (wui != null) {
+				if (w.canFire()) {
+					wui.setColour(Color.WHITE);
 				} else {
-					canvas.setColor(Color.RED);
+					wui.setColour(Color.RED);
 				}
+				weaponArray.add (wui);
+
+			//	System.out.println("setFromWeaponArray() not null - " + sectionName);
 				
-				// make composite
-				canvas.setComposite(AddComposite.DEFAULT);
-				// draw rect
-				canvas.fillRect((int)r.getX(),(int)r.getY(),(int)r.getWidth(),(int)r.getHeight());
+				canvas.drawImage(wui,0,y,null);
+				
+				y += wui.getHeight();
 				
 			}
 		}

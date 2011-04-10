@@ -3,14 +3,14 @@ import java.awt.Rectangle;
 public class SpecialWeaponTactical extends TacticalUI {
 	
 	public SpecialWeaponTactical() {
-		super(Guitwo.getImageWithFilename ("Images/SpecialWeaponTactical.png"));
+		super(3);
 	}
 
-	public Rectangle getDome() { return null; }
-	public Rectangle getNeck() { return null; }
-	public Rectangle getRightShoulder() { return null; } 
-	public Rectangle getLeftShoulder() { return null; } 
-	public Rectangle getRightSkirt() { return new Rectangle (84,232,49,205); } 
-	public Rectangle getLeftSkirt() { return new Rectangle (134,232,48,203); }	
-	public Rectangle getShoulder() { return new Rectangle (93,118,80,55);  }
+	public WeaponUI getDome() { return null; }
+	public WeaponUI getNeck() { return null; }
+	public WeaponUI getRightShoulder() { return null; } 
+	public WeaponUI getLeftShoulder() { return null; } 
+	public WeaponUI getRightSkirt() { return new WeaponUI ("Auto Bomb/10",0,1,2,3,10,10,10,Guitwo.getImageWithFilename("Images/BronzeBomb.png")); } 
+	public WeaponUI getLeftSkirt() { return new WeaponUI ("Auto Bomb/10",0,1,2,3,10,10,10,Guitwo.getImageWithFilename("Images/BronzeBomb.png")); }	
+	public WeaponUI getShoulder() { return new WeaponUI ("PPC",3,6,12,18,10,10,10,Guitwo.getImageWithFilename("Images/SpecialWeaponWeapon.png"));  }
 }

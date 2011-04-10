@@ -479,12 +479,13 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			
 		}
 		
-		
 		if (kc == KeyEvent.VK_SPACE) {
+			callback.setSelectedMovement(Tables.SELECT);
+
 		}
 		
 		if (kc == KeyEvent.VK_ENTER) {
-			callback.setSelectedMovement(Tables.NONE);
+			callback.setSelectedMovement(Tables.DONE);
 		}
 		
     }

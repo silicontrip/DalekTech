@@ -76,11 +76,11 @@ public  class Network extends UserInterface {
 	} 
 	
 	
-	int getDalekDirection (Dalek d) {
+	Direction getDalekDirection (Dalek d) {
 		try {
 			oos.writeObject("getDalekDirection");
 			oos.writeObject(d);
-			return (Integer)ois.readObject();
+			return (Direction)ois.readObject();
 		} catch (IOException ioe) {
 			System.out.println("getDalekDirection IO error " + ioe);
 		} catch (ClassNotFoundException cnfe) {
@@ -150,12 +150,14 @@ public  class Network extends UserInterface {
 	}
 	
 	
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList,ArrayList<Integer> targetCost) {
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los); {
 		try {
 			oos.writeObject("selectTargetDalek");
 			oos.writeObject(d);
 			oos.writeObject(targetList);
 			oos.writeObject(targetCost);
+			oos.writeObject(distance);
+			oos.writeObject(los);
 			return (Integer)ois.readObject();
 		} catch (IOException ioe) {
 			System.out.println("selectTargetDalek IO error " + ioe);
@@ -218,6 +220,7 @@ public  class Network extends UserInterface {
 	
 	void notifyDalek (String s, Dalek d) {
 		try {
+			// oos.writeObject("notifyDalek");
 			oos.writeObject(s);
 			oos.writeObject(d);
 		} catch (IOException ioe) {
@@ -289,6 +292,15 @@ public  class Network extends UserInterface {
 		try {
 			oos.writeObject("notifyEnd");
 			oos.writeObject(new Boolean(destroyed));							 
+		} catch (IOException ioe) {
+			System.out.println("notifyEnd IO error " + ioe);
+		}
+		
+	}
+	void setInterfaceMessage(String s) {
+		try {
+			oos.writeObject("setInterfaceMessage");
+			oos.writeObject(s);							 
 		} catch (IOException ioe) {
 			System.out.println("notifyEnd IO error " + ioe);
 		}
