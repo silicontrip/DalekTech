@@ -87,7 +87,7 @@ public  class Network extends UserInterface {
 			System.out.println("ac Class error " + cnfe);
 		}
 		
-		return -1;
+		return null;
 		
 	}
 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn)  {
@@ -133,6 +133,20 @@ public  class Network extends UserInterface {
 		
 	}
 	
+	Position getDalekPositionAndDirection(Dalek d) {
+		
+		try {
+			oos.writeObject("getDalekPositionAndDirection");
+			oos.writeObject(d);
+			return (Position)ois.readObject();
+		} catch (IOException ioe) {
+			System.out.println("getDalekTwist IO error " + ioe);
+		}  catch (ClassNotFoundException cnfe) {
+			System.out.println("ac Class error " + cnfe);
+		}
+		return null;
+	}
+	
 	// Show and ask user selections
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 		try {
@@ -150,7 +164,7 @@ public  class Network extends UserInterface {
 	}
 	
 	
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los); {
+	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los) {
 		try {
 			oos.writeObject("selectTargetDalek");
 			oos.writeObject(d);
