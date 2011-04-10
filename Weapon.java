@@ -14,8 +14,8 @@ public class Weapon implements Serializable {
 	int longDamage;
 	int ammo;
 	
-	transient boolean fired;
-	transient DalekSection dalsec;
+	boolean fired;
+	DalekSection dalsec;
 
 public String getName () { return name; }
 public void setName (String s) { this.name = s; }

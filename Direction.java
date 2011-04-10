@@ -1,5 +1,6 @@
+import java.io.*;
 
-public class Direction {
+public class Direction implements Serializable {
 
 
 	int dir;

@@ -63,6 +63,7 @@ public  class Network extends UserInterface {
 	Position getDalekPosition(Dalek d) {
 		
 		try {
+			oos.reset();
 			oos.writeObject("getDalekPosition");
 			oos.writeObject(d);
 			return (Position)ois.readObject();
@@ -78,6 +79,8 @@ public  class Network extends UserInterface {
 	
 	Direction getDalekDirection (Dalek d) {
 		try {
+			oos.reset();
+
 			oos.writeObject("getDalekDirection");
 			oos.writeObject(d);
 			return (Direction)ois.readObject();
@@ -93,6 +96,8 @@ public  class Network extends UserInterface {
 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn)  {
 		
 		try {
+			oos.reset();
+
 			oos.writeObject("getDalekMove");
 			oos.writeObject(d);
 			oos.writeObject(new Integer(currentMove));
@@ -119,6 +124,8 @@ public  class Network extends UserInterface {
 	int getDalekTwist (Dalek d){
 		
 		try {
+			oos.reset();
+
 			oos.writeObject("getDalekTwist");
 			oos.writeObject(d);
 			return (Integer)ois.readObject();
@@ -136,6 +143,8 @@ public  class Network extends UserInterface {
 	Position getDalekPositionAndDirection(Dalek d) {
 		
 		try {
+			oos.reset();
+
 			oos.writeObject("getDalekPositionAndDirection");
 			oos.writeObject(d);
 			return (Position)ois.readObject();
@@ -150,6 +159,8 @@ public  class Network extends UserInterface {
 	// Show and ask user selections
 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 		try {
+			oos.reset();
+
 			oos.writeObject("selectFactoryDaleks");
 			oos.writeObject(dalekList);
 			return (ArrayList<Integer>)ois.readObject();
@@ -166,6 +177,8 @@ public  class Network extends UserInterface {
 	
 	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los) {
 		try {
+			oos.reset();
+
 			oos.writeObject("selectTargetDalek");
 			oos.writeObject(d);
 			oos.writeObject(targetList);
@@ -185,6 +198,8 @@ public  class Network extends UserInterface {
 	}
 	int selectWeapon(ArrayList<Weapon> w) {
 		try {
+			oos.reset();
+
 			oos.writeObject("selectWeapon");
 			oos.writeObject(w);
 			return (Integer)ois.readObject();
@@ -200,6 +215,8 @@ public  class Network extends UserInterface {
 	
 	int selectDalek(ArrayList<Dalek> dalekList) {
 		try {
+			oos.reset();
+
 			oos.writeObject("selectDalek");
 			oos.writeObject(dalekList);
 			return (Integer)ois.readObject();
@@ -215,6 +232,8 @@ public  class Network extends UserInterface {
 	
 	int selectDalekWithExit(ArrayList<Dalek> dalekList) {
 		try {
+			oos.reset();
+
 			oos.writeObject("selectDalekWithExit");
 			oos.writeObject(dalekList);
 			return (Integer)ois.readObject();
@@ -234,6 +253,8 @@ public  class Network extends UserInterface {
 	
 	void notifyDalek (String s, Dalek d) {
 		try {
+			oos.reset();
+
 			// oos.writeObject("notifyDalek");
 			oos.writeObject(s);
 			oos.writeObject(d);
@@ -251,6 +272,8 @@ public  class Network extends UserInterface {
 	
 	void notifyEngine(int current, int walk, int run) {
 		try {
+			oos.reset();
+
 			oos.writeObject("notifyEngine");
 			oos.writeObject(new Integer(current));
 			oos.writeObject(new Integer(walk));
@@ -264,6 +287,8 @@ public  class Network extends UserInterface {
 	}
 	void notifyDifficulty(int cost) {
 		try {
+			oos.reset();
+
 			oos.writeObject("notifyDifficulty");
 			oos.writeObject((Integer)cost);			
 		} catch (IOException ioe) {
@@ -273,6 +298,8 @@ public  class Network extends UserInterface {
 	}
 	void notifyLOS(ArrayList<Hex> line) {
 		try {
+			oos.reset();
+
 			oos.writeObject("notifyLOS");
 			oos.writeObject(line);			
 		} catch (IOException ioe) {
@@ -281,6 +308,8 @@ public  class Network extends UserInterface {
 	}
 	void notifyDalekDamage(Dalek d,int location, Weapon w, int damage) {
 		try {
+			oos.reset();
+
 			oos.writeObject("notifyDalekDamage");
 			oos.writeObject(d);	
 			oos.writeObject(new Integer(location));			
@@ -293,6 +322,8 @@ public  class Network extends UserInterface {
 	}
 	void notifyMiss(Dalek d, Weapon w) {
 		try {
+			oos.reset();
+
 			oos.writeObject("notifyMiss");
 			oos.writeObject(d);	
 			oos.writeObject(w);			
@@ -303,7 +334,9 @@ public  class Network extends UserInterface {
 		
 	}
 	void notifyEnd(boolean destroyed) {
-		try {
+		try {		
+			oos.reset();
+
 			oos.writeObject("notifyEnd");
 			oos.writeObject(new Boolean(destroyed));							 
 		} catch (IOException ioe) {
@@ -313,6 +346,8 @@ public  class Network extends UserInterface {
 	}
 	void setInterfaceMessage(String s) {
 		try {
+			oos.reset();
+
 			oos.writeObject("setInterfaceMessage");
 			oos.writeObject(s);							 
 		} catch (IOException ioe) {

@@ -10,12 +10,21 @@ public class NetworkClient {
 	static UserInterface interfaceFactory (String s,Map m) {
 		
 		if (s.equalsIgnoreCase("cli")) {
+			System.out.println("CLI");
 			return new Cli(m);
 		}
 		if (s.equalsIgnoreCase("network"))  {
+			System.out.println("NETWORK");
+
 			return new Network(m);
 		}
-		return null;
+		if (s.equalsIgnoreCase("gui2"))  {
+			System.out.println("GUI2");
+
+			return new Guitwo(m);
+		}
+		
+		return new Guitwo(m);
 	}
 	
 	
@@ -58,14 +67,20 @@ public class NetworkClient {
 						try {
 							String message = (String) ois.readObject();
 							
-							// System.out.println("Message: " + message);
+							 System.out.println("Message: " + message);
 							
 							if (message.equals("getDalekPosition")) {
+								
+								
 								oos.writeObject(intf.getDalekPosition( (Dalek) ois.readObject()));
 							}
 							if (message.equals("getDalekDirection")) {
-								oos.writeObject(new Integer(intf.getDalekDirection((Dalek) ois.readObject())));
+								oos.writeObject(intf.getDalekDirection((Dalek) ois.readObject()));
 							}
+							if (message.equals("getDalekPositionAndDirection")) {
+								oos.writeObject(intf.getDalekPositionAndDirection((Dalek) ois.readObject()));
+							}
+							
 							if (message.equals("getDalekMove")) {
 								oos.writeObject(new Integer(intf.getDalekMove((Dalek)ois.readObject(), 
 																			  (Integer) ois.readObject(),
@@ -79,7 +94,7 @@ public class NetworkClient {
 															)));
 							}
 							if (message.equals("getDalekTwist")) {
-								oos.writeObject(new Integer(intf.getDalekTwist((Dalek)ois.readObject())));
+								oos.writeObject(intf.getDalekTwist((Dalek)ois.readObject()));
 							}
 							if (message.equals("selectFactoryDaleks")) {
 								oos.writeObject(intf.selectFactoryDaleks( (ArrayList<Dalek>) ois.readObject()));
@@ -87,7 +102,9 @@ public class NetworkClient {
 							if (message.equals("selectTargetDalek")) {
 								oos.writeObject(new Integer(intf.selectTargetDalek((Dalek) ois.readObject(),
 																				   (ArrayList<Dalek>) ois.readObject(),
-																				   (ArrayList<Integer>) ois.readObject()
+																				   (ArrayList<Integer>) ois.readObject(),
+																				   (ArrayList<Double>) ois.readObject(),
+																				   (ArrayList<ArrayList<Hex>>) ois.readObject()
 																				   )));
 								
 							}
@@ -102,7 +119,9 @@ public class NetworkClient {
 							}
 							
 							
-							if (message.equals("notifyDalekPosition")) { intf.notifyDalekPosition((Dalek) ois.readObject()); }
+							if (message.equals("notifyDalekPosition")) { 
+								intf.notifyDalekPosition((Dalek) ois.readObject()); 
+							}
 							if (message.equals("notifyName")) { intf.notifyName((Dalek) ois.readObject()); }
 							if (message.equals("notifyDamage")) { intf.notifyDamage((Dalek) ois.readObject()); }
 							if (message.equals("notifyTargetDalek")) { intf.notifyTargetDalek((Dalek) ois.readObject()); }
@@ -130,6 +149,8 @@ public class NetworkClient {
 												(Weapon) ois.readObject());
 							}
 							if (message.equals("notifyEnd")) { intf.notifyEnd((Boolean) ois.readObject()); }
+							
+							if (message.equals("setInterfaceMessage")) { intf.setInterfaceMessage((String) ois.readObject()); }
 							
 							
 						} catch (ClassNotFoundException cnfe) {

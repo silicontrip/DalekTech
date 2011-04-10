@@ -470,12 +470,16 @@ public class Guitwo extends Cli {
 			
 			//System.out.println ("Selected Movement: " + selectedMovement);
 			
-		} while (selectedMovement != Tables.SELECT) ;
+		} while (selectedMovement != Tables.SELECT && selectedMovement != Tables.DONE)  ;
 		
 		getStatusPanel().repaint();
 
 		
-		return currentSelection;
+		if (selectedMovement == Tables.SELECT) {
+			return currentSelection;
+		} else {
+			return -1;
+		}
 		
 	}
 	

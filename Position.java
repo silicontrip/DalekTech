@@ -210,7 +210,7 @@ public class Position implements Serializable {
 		}
 		return this;
 	}
-
+/*
 	private void writeObject(java.io.ObjectOutputStream stream) throws IOException  {
 		stream.writeInt(x);
 		stream.writeInt(y);
@@ -222,7 +222,7 @@ private void readObject(java.io.ObjectInputStream stream) throws IOException, Cl
 	y = stream.readInt();
 	dir = new Direction(stream.readInt()); 
 }
-	
+*/	
 	
 	public Position () { this.x = -1 ; this.y = -1 ; setDirection(new Direction()); }
 	public Position (int x, int y) {this(x,y,new Direction());}

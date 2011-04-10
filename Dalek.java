@@ -38,10 +38,11 @@ public class Dalek implements Serializable  {
 	public ArrayList<DalekSection> getLocationArray() { return locationArray; }
 	public void setLocationArray(ArrayList<DalekSection> ds) {  this.locationArray = ds; }
 	public HashMap<String,DalekSection> getLocationMap() { return locationMap; }
-	public void getLocationMap(HashMap<String,DalekSection> ds) { this.locationMap = ds; }
+	// public void getLocationMap(HashMap<String,DalekSection> ds) { this.locationMap = ds; }
 	
 	public void setPosition (Position p) {this.position = p;}
 	public Position getPosition () { return this.position; }
+	
 	void setDirection (Direction d) {
 		this.getPosition().setDirection(d);  // position direction has out of bounds detector
 		this.setFacing(d); 

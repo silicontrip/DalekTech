@@ -6,8 +6,8 @@ public class DalekSection implements Serializable {
 	DalekSection transfer;
 	Weapon weapon; // only one for the time being
 
-	transient Dalek dalek;
-	transient int currentArmour;
+	Dalek dalek;
+	int currentArmour;
 	
 	void setDalek(Dalek dalek) { this.dalek = dalek; }
 	Dalek getDalek() { return this.dalek; }
