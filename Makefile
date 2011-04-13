@@ -2,7 +2,7 @@
 %.class:%.java
 	javac $<
 
-all: Cli.class Dalek.class DalekFactory.class DalekSection.class \
+OBJ = Cli.class Dalek.class DalekFactory.class DalekSection.class \
 	DalekSectionDome.class DalekSectionSkirt.class DalekTech.class \
 	Hex.class Map.class Player.class Position.class Tables.class \
 	UserInterface.class Weapon.class  \
@@ -15,6 +15,13 @@ all: Cli.class Dalek.class DalekFactory.class DalekSection.class \
 	RedCommanderTactical.class RedSaucerTactical.class SpecialWeaponTactical.class \
 	WeaponUI.class \
 	Network.class NetworkClient.class 
+
+all: ${OBJ}
+
+jar: DalekTech.jar
+
+DalekTech.jar: ${OBJ}
+	jar cf DalekTech.jar *class Images
 
 BlackRenegadeTactical.class: TacticalUI.java BlackRenegadeTactical.java
 GreyRenegadeTactical.class: TacticalUI.java GreyRenegadeTactical.java

@@ -115,6 +115,8 @@ public class DalekTech {
 		
 		// player 1 choose some daleks
 		
+		// would like to thread these off.
+		
 		Game.getPlayer(0).selectFactoryDaleks(DalekFactory.getAllDaleks());
 		
 		// player 2 choose some daleks

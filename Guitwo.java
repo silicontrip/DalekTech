@@ -264,7 +264,7 @@ public class Guitwo extends Cli {
 					currentSelection++;
 					if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
 				}
-			} while (selectedMovement != Tables.NONE) ;
+			} while (selectedMovement != Tables.SELECT) ;
 			
 			getMapPanel().setSelectorPosition(null);
 			getMapPanel().repaint();
@@ -592,18 +592,36 @@ public class Guitwo extends Cli {
 		DamageUI dalekStatus;
 		TacticalUI dalekWeapon;
 		
+		BufferedImage oldImage; 
+		
 		getStatusPanel().setDalekName(d.getName());
 		
 		dalekStatus = dalekDamageImages.get(d.getName());
+		
+		
+		oldImage= new BufferedImage (dalekStatus.getWidth(null),dalekStatus.getHeight(null),BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D canvas  = oldImage.createGraphics();
+		canvas.drawImage(dalekStatus,0,0,null);
+		
 		dalekStatus.setFromSections(d.getSections());
+		// implement some kind of flasher
+
+		for (int i=0 ; i < 3; i++) {
+			getStatusPanel().setDamageImage(dalekStatus);
+			getStatusPanel().repaint();
+			try {
+				Thread.sleep(400); 
+			} catch (InterruptedException ie) { ; }
+			getStatusPanel().setDamageImage(oldImage);
+			getStatusPanel().repaint();
+
+			try {
+				Thread.sleep(400); 
+			} catch (InterruptedException ie) { ; }
+
+		}
+
 		getStatusPanel().setDamageImage(dalekStatus);
-		
-		//dalekWeapon = dalekTacticalImages.get(d.getName());
-		//	dalekWeapon.setFromSections(d.canFireMap());
-		//	getStatusPanel().setTacticalImage(dalekWeapon);
-		
-		
-		//		getStatusPanel().setFromSections(d.getSections());		
 		getStatusPanel().repaint();
 		
 	}

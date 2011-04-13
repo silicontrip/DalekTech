@@ -13,7 +13,7 @@ public class statusPanel extends JPanel {
 	Image panelBackground;
 	
 	TacticalUI dalekTacticalImage;
-	DamageUI dalekDamageImage;
+	Image dalekDamageImage;
 	Image dalekImage;
 	
 	Integer engineCurrent;
@@ -52,7 +52,7 @@ public class statusPanel extends JPanel {
 	//	setDamageImage(getDamageImageFromName());
 	//	setTacticalImage(getTacticalImageFromName());
 	}
-	void setDamageImage(DamageUI i) { this.dalekDamageImage = i; }
+	void setDamageImage(Image i) { this.dalekDamageImage = i; }
 	void setTacticalImage(TacticalUI i) { this.dalekTacticalImage = i; }
 	TacticalUI getTacticalImage() { return dalekTacticalImage; }
 	
@@ -139,7 +139,9 @@ public class statusPanel extends JPanel {
 			// int h = (int)  (dalekImage.getHeight(null) * w / dalekImage.getWidth(null)  );
 			
 			int h = 200;
-			int w = dalekDamageImage.scaleWidth(h);			
+			// int w = dalekDamageImage.scaleWidth(h);			
+			
+			int w = h * dalekDamageImage.getWidth(null) / dalekDamageImage.getHeight(null);
 			
 	
 			BufferedImage thumbImage = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
