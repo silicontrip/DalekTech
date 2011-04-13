@@ -42,7 +42,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Double targetDistance = null;
 	ArrayList<Hex> lineSight = null;
 	String interfaceMessage = null;
-	DamageUI targetDalek;
+	Image targetDalek;
 	
 	String moveDalekName=null;
 	Position moveDalekPosition=null;
@@ -186,7 +186,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	// public void setTargetCost(Integer i) { probUI.setTargetCost(i); }	
 	
-	public void setTarget(DamageUI i) { targetDalek = i; }
+	public void setTarget(Image i) { targetDalek = i; }
 	
 	/*
 	void paintMovementCost(Graphics g) {
@@ -252,8 +252,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		 
 		// need proportional scaling
 		if (targetDalek != null) {
-			canvas.drawImage(targetDalek,500,200,targetDalek.scaleWidth(128),128,null);
+			int tw = 128 * targetDalek.getWidth(null) / targetDalek.getHeight(null);
+			canvas.drawImage(targetDalek,500,200,tw,128,null);
 		}
+		
+		// line of sight 
 		
 		// I may move this to a BufferedImage
 		// probUI.paintComponent(canvas); 
@@ -261,7 +264,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		canvas.drawImage(probUI,500,64,64,64,null);
 		
 		if (interfaceMessage != null) {
-			
+			// again want to move this to an image
 			canvas.setColor(java.awt.Color.WHITE);
 			canvas.setFont( new Font("Eurostile",0,24));
 			canvas.drawString(interfaceMessage,32,32);

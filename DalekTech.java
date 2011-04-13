@@ -161,8 +161,8 @@ public class DalekTech {
 		// until all daleks twist
 			} while (!Game.allDaleksTwist());
 			
-			playerOrder.get(0).setFiring(new  HashMap<Weapon,Dalek>());
-			playerOrder.get(1).setFiring(new  HashMap<Weapon,Dalek>());
+			playerOrder.get(0).setFiring(new HashMap<Weapon,Dalek>());
+			playerOrder.get(1).setFiring(new HashMap<Weapon,Dalek>());
 
 		// repeat
 			do {
@@ -210,6 +210,10 @@ public class DalekTech {
 			int roll = this.twodsix();
 			
 			Dalek dal = firing.get(weap);
+			
+			p1.getUI().notifyFire(dal,weap);
+			p2.getUI().notifyFire(dal,weap);
+
 			
 			// damage 
 			if (roll >= cost) {

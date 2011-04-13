@@ -32,6 +32,7 @@ public abstract class UserInterface {
 	abstract void notifyLOS(ArrayList<Hex> line);
 	abstract void notifyTargetDalek(Dalek d);
 	abstract void notifyDalekDamage(Dalek d,int location, Weapon w, int damage);
+	abstract void notifyFire(Dalek d, Weapon w);
 	abstract void notifyMiss(Dalek d, Weapon w);
 	abstract void notifyEnd(boolean destroyed);
 }

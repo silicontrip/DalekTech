@@ -32,6 +32,9 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Boolean backwardMove;
 	Image arrowImage=null;
 
+	// Weapons fire...
+	
+	
 	
 	Map map;
 	int percent;
@@ -253,8 +256,9 @@ public class MapImage extends BufferedImage implements ActionListener {
 				while (it.hasNext()){
 					String n = it.next();
 					dalekImagePosition.put(n,dalekImageEndPosition.get(n));
-					dalekImageEndPosition.remove(n);
+				//	dalekImageEndPosition.remove(n);
 				}
+				dalekImageEndPosition.clear();
 			}
 		}
 		

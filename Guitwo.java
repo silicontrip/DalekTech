@@ -587,6 +587,44 @@ public class Guitwo extends Cli {
 		if (!destroyed) { this.setInterfaceMessage("Enemy Daleks Destroyed - Mission Accomplished"); }
 	}
 	
+	void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
+
+		DamageUI dalekStatus;
+		BufferedImage oldImage; 
+
+		
+		dalekStatus = dalekRemoteImages.get(d.getName());
+
+		oldImage= new BufferedImage (dalekStatus.getWidth(null),dalekStatus.getHeight(null),BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D canvas  = oldImage.createGraphics();
+		canvas.drawImage(dalekStatus,0,0,null);
+		
+		
+		dalekStatus.setFromSections(d.getSections());
+		
+		getMapPanel().centreOn(d.getPosition());
+
+		
+		for (int i=0 ; i < 3; i++) {
+			getMapPanel().setTarget(dalekStatus);
+			getMapPanel().repaint();
+			try {
+				Thread.sleep(400); 
+			} catch (InterruptedException ie) { ; }
+			getMapPanel().setTarget(oldImage);
+			getMapPanel().repaint();
+			
+			try {
+				Thread.sleep(400); 
+			} catch (InterruptedException ie) { ; }
+			
+		}
+		
+		getMapPanel().setTarget(null);
+		getMapPanel().repaint();
+		
+	}
+	
 	void notifyDamage(Dalek d) {
 		
 		DamageUI dalekStatus;
@@ -598,7 +636,6 @@ public class Guitwo extends Cli {
 		
 		dalekStatus = dalekDamageImages.get(d.getName());
 		
-		
 		oldImage= new BufferedImage (dalekStatus.getWidth(null),dalekStatus.getHeight(null),BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D canvas  = oldImage.createGraphics();
 		canvas.drawImage(dalekStatus,0,0,null);
@@ -606,6 +643,9 @@ public class Guitwo extends Cli {
 		dalekStatus.setFromSections(d.getSections());
 		// implement some kind of flasher
 
+		getMapPanel().centreOn(d.getPosition());
+
+		
 		for (int i=0 ; i < 3; i++) {
 			getStatusPanel().setDamageImage(dalekStatus);
 			getStatusPanel().repaint();
