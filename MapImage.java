@@ -166,6 +166,10 @@ public class MapImage extends BufferedImage implements ActionListener {
 								 w,h,null);
 			}
 			
+			// layer weapons fire
+			
+			
+			
 			// layer 2 dalek positions
 			if (this.hasDaleks()) {
 				
@@ -200,6 +204,8 @@ public class MapImage extends BufferedImage implements ActionListener {
 					}
 				}
 			}
+			
+			// layer explosion
 			
 			// layer 3 dalek cost and direction
 			// doing the recode allowed me to understand the registration and rotation process for images

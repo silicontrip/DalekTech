@@ -320,6 +320,20 @@ public  class Network extends UserInterface {
 			System.out.println("notifyDalekDamage IO error " + ioe);
 		}
 	}
+	void notifyFire(Dalek d, Weapon w) {
+		try {
+			oos.reset();
+			
+			oos.writeObject("notifyFire");
+			oos.writeObject(d);	
+			oos.writeObject(w);			
+			
+		} catch (IOException ioe) {
+			System.out.println("notifyMiss IO error " + ioe);
+		}
+		
+	}
+	
 	void notifyMiss(Dalek d, Weapon w) {
 		try {
 			oos.reset();

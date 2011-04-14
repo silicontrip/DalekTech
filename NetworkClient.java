@@ -148,6 +148,11 @@ public class NetworkClient {
 								intf.notifyMiss((Dalek) ois.readObject(),
 												(Weapon) ois.readObject());
 							}
+							if (message.equals("notifyFire")) {
+								intf.notifyFire((Dalek) ois.readObject(),
+												(Weapon) ois.readObject());
+							}
+							
 							if (message.equals("notifyEnd")) { intf.notifyEnd((Boolean) ois.readObject()); }
 							
 							if (message.equals("setInterfaceMessage")) { intf.setInterfaceMessage((String) ois.readObject()); }

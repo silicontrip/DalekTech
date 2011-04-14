@@ -61,7 +61,7 @@ public class Player {
 		Dalek dal;
 		while(it.hasNext()) {
 			dal = it.next();
-			if (!dal.hasMoved()) {
+			if (!dal.hasMoved() && !dal.isDestroyed()) {
 				selected.add(dal);
 			}
 		}
@@ -74,7 +74,7 @@ public class Player {
 		Dalek dal;
 		while(it.hasNext()) {
 			dal = it.next();
-			if (!dal.hasTwist()) {
+			if (!dal.hasTwist() && !dal.isDestroyed()) {
 				selected.add(dal);
 			}
 		}
@@ -87,7 +87,7 @@ public class Player {
 		Dalek dal;
 		while(it.hasNext()) {
 			dal = it.next();
-			if (!dal.hasFired()) {
+			if (!dal.hasFired() && !dal.isDestroyed()) {
 				selected.add(dal);
 			}
 		}
@@ -102,9 +102,12 @@ public class Player {
 	}
 	
 	boolean allMoved () {
-		Iterator<Dalek> it = getDaleks().iterator();
+		Iterator<Dalek> it = getDaleks().iterator();		
+		Dalek dal;
+
 		while(it.hasNext()) {
-			if (!it.next().hasMoved()) {
+			dal = it.next();
+			if (!dal.hasMoved() && !dal.isDestroyed()) {
 				return false;
 			}
 		}
@@ -113,8 +116,12 @@ public class Player {
 	
 	boolean allTwist () {
 		Iterator<Dalek> it = getDaleks().iterator();
+		Dalek dal;
+
 		while(it.hasNext()) {
-			if (!it.next().hasTwist()) {
+			dal = it.next();
+
+			if (!dal.hasTwist() && !dal.isDestroyed()) {
 				return false;
 			}
 		}
@@ -123,8 +130,12 @@ public class Player {
 	
 	boolean allFired () {
 		Iterator<Dalek> it = getDaleks().iterator();
+		Dalek dal;
+
 		while(it.hasNext()) {
-			if (!it.next().hasFired()) {
+			dal = it.next();
+
+			if (!dal.hasFired() && !dal.isDestroyed()) {
 				return false;
 			}
 		}
