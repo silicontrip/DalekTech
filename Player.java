@@ -188,6 +188,7 @@ public class Player {
 			Dalek dal;
 			ArrayList<Dalek> havent = getHaventMoved();
 			int select;
+			boolean forward= true, backward=true;
 			
 			getUI().setInterfaceMessage("Select Dalek to Move");
 			select = getUI().selectDalek(havent);
@@ -206,14 +207,28 @@ public class Player {
 										 dal.getRun());
 					
 					getUI().setInterfaceMessage("Move");
+					
+					forward= true;
+					backward=true;
+					if (dal.getPosition().newForwardsPosition().isIn(getGame().allDalekPositions())) {
+						forward = false;
+					}
+					
+					if (dal.getPosition().newBackwardsPosition().isIn(getGame().allDalekPositions())) {
+						
+						backward = false;
+						
+					}
+					
+					
 					dir = getUI().getDalekMove(dal,
 											   dal.getMovement(),
 											   dal.getWalk(),
 											   dal.getRun(),
 											   dal.getHex().getMovementCost(dal.getForwardsHex()),
 											   dal.getHex().getMovementCost(dal.getBackwardsHex()),
-											   dal.canMoveForwards(),
-											   dal.canMoveBackwards(),
+											   dal.canMoveForwards() && forward,
+											   dal.canMoveBackwards() && backward,
 											   dal.canTurn()
 											   );
 				} while (dal.moveDalek(dir) && dal.canTurn());

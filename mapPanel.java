@@ -341,10 +341,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void mousePressed(MouseEvent e) { 		
 	//	System.out.println("mousePressed: " + e);
 		
-		if (isNothing()) {
+		//if (isNothing()) { // still want to drag the display when positioning daleks
 			startx = e.getX();
 			starty = e.getY();
-		}
+		//}
 	} 
 	
 	public void mouseEntered(MouseEvent e)

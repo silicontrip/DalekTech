@@ -163,6 +163,10 @@ public class Guitwo extends Cli {
 		
 		// not sure where to put forward/backward cost.
 		
+		// check for not moving onto dalek
+		
+		
+		
 		getMapPanel().setMovementCost(d.getPosition(),new Integer(forwardCost), new Integer(backwardCost),forward,backward);
 		
 		getMapPanel().setFocusable(true);
