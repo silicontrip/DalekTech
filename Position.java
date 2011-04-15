@@ -183,6 +183,22 @@ public class Position implements Serializable {
 	
 	public Position newForwardsPosition() { return this.newPosition(this.getDirection()); }
 	public Position newBackwardsPosition() { return this.newPosition(this.getDirection().reverseDirection()); }
+	
+	public Position newForwardLeftPosition() { 
+		this.turnLeft();
+		Position left = this.newForwardsPosition();
+		this.turnRight();
+		return left;
+	}
+	
+	public Position newForwardRightPosition() { 
+		this.turnRight();
+		Position right = this.newForwardsPosition();
+		this.turnLeft();
+		return right;
+	}
+	
+	
 
 	public Position newPosition(Direction direction) {
 		int col;

@@ -96,6 +96,9 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	MapImage getMapImage() { return map; }
 	void setSelectorImage(Image i) { this.getMapImage().setSelectorImage(i); }
 	void setArrowImage(Image i) { this.getMapImage().setMovementImage(i); }
+	void setLeftImage(Image i) { this.getMapImage().setLeftImage(i); }
+	void setRightImage(Image i) { this.getMapImage().setRightImage(i); }
+
 	
 	void setProbabilityUI(ProbabilityUI pui) { this.probUI = pui; }
 
@@ -261,6 +264,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		// I may move this to a BufferedImage
 		// probUI.paintComponent(canvas); 
 		
+		// oh look a BufferedImage
 		canvas.drawImage(probUI,500,64,64,64,null);
 		
 		if (interfaceMessage != null) {
@@ -368,20 +372,31 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		}
 		if (isDirectDalek()) {
 			// I want to merge this with the above code.
-			/*
-			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
-			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
-			Position p = new Position (x,y);
-			this.posDalek.facePosition(p);
-			*/
 			this.setNothing();
 			
 			callback.setSelectedDirection(getMapImage().getTemporaryDalekPosition().getDirection()); 
 			getMapImage().setTemporaryDalek(null,null);
 			
 			this.repaint();
-						
 		}
+		if (getMapImage().getMovementPosition() != null) {
+			
+			Position ref  = getMapImage().getMovementPosition();
+			
+			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
+			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
+			
+			Position click = new Position (x,y);
+			// check for positions.
+			if ( ref.equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.DONE); }
+			if ( ref.newForwardsPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.FORWARD); }
+			if ( ref.newBackwardsPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.BACKWARD); }
+			if ( ref.newForwardRightPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.RIGHT); }
+			if ( ref.newForwardLeftPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.LEFT); }
+			
+		}
+		
+		
 		
 	}
 	public void mouseDragged(MouseEvent e)  {

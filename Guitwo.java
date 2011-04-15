@@ -59,6 +59,9 @@ public class Guitwo extends Cli {
 		
 		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
 		mapp.setArrowImage(getImageWithFilename("Images/Arrow.png"));
+		mapp.setLeftImage(getImageWithFilename("Images/ArrowLeft.png"));
+		mapp.setRightImage(getImageWithFilename("Images/ArrowRight.png"));
+
 		
 		// for testing the selector registration...
 		// mapp.setSelectorPosition(new Position(0,0));
@@ -184,6 +187,9 @@ public class Guitwo extends Cli {
 		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().repaint();
 		
+		getMapPanel().setMovementCost(d.getPosition(),new Integer(0), new Integer(0),false,false);
+
+		
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
 		
@@ -203,6 +209,8 @@ public class Guitwo extends Cli {
 				 selectedMovement != Tables.RIGHT &&
 				 selectedMovement != Tables.DONE) ;
 		
+		getMapPanel().setMovementCost(null,null,null,null,null);
+
 		return selectedMovement;
 		
 	}

@@ -31,7 +31,11 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Boolean forwardMove;
 	Boolean backwardMove;
 	Image arrowImage=null;
+	Image arrowLeftImage=null;
+	Image arrowRightImage=null;
 
+	
+	
 	// Weapons fire...
 	
 	
@@ -128,7 +132,13 @@ public class MapImage extends BufferedImage implements ActionListener {
 	}
 	public Position getMovementPosition () { return costPosition; }
 	public void setMovementImage(Image i) { arrowImage = i; }
+	public void setLeftImage(Image i) { arrowLeftImage = i; }
+	public void setRightImage(Image i) { arrowRightImage = i; }
+
 	public Image getMovementImage() { return arrowImage; }
+	public Image getLeftImage() { return arrowLeftImage; }
+	public Image getRightImage() { return arrowRightImage; }
+
 	
 	// movement directions
 	
@@ -210,21 +220,48 @@ public class MapImage extends BufferedImage implements ActionListener {
 			// layer 3 dalek cost and direction
 			// doing the recode allowed me to understand the registration and rotation process for images
 			if (this.hasMovementCost()) {
-				int h = (int)(getMap().getRegScaleY() * 0.66 ); // nice easy scale factor.
+				int h = (int)(getMap().getRegScaleY() * 0.66 ); // nice easy scale factor. 2 thirds height of a hex
 				int w = getMovementImage().getWidth(null) * h / getMovementImage().getHeight(null);
+				
+				// going to assume right arrow and left arrow are the same dimensions
+				int wl = getLeftImage().getWidth(null) * h / getLeftImage().getHeight(null);
+				
+			//	System.out.println ("movement postition: " + getMovementPosition());
+				
+				
 				Position forwardPosition = getMovementPosition().newForwardsPosition();
 				Position backwardPosition = getMovementPosition().newBackwardsPosition();
 				
+			//	System.out.println ("forward postition: " + forwardPosition);
+
+				
+				Position leftPosition =  getMovementPosition().newForwardLeftPosition();
+				Position rightPosition =  getMovementPosition().newForwardRightPosition();
+
+			//	System.out.println ("left postition: " + leftPosition);
+			//	System.out.println ("right postition: " + rightPosition);
+
+				
+				AffineTransform oldXform = canvas.getTransform();
+				AffineTransform newXform = AffineTransform.getRotateInstance(forwardPosition.getAngle(),imageX(leftPosition),imageY(leftPosition));
+				canvas.setTransform(newXform);
+				canvas.drawImage(getLeftImage(),imageX(leftPosition)-wl/2,imageY(leftPosition)-h/2,wl,h,null);
+				canvas.setTransform(oldXform);
+				
+				newXform = AffineTransform.getRotateInstance(forwardPosition.getAngle(),imageX(rightPosition),imageY(rightPosition));
+				canvas.setTransform(newXform);
+				canvas.drawImage(getRightImage(),imageX(rightPosition)-wl/2,imageY(rightPosition)-h/2,wl,h,null);
+				canvas.setTransform(oldXform);
+
+				
 				if (forwardMove) {
-					AffineTransform oldXform = canvas.getTransform();
-					AffineTransform newXform = AffineTransform.getRotateInstance(forwardPosition.getAngle(),imageX(forwardPosition),imageY(forwardPosition));
+					newXform = AffineTransform.getRotateInstance(forwardPosition.getAngle(),imageX(forwardPosition),imageY(forwardPosition));
 					canvas.setTransform(newXform);
 					canvas.drawImage(getMovementImage(),imageX(forwardPosition)-w/2,imageY(forwardPosition)-h/2,w,h,null);
 					canvas.setTransform(oldXform);
 				}
 				if (backwardMove) {
-					AffineTransform oldXform = canvas.getTransform();
-					AffineTransform newXform = AffineTransform.getRotateInstance(backwardPosition.getReverseAngle(),imageX(backwardPosition),imageY(backwardPosition));
+					newXform = AffineTransform.getRotateInstance(backwardPosition.getReverseAngle(),imageX(backwardPosition),imageY(backwardPosition));
 					canvas.setTransform(newXform);
 					canvas.drawImage(getMovementImage(),imageX(backwardPosition)-w/2,imageY(backwardPosition)-h/2,w,h,null);
 					canvas.setTransform(oldXform);
