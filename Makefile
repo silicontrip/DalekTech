@@ -21,7 +21,7 @@ all: ${OBJ}
 jar: DalekTech.jar
 
 DalekTech.jar: ${OBJ}
-	jar cf DalekTech.jar *class Images
+	jar cf DalekTech.jar *class Images/*png
 
 BlackRenegadeTactical.class: TacticalUI.java BlackRenegadeTactical.java
 GreyRenegadeTactical.class: TacticalUI.java GreyRenegadeTactical.java

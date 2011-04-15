@@ -53,6 +53,9 @@ public abstract class TacticalUI extends BufferedImage {
 		int y=0;
 		WeaponUI wui = null;
 		
+		
+
+		
 		c = weaponMap.values();
 		it = c.iterator();
 		
@@ -119,6 +122,9 @@ public abstract class TacticalUI extends BufferedImage {
 		
 		it = weapon.iterator();
 		weaponArray = new ArrayList<WeaponUI>();
+
+		canvas.setColor(Color.WHITE);
+		canvas.fillRect(0,0,this.getWidth() , this.getHeight());
 
 		
 		while (it.hasNext()) {
