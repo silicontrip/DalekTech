@@ -317,6 +317,8 @@ public class Guitwo extends Cli {
 			getMapPanel().repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 			
+			System.out.println ("Angle to target: " + d.getPosition().getAngleTo(targetList.get(currentSelection).getPosition()));
+			
 			selectedMovement = Tables.NONE;
 			
 			while (selectedMovement == Tables.NONE) {
@@ -591,7 +593,7 @@ public class Guitwo extends Cli {
 	}
 	
 	void notifyDalekPosition(Dalek d) {
-		getMapPanel().notifyDalek(d.getName(),dalekImage(d.getName()),d.getPosition());
+		getMapPanel().notifyDalek(d.getDalekID(),dalekImage(d.getName()),d.getPosition());
 	}
 	
 	void notifyEnd(boolean destroyed) {

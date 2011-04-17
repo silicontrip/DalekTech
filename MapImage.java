@@ -20,9 +20,9 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Position selectorPosition=null;
 	
 	// Daleks
-	HashMap<String,Position> dalekImageEndPosition;
-	HashMap<String,Position> dalekImagePosition;
-	HashMap<String,Image> dalekImage;
+	HashMap<Long,Position> dalekImageEndPosition;
+	HashMap<Long,Position> dalekImagePosition;
+	HashMap<Long,Image> dalekImage;
 	
 	// Movement cost
 	Integer forwardCost;
@@ -47,9 +47,9 @@ public class MapImage extends BufferedImage implements ActionListener {
 	
 	public MapImage(Image baseImage, Map map) {
 		super(baseImage.getWidth(null),baseImage.getHeight(null),BufferedImage.TYPE_4BYTE_ABGR);
-		dalekImagePosition = new HashMap<String,Position>();
-		dalekImageEndPosition = new HashMap<String,Position>();
-		dalekImage = new HashMap<String,Image>();
+		dalekImagePosition = new HashMap<Long,Position>();
+		dalekImageEndPosition = new HashMap<Long,Position>();
+		dalekImage = new HashMap<Long,Image>();
 		
 		timer = new javax.swing.Timer(10, this);
 		timer.setInitialDelay(10);
@@ -86,24 +86,24 @@ public class MapImage extends BufferedImage implements ActionListener {
 	
 	// add daleks
 	
-	public void addDalek(String name, Image i, Position p) {
-		dalekImage.put(name,i);
-		dalekImagePosition.put(name,p);
+	public void addDalek(Long id, Image i, Position p) {
+		dalekImage.put(id,i);
+		dalekImagePosition.put(id,p);
 	}
 	
 	// dalek start position
 	// dalek end position
 	
-	public void moveDalek(mapPanel mapp, String name, Position p) {
+	public void moveDalek(mapPanel mapp, Long id, Position p) {
 		
 		this.mapp = mapp;
 		setPercent(0);
-		dalekImageEndPosition.put(name,p);
+		dalekImageEndPosition.put(id,p);
 		timer.start();
 		
 	}
 	
-	public boolean hasDalek (String name) { return dalekImagePosition.containsKey(name); }
+	public boolean hasDalek (Long id) { return dalekImagePosition.containsKey(id); }
 	
 	// dalek percent movement
 	
@@ -183,11 +183,11 @@ public class MapImage extends BufferedImage implements ActionListener {
 			// layer 2 dalek positions
 			if (this.hasDaleks()) {
 				
-				Iterator<String> it = dalekImagePosition.keySet().iterator();
+				Iterator<Long> it = dalekImagePosition.keySet().iterator();
 				
 				while (it.hasNext()){
 					
-					String n = it.next();
+					Long n = it.next();
 					Image dalek = dalekImage.get(n);
 					Position pos= dalekImagePosition.get(n);
 					Position epos = null;
@@ -295,9 +295,9 @@ public class MapImage extends BufferedImage implements ActionListener {
 				setPercent(0);
 				timer.stop();
 				
-				Iterator<String> it = dalekImageEndPosition.keySet().iterator();
+				Iterator<Long> it = dalekImageEndPosition.keySet().iterator();
 				while (it.hasNext()){
-					String n = it.next();
+					Long n = it.next();
 					dalekImagePosition.put(n,dalekImageEndPosition.get(n));
 				//	dalekImageEndPosition.remove(n);
 				}

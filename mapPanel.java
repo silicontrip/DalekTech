@@ -124,16 +124,16 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		timer.start();
 	}
 	
-	void notifyDalek(String s, Image i, Position p) {
+	void notifyDalek(Long l, Image i, Position p) {
 		// scroll map display to position.
 		
 		this.centreOn(p);
 			
-		if (getMapImage().hasDalek(s)) {
+		if (getMapImage().hasDalek(l)) {
 			// System.out.println("Move Dalek - " + p);
-			getMapImage().moveDalek(this,s,p);
+			getMapImage().moveDalek(this,l,p);
 		} else {
-			getMapImage().addDalek(s,i,p);
+			getMapImage().addDalek(l,i,p);
 		}
 		timer.start();
 	}

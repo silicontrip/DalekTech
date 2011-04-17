@@ -13,6 +13,8 @@ public class Dalek implements Serializable  {
 	int run;
 	int base;
 	
+	Long id;
+	
 	ArrayList<DalekSection> locationArray;
 	HashMap<String,DalekSection> locationMap;
 	
@@ -27,6 +29,10 @@ public class Dalek implements Serializable  {
 	
 //	Player owner;
 		
+	public void setDalekID(Long id) { this.id = id; }
+	public Long getDalekID() { return id; }
+
+	
 	public String getName() { return name; }
 	public void setName(String s) { name = s; }
 	public void setWalk (int w) { walk = w; }

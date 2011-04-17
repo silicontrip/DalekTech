@@ -175,13 +175,18 @@ public class Player {
 		
 		it  = select.iterator();
 		while (it.hasNext()) {
-			daleks.add(DalekFactory.getInstance().dalekWithName(dalekList.get(it.next()).getName()));
+			
+			Dalek thisDalek = DalekFactory.getInstance().dalekWithName(dalekList.get(it.next()).getName());
+			// randomise name
+			
+			thisDalek.setDalekID (new Long(System.nanoTime()));
+			
+			
+			daleks.add(thisDalek);
 		}
 	}
 	
 	void moveDalek () {
-		
-		
 		
 		if (!this.allMoved()) {
 			int dir;
