@@ -63,6 +63,7 @@ public void setAmmo(int i) { this.ammo = i; }
 	void setDalekSection(DalekSection ds) { this.dalsec = ds; }
 	Dalek getDalek() {return this.getDalekSection().getDalek(); }
 	void setFired(boolean b) { fired = b; }
+	void fire() { ammo --; } // could put in side effects
 	boolean canFire () { return !fired && ammo != 0; }
 	boolean inRange(Dalek d) { return this.distanceTo(d) < longRange; }
 	double distanceTo(Dalek d) { return this.getDalek().distanceTo(d); }

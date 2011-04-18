@@ -203,6 +203,10 @@ public class DalekTech {
 		while (wit.hasNext()) {
 			
 			Weapon weap = wit.next();
+			
+			// deplete ammo
+			weap.fire();
+			
 			// get cost to hit
 			int cost = weap.costFire(firing.get(weap));
 			
