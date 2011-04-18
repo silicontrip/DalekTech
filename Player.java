@@ -32,7 +32,21 @@ public class Player {
 	public HashMap<Weapon,Dalek> getFiring() { return this.firing; }
 	
 	Map getMap() { return getGame().getMap(); }
-	ArrayList<Dalek> getDaleks() { return daleks; }
+	
+	ArrayList<Dalek> getDaleks() { 
+		// don't return dead daleks
+		ArrayList<Dalek> alive = new ArrayList<Dalek>();
+		Iterator<Dalek> it = daleks.iterator();
+		while(it.hasNext()) {
+			Dalek d = it.next();
+			if (!d.isDestroyed()) {
+				alive.add(d);
+			}
+		}
+		return alive;
+		
+	//return daleks; 
+	}
 	
 	DalekTech getGame() { return game; }
 	
@@ -57,11 +71,11 @@ public class Player {
 	
 	ArrayList<Dalek> getHaventMoved () {
 		ArrayList<Dalek> selected = new ArrayList<Dalek>();
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		Dalek dal;
 		while(it.hasNext()) {
 			dal = it.next();
-			if (!dal.hasMoved() && !dal.isDestroyed()) {
+			if (!dal.hasMoved() ) {
 				selected.add(dal);
 			}
 		}
@@ -70,11 +84,11 @@ public class Player {
 	
 	ArrayList<Dalek> getHaventTwist () {
 		ArrayList<Dalek> selected = new ArrayList<Dalek>();
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		Dalek dal;
 		while(it.hasNext()) {
 			dal = it.next();
-			if (!dal.hasTwist() && !dal.isDestroyed()) {
+			if (!dal.hasTwist() ) {
 				selected.add(dal);
 			}
 		}
@@ -83,7 +97,7 @@ public class Player {
 	
 	ArrayList<Dalek> getHaventFired () {
 		ArrayList<Dalek> selected = new ArrayList<Dalek>();
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		Dalek dal;
 		while(it.hasNext()) {
 			dal = it.next();
@@ -107,7 +121,7 @@ public class Player {
 
 		while(it.hasNext()) {
 			dal = it.next();
-			if (!dal.hasMoved() && !dal.isDestroyed()) {
+			if (!dal.hasMoved()) {
 				return false;
 			}
 		}
@@ -121,7 +135,7 @@ public class Player {
 		while(it.hasNext()) {
 			dal = it.next();
 
-			if (!dal.hasTwist() && !dal.isDestroyed()) {
+			if (!dal.hasTwist()) {
 				return false;
 			}
 		}
@@ -135,7 +149,7 @@ public class Player {
 		while(it.hasNext()) {
 			dal = it.next();
 
-			if (!dal.hasFired() && !dal.isDestroyed()) {
+			if (!dal.hasFired() ) {
 				return false;
 			}
 		}
@@ -144,7 +158,7 @@ public class Player {
 	
 	void positionDaleks() {
 		Dalek dal;
-		Iterator<Dalek> it = daleks.iterator();
+		Iterator<Dalek> it = getDaleks().iterator();
 		
 		getUI().setInterfaceMessage("Position");
 		

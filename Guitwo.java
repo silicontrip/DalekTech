@@ -77,6 +77,10 @@ public class Guitwo extends Cli {
 		 weaponTestArray.add(WeaponUI.factory ("Red Commander","Auto Bomb/10"));
 		 */
 		
+		getMapPanel().setFocusable(true);
+		getMapPanel().requestFocus();
+
+		
 		// statusp.setTacticalImage(weaponTestArray);
 		
 		frame.getContentPane().add(BorderLayout.WEST, statusp);
@@ -129,9 +133,12 @@ public class Guitwo extends Cli {
 	
 	Position getDalekPositionAndDirection(Dalek d) {
 		
-		Position selectedPosition = getDalekPosition(d);
-		
-		selectedPosition.setDirection(getDalekDirection(d));
+		getMapPanel().setFocusable(true);
+		getMapPanel().requestFocus();
+
+		Position selectedPosition = this.getDalekPosition(d);
+		d.setPosition(selectedPosition);
+		selectedPosition.setDirection(this.getDalekDirection(d));
 				
 		return selectedPosition;
 	}

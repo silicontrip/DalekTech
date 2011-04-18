@@ -17,7 +17,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Position selectorPosition=null;
 	Map gridMap;
 	int startx, starty;
-	// Guitwo callback;
 	
 	int selectedMovement;
 	Position selectedPosition;
@@ -67,18 +66,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		super();
 		this.map = new MapImage(map,m);
 		this.gridMap = m;
-// this.callback = ui;
 		
 		dalekImagePosition = new HashMap<String,Position>();
 		dalekImage = new HashMap<String,Image>();
 
-		
-		//probUI = new ProbabilityUI ();
-		// probUI.setScale(8,-2);
-		//probUI.setFont(new Font("Eurostile",0,64));
-		// probUI.setFontYOffset(20);
-		//probUI.setLocation(500,100);
-							  
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
 		addMouseListener(this);
@@ -120,6 +111,14 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	Map getMap() { return gridMap; }
 	double getScale() { return scale; }
+
+	void setScale(double scale) {	
+		if (imageBound(scale,xpos,ypos) ) {
+		// want to change xpos and ypos to accomodate scale change
+			this.scale = scale;
+		}
+	}
+	
 	
 	double calX (double x) { return ((getMap().getRegScaleX() *x + getMap().getRegTLX()) * getScale()) + xpos; }
 	double calY (double y) { return ((getMap().getRegScaleY() *y + getMap().getRegTLY()) * getScale()) + ypos; }
@@ -133,6 +132,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 		timer.start();
 	}
+	
+	Position getPositionFrom(int ex, int ey) {
+		double x = (( ex - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
+		double y = (( ey - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
+	
+		return new Position(x,y);
+	}
+		
+	Position getCentre() {  return getPositionFrom(mapPanelWidth/2,mapPanelHeight/2);  }
 	
 	void notifyDalek(Long l, Image i, Position p) {
 		// scroll map display to position.
@@ -270,15 +278,12 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		}
 		
 		// line of sight 
-		
-		// I may move this to a BufferedImage
-		// probUI.paintComponent(canvas); 
-		
-		// oh look a BufferedImage
+
+		// hit difficulty
 		canvas.drawImage(probUI,500,64,64,64,null);
 		
 		if (interfaceMessage != null) {
-			// again want to move this to an image
+			//  want to move this to an image
 			canvas.setColor(java.awt.Color.WHITE);
 			canvas.setFont( new Font("Eurostile",0,24));
 			canvas.drawString(interfaceMessage,32,32);
@@ -349,12 +354,10 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 	
 	public void mousePressed(MouseEvent e) { 		
-	//	System.out.println("mousePressed: " + e);
 		
-		//if (isNothing()) { // still want to drag the display when positioning daleks
+		// still want to drag the display when positioning daleks
 			startx = e.getX();
 			starty = e.getY();
-		//}
 	} 
 	
 	public void mouseEntered(MouseEvent e)
@@ -439,23 +442,16 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		 //System.out.println("Action: " + e + " mouseState: " + mouseState);
 		//System.out.println("mouseState: " + mouseState);
 
-		
 		if (isPositionDalek()) {
-		
 			// mouse to grid
-			
-			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
-			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
-
-			getMapImage().setTemporaryDalekPosition(new Position(x,y));
+			getMapImage().setTemporaryDalekPosition(this.getPositionFrom(e.getX(),e.getY()));
 			this.repaint();
 
 		}
+		
 		if (isDirectDalek()) {
-			double x = (( e.getX() - xpos ) / scale - getMap().getRegTLX() ) / getMap().getRegScaleX();
-			double y = (( e.getY() - ypos ) / scale - getMap().getRegTLY() ) / getMap().getRegScaleY();
 			
-			Position p = new Position (x,y);
+			Position p = this.getPositionFrom(e.getX(),e.getY());
 		
 			//posDalek.facePosition(p);
 			getMapImage().faceTemporaryDalekPosition(p);
@@ -471,23 +467,30 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		//System.out.println("Action: " + e);
-		double tempscale;
-		tempscale = scale * (1.0 + ( e.getWheelRotation() / 60.0 ));
-		
-		if (imageBound(tempscale,xpos,ypos) ) {
-			// want to change xpos and ypos to accomodate scale change
-			scale = tempscale;
-		}
-	//	System.out.println ("Old scale: " + scale + ", new scale : " + tempscale);
-
+		this.setScale(this.getScale() * (1.0 + ( e.getWheelRotation() / 60.0 )));		
 		this.repaint();
 
 	}
+
 	
 	public void keyPressed(KeyEvent e) {
 			//System.out.println("Action: " + e);
 		
 		int kc = e.getKeyCode();
+		
+		if ( kc == KeyEvent.VK_PLUS || kc == KeyEvent.VK_EQUALS ) {
+			this.setScale(this.getScale() * 1.015);		
+			this.repaint();
+
+		}
+
+		
+		if ( kc == KeyEvent.VK_MINUS) {
+			this.setScale(this.getScale() * 0.985);	
+			this.repaint();
+
+		}
+		
 		
 		if (kc == KeyEvent.VK_LEFT) {
 			this.setSelectedMovement(Tables.LEFT);
