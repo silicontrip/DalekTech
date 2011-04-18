@@ -105,57 +105,21 @@ public class Position implements Serializable {
 	public double getAngle() { return dir.getAngle(); }
 	public int getDegrees() { return dir.getDegrees(); }
 	
-	
-	/*
-	public int directionTo(Position p) {
-	
-		Double diff = this.getSpatialDiff(p);
-		
-	//	System.out.println("tsx: " + this.getSpatialX() + ", tsy: " + this.getSpatialY() + ", psx: " + p.getSpatialX() + ", psy: " +  p.getSpatialY() );
-		
-		if (java.lang.Math.abs (diff.getX()) < 0.001) {
-		
-			if (p.getSpatialY() > this.getSpatialY() ) { return Tables.SOUTH; }
-			if (p.getSpatialY() < this.getSpatialY() ) { return Tables.NORTH; }
-
-			return Tables.NONE;
-		}
-		
-		double angle = java.lang.Math.atan( diff.getY() / diff.getX() );
-		
-	//	System.out.println("angle: " + angle);
-		
-		if (diff.getX() >= 0 ) {
-			if (angle >=0 && angle < 1.04719755109187799103455468647774618) {return Tables.SOUTHEAST;}
-			if (angle >= 1.04719755109187799103455468647774618) { return Tables.SOUTH; }
-			if (angle <0 && angle > - 1.04719755109187799103455468647774618) { return Tables.NORTHEAST; }
-			if (angle <= -1.04719755109187799103455468647774618) { return Tables.NORTH; }
-		}
-		if (diff.getX() < 0) {
-			if (angle >=0 && angle < 1.04719755109187799103455468647774618) {return Tables.NORTHWEST;}
-			if (angle >= 1.04719755109187799103455468647774618) { return Tables.NORTH; }
-			if (angle <0 && angle > - 1.04719755109187799103455468647774618) { return Tables.SOUTHWEST; }
-			if (angle <= -1.04719755109187799103455468647774618) { return Tables.SOUTH; }
-		}
-			
-		return Tables.NONE;
-
-		
-	}
-*/
 	public Double getSpatial() { return new Double(getSpatialX(),getSpatialY()); }
 	public Double getSpatialDiff(Position p) {
 		return new Double(p.getSpatialX() - this.getSpatialX(),
 						  p.getSpatialY() - this.getSpatialY());
 	}
 	
-	public double getSpatialX() { return x * sin60; }
-	public double getSpatialY() { return y + (x % 2) / 2.0; }
-	public double distanceTo(Position p) { 
-		return this.getSpatial().distance(p.getSpatial());		
-//		Double diff = this.getSpatialDiff(p);
-//		return java.lang.Math.sqrt(diff.getX() * diff.getX()  + diff.getY() * diff.getY());
+	public int getXMod2() {  		
+		
+		if (this.x<0) { return (-x) % 2; }
+		return x % 2;
 	}
+	
+	public double getSpatialX() { return x * sin60; }
+	public double getSpatialY() { return y + getXMod2() / 2.0; }
+	public double distanceTo(Position p) { return this.getSpatial().distance(p.getSpatial()); }
 
 	public String toString() {
 		
@@ -167,19 +131,14 @@ public class Position implements Serializable {
 	}
 	
 	public boolean isIn (Collection<Position> p) {
-	
 		Iterator<Position> it = p.iterator();
-		
 		while (it.hasNext()) {
-			if (this.equalsIgnoreDirection(it.next())) {
-				return true;
-			}
+			if (this.equalsIgnoreDirection(it.next())) { return true; }
 		}
 		return false;
 	}
-	public boolean equalsIgnoreDirection (Position p) {
-		return p.getX() == this.getX() && p.getY() == this.getY();
-	}
+	
+	public boolean equalsIgnoreDirection (Position p) { return p.getX() == this.getX() && p.getY() == this.getY(); }
 	
 	public Position newForwardsPosition() { return this.newPosition(this.getDirection()); }
 	public Position newBackwardsPosition() { return this.newPosition(this.getDirection().reverseDirection()); }
@@ -210,7 +169,7 @@ public class Position implements Serializable {
 			return new Position(this.getX(),this.getY()+1,this.getDirection());
 		}
 		
-		col=this.getX() % 2;
+		col=getXMod2();
 		
 		if (direction.isNorthWest()) {
 			return new Position(this.getX()-1,this.getY()+col-1,this.getDirection());

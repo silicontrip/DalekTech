@@ -94,12 +94,6 @@ public class Guitwo extends Cli {
 	
 	mapPanel getMapPanel() { return mapp; }
 	statusPanel getStatusPanel() { return statusp; }
-	// DalekSectionUI getDalekSectionUI() { return dsui; }
-	// mapOverlayPanel getMapOverlayPanel() { return mop; }
-	
-//	void setSelectedPosition(Position p) { this.selectedPosition = p; }
-//	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
-//	void setSelectedMovement(int d) { this.selectedMovement = d; }
 	
 	void setInterfaceMessage(String s) { getMapPanel().setInterfaceMessage(s); getMapPanel().repaint(); }
 	
@@ -212,6 +206,7 @@ public class Guitwo extends Cli {
 		TacticalUI dalekWeapon;
 		
 		getMapPanel().centreOn(dalekList.get(currentSelection).getPosition());
+		
 		getStatusPanel().setDalekName(dalekList.get(currentSelection).getName());
 		dalekStatus = dalekDamageImages.get(dalekList.get(currentSelection).getName());
 		dalekStatus.setFromSections(dalekList.get(currentSelection).getSections());
@@ -246,8 +241,9 @@ public class Guitwo extends Cli {
 				//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 				
 				getMapPanel().setSelectedMovement(Tables.NONE);
+			//	getMapPanel().setSelectedPosition(null);
 				
-				while (getMapPanel().getSelectedMovement() == Tables.NONE) {
+				while (getMapPanel().getSelectedMovement() == Tables.NONE ) {
 					try {
 						Thread.sleep(250); 
 					} catch (InterruptedException ie) { ; }
