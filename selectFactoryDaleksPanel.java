@@ -10,10 +10,11 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	int dalekWidth;
 	int dalekIconWidth;
 	int slide, slideDelta;
-	Guitwo callback;
 	Image selector;
 	Image overlay;
 
+	int selectedMovement;
+	
 	javax.swing.Timer timer;
 
 //	statusPanel sp;
@@ -30,6 +31,9 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	void setDalekIconWidth(int i) { dalekIconWidth = i; }
 	int getDalekIconWidth() { return dalekIconWidth; }
 
+	void setSelectedMovement(int i) { this.selectedMovement = i; }
+	int getSelectedMovement() { return selectedMovement; }
+	
 	
 	public selectFactoryDaleksPanel () {
 		super();
@@ -48,10 +52,9 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	}
 	
 	// really want this to be a generic interface class not a specific sub class.
-	public selectFactoryDaleksPanel (HashMap<String,Image> dalekImages, ArrayList<Dalek> dalekList,Guitwo ui) {
+	public selectFactoryDaleksPanel (HashMap<String,Image> dalekImages, ArrayList<Dalek> dalekList) {
 		super();
 		this.dalekList = dalekList;
-		this.callback = ui;
 		this.dalekImages = dalekImages;
 		dalekWidth = 1;
 		addKeyListener(this);
@@ -64,24 +67,11 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		timer.setCoalesce(false);
 		timer.setRepeats(true);
 	}
-	
-	Guitwo getCallbackUI() { return callback; }
-	
+		
 	void setSelectorImage (Image i) { selector = i; }
-	void setOverlayImage (Image i) { overlay = i; }
-
-	/*
-	void setStatusPanel(statusPanel sp) {
-		this.sp = sp;
-	}
-	*/
-	
-	
+	void setOverlayImage (Image i) { overlay = i; }	
 	Image dalekImage(String name) { return dalekImages.get(name); }
-	
-	
-	public Dimension getPreferredSize() { return new Dimension(640,480); }
-	
+	public Dimension getPreferredSize() { return new Dimension(640,480); }	
 	public void setDalekList(ArrayList<Dalek> dalekList) { this.dalekList = dalekList; }
 	
 	void drawDalekAt (Graphics g, String name, int x, int y, int w) {
@@ -207,30 +197,30 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		int kc = e.getKeyCode();
 		
 		if (kc == KeyEvent.VK_LEFT) {
-			callback.setSelectedMovement(Tables.LEFT);
+			this.setSelectedMovement(Tables.LEFT);
 		}
 		
 		if (kc == KeyEvent.VK_RIGHT) {
-			callback.setSelectedMovement(Tables.RIGHT);
+			this.setSelectedMovement(Tables.RIGHT);
 			
 		}
 		
 		if (kc == KeyEvent.VK_UP) {
-			callback.setSelectedMovement(Tables.FORWARD);
+			this.setSelectedMovement(Tables.FORWARD);
 		}
 		
 		if (kc == KeyEvent.VK_DOWN) {
-			callback.setSelectedMovement(Tables.BACKWARD);
+			this.setSelectedMovement(Tables.BACKWARD);
 			
 		}
 		
 		
 		if (kc == KeyEvent.VK_SPACE) {
-			callback.setSelectedMovement(Tables.SELECT);
+			this.setSelectedMovement(Tables.SELECT);
 		}
 		
 		if (kc == KeyEvent.VK_ENTER) {
-			callback.setSelectedMovement(Tables.DONE);
+			this.setSelectedMovement(Tables.DONE);
 		}
 		
     }

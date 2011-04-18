@@ -17,7 +17,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	Position selectorPosition=null;
 	Map gridMap;
 	int startx, starty;
-	Guitwo callback;
+	// Guitwo callback;
+	
+	int selectedMovement;
+	Position selectedPosition;
+	Direction selectedDirection;
 	
 	Image arrowImage = null;
 	Position forwardPosition = null;
@@ -63,7 +67,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		super();
 		this.map = new MapImage(map,m);
 		this.gridMap = m;
-		this.callback = ui;
+// this.callback = ui;
 		
 		dalekImagePosition = new HashMap<String,Position>();
 		dalekImage = new HashMap<String,Image>();
@@ -98,8 +102,6 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	void setArrowImage(Image i) { this.getMapImage().setMovementImage(i); }
 	void setLeftImage(Image i) { this.getMapImage().setLeftImage(i); }
 	void setRightImage(Image i) { this.getMapImage().setRightImage(i); }
-
-	
 	void setProbabilityUI(ProbabilityUI pui) { this.probUI = pui; }
 
 	void setSelectorPosition(Position p) { this.getMapImage().setSelectorPosition(p); }
@@ -107,6 +109,14 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	
 	void setInterfaceMessage(String s) { interfaceMessage = s; }
 		
+	
+	void setSelectedMovement(int i) { this.selectedMovement = i; }
+	int getSelectedMovement() { return selectedMovement; }
+	void setSelectedPosition(Position p) {this.selectedPosition = p; }
+	Position getSelectedPosition() { return selectedPosition; }
+	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
+	Direction getSelectedDirection() {return this.selectedDirection; }
+	
 	
 	Map getMap() { return gridMap; }
 	double getScale() { return scale; }
@@ -365,7 +375,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		if (isPositionDalek()) {
 			if (getMapImage().getTemporaryDalekPosition() != null) {
 				this.setNothing();
-				callback.setSelectedPosition(getMapImage().getTemporaryDalekPosition());
+				this.setSelectedPosition(getMapImage().getTemporaryDalekPosition());
 				
 				getMapImage().setTemporaryDalek(null,null);
 			}
@@ -374,7 +384,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			// I want to merge this with the above code.
 			this.setNothing();
 			
-			callback.setSelectedDirection(getMapImage().getTemporaryDalekPosition().getDirection()); 
+			this.setSelectedDirection(getMapImage().getTemporaryDalekPosition().getDirection()); 
 			getMapImage().setTemporaryDalek(null,null);
 			
 			this.repaint();
@@ -388,11 +398,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 			
 			Position click = new Position (x,y);
 			// check for positions.
-			if ( ref.equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.DONE); }
-			if ( ref.newForwardsPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.FORWARD); }
-			if ( ref.newBackwardsPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.BACKWARD); }
-			if ( ref.newForwardRightPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.RIGHT); }
-			if ( ref.newForwardLeftPosition().equalsIgnoreDirection(click)) { callback.setSelectedMovement(Tables.LEFT); }
+			if ( ref.equalsIgnoreDirection(click)) { this.setSelectedMovement(Tables.DONE); }
+			if ( ref.newForwardsPosition().equalsIgnoreDirection(click)) { this.setSelectedMovement(Tables.FORWARD); }
+			if ( ref.newBackwardsPosition().equalsIgnoreDirection(click)) { this.setSelectedMovement(Tables.BACKWARD); }
+			if ( ref.newForwardRightPosition().equalsIgnoreDirection(click)) { this.setSelectedMovement(Tables.RIGHT); }
+			if ( ref.newForwardLeftPosition().equalsIgnoreDirection(click)) { this.setSelectedMovement(Tables.LEFT); }
 			
 		}
 		
@@ -480,30 +490,30 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		int kc = e.getKeyCode();
 		
 		if (kc == KeyEvent.VK_LEFT) {
-			callback.setSelectedMovement(Tables.LEFT);
+			this.setSelectedMovement(Tables.LEFT);
 		}
 		
 		if (kc == KeyEvent.VK_RIGHT) {
-			callback.setSelectedMovement(Tables.RIGHT);
+			this.setSelectedMovement(Tables.RIGHT);
 
 		}
 		
 		if (kc == KeyEvent.VK_UP) {
-			callback.setSelectedMovement(Tables.FORWARD);
+			this.setSelectedMovement(Tables.FORWARD);
 		}
 		
 		if (kc == KeyEvent.VK_DOWN) {
-			callback.setSelectedMovement(Tables.BACKWARD);
+			this.setSelectedMovement(Tables.BACKWARD);
 			
 		}
 		
 		if (kc == KeyEvent.VK_SPACE) {
-			callback.setSelectedMovement(Tables.SELECT);
+			this.setSelectedMovement(Tables.SELECT);
 
 		}
 		
 		if (kc == KeyEvent.VK_ENTER) {
-			callback.setSelectedMovement(Tables.DONE);
+			this.setSelectedMovement(Tables.DONE);
 		}
 		
     }

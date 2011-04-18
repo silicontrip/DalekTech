@@ -25,9 +25,9 @@ public class Guitwo extends Cli {
 	HashMap<String,TacticalUI> dalekTacticalImages;
 	
 	
-	Position selectedPosition;
-	Direction selectedDirection = null;
-	int selectedMovement;
+//	Position selectedPosition;
+//	Direction selectedDirection = null;
+//	int selectedMovement;
 	
 	BufferedImage statusImage;
 	
@@ -93,65 +93,46 @@ public class Guitwo extends Cli {
 	// DalekSectionUI getDalekSectionUI() { return dsui; }
 	// mapOverlayPanel getMapOverlayPanel() { return mop; }
 	
-	void setSelectedPosition(Position p) { this.selectedPosition = p; }
-	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
-	void setSelectedMovement(int d) { this.selectedMovement = d; }
+//	void setSelectedPosition(Position p) { this.selectedPosition = p; }
+//	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
+//	void setSelectedMovement(int d) { this.selectedMovement = d; }
 	
 	void setInterfaceMessage(String s) { getMapPanel().setInterfaceMessage(s); getMapPanel().repaint(); }
 	
 	Position getDalekPosition(Dalek d) {
 		
-		selectedPosition = null;
-		
+		getMapPanel().setSelectedPosition(null);
 		getMapPanel().positionDalek(dalekImage(d.getName()));
 		
-		while (selectedPosition == null) {
+		while (getMapPanel().getSelectedPosition() == null) {
 			try {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 		}
 		
-		return selectedPosition;
+		return getMapPanel().getSelectedPosition();
 	}
 	
 	Direction getDalekDirection (Dalek d) {
 		
-		selectedDirection  = null;
+		getMapPanel().setSelectedDirection(null);
 		getMapPanel().directDalek(dalekImage(d.getName()),d.getPosition());
 		
-		while (selectedDirection == null) {
+		while (getMapPanel().getSelectedDirection() == null) {
 			try {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 			
 		}
-		return selectedDirection;
+		return getMapPanel().getSelectedDirection();
 	}
 	
 	Position getDalekPositionAndDirection(Dalek d) {
 		
-		selectedPosition = null;
+		Position selectedPosition = getDalekPosition(d);
 		
-		getMapPanel().positionDalek(dalekImage(d.getName()));
-		
-		while (selectedPosition == null) {
-			try {
-				Thread.sleep(250); 
-			} catch (InterruptedException ie) { ; }
-		}
-		
-		selectedDirection  = null;
-		getMapPanel().directDalek(dalekImage(d.getName()),selectedPosition);
-		
-		while (selectedDirection == null) {
-			try {
-				Thread.sleep(250); 
-			} catch (InterruptedException ie) { ; }
-			
-		}
-		
-		selectedPosition.setDirection(selectedDirection);
-		
+		selectedPosition.setDirection(getDalekDirection(d));
+				
 		return selectedPosition;
 	}
 	
@@ -165,25 +146,22 @@ public class Guitwo extends Cli {
 		
 		// check for not moving onto dalek
 		
-		
-		
 		getMapPanel().setMovementCost(d.getPosition(),new Integer(forwardCost), new Integer(backwardCost),forward,backward);
 		
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
 		
 		//	getMapPanel().moveDalek(d.getName());
-		selectedMovement = Tables.NONE;
+		getMapPanel().setSelectedMovement(Tables.NONE);
 		
-		while (selectedMovement == Tables.NONE) {
+		while (getMapPanel().getSelectedMovement() == Tables.NONE) {
 			try {
 				Thread.sleep(250); 
 			} catch (InterruptedException ie) { ; }
 		}
 		getMapPanel().setMovementCost(null,null,null,null,null);
 		
-		return selectedMovement;
-		
+		return getMapPanel().getSelectedMovement();
 	}
 	
 	int getDalekTwist(Dalek d) {
@@ -202,20 +180,20 @@ public class Guitwo extends Cli {
 		
 		//	getMapPanel().moveDalek(d.getName());
 		do {
-			selectedMovement = Tables.NONE;
+			getMapPanel().setSelectedMovement(Tables.NONE);
 			
-			while (selectedMovement == Tables.NONE) {
+			while (getMapPanel().getSelectedMovement() == Tables.NONE) {
 				try {
 					Thread.sleep(250); 
 				} catch (InterruptedException ie) { ; }
 			}
-		} while (selectedMovement != Tables.LEFT &&
-				 selectedMovement != Tables.RIGHT &&
-				 selectedMovement != Tables.DONE) ;
+		} while (getMapPanel().getSelectedMovement() != Tables.LEFT &&
+				 getMapPanel().getSelectedMovement() != Tables.RIGHT &&
+				 getMapPanel().getSelectedMovement() != Tables.DONE) ;
 		
 		getMapPanel().setMovementCost(null,null,null,null,null);
 
-		return selectedMovement;
+		return getMapPanel().getSelectedMovement();
 		
 	}
 	
@@ -260,23 +238,23 @@ public class Guitwo extends Cli {
 				getMapPanel().repaint();
 				//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 				
-				selectedMovement = Tables.NONE;
+				getMapPanel().setSelectedMovement(Tables.NONE);
 				
-				while (selectedMovement == Tables.NONE) {
+				while (getMapPanel().getSelectedMovement() == Tables.NONE) {
 					try {
 						Thread.sleep(250); 
 					} catch (InterruptedException ie) { ; }
 				}
 				
-				if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+				if (getMapPanel().getSelectedMovement() == Tables.LEFT || getMapPanel().getSelectedMovement() == Tables.FORWARD) {
 					currentSelection --;
 					if (currentSelection < 0 ) { currentSelection += dalekSize; }
 				}
-				if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+				if (getMapPanel().getSelectedMovement() == Tables.RIGHT || getMapPanel().getSelectedMovement() == Tables.BACKWARD) {
 					currentSelection++;
 					if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
 				}
-			} while (selectedMovement != Tables.SELECT) ;
+			} while (getMapPanel().getSelectedMovement() != Tables.SELECT) ;
 			
 			getMapPanel().setSelectorPosition(null);
 			getMapPanel().repaint();
@@ -319,23 +297,23 @@ public class Guitwo extends Cli {
 			
 			System.out.println ("Angle to target: " + d.getPosition().getAngleTo(targetList.get(currentSelection).getPosition()));
 			
-			selectedMovement = Tables.NONE;
+			getMapPanel().setSelectedMovement(Tables.NONE);
 			
-			while (selectedMovement == Tables.NONE) {
+			while (getMapPanel().getSelectedMovement() == Tables.NONE) {
 				try {
 					Thread.sleep(250); 
 				} catch (InterruptedException ie) { ; }
 			}
 			
-			if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+			if (getMapPanel().getSelectedMovement() == Tables.LEFT || getMapPanel().getSelectedMovement() == Tables.FORWARD) {
 				currentSelection --;
 				if (currentSelection < 0 ) { currentSelection += dalekSize; }
 			}
-			if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+			if (getMapPanel().getSelectedMovement() == Tables.RIGHT || getMapPanel().getSelectedMovement() == Tables.BACKWARD) {
 				currentSelection++;
 				if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
 			}
-		} while (selectedMovement != Tables.SELECT && selectedMovement != Tables.DONE) ;
+		} while (getMapPanel().getSelectedMovement() != Tables.SELECT && getMapPanel().getSelectedMovement() != Tables.DONE) ;
 		
 		getMapPanel().setProbabilityUI(null);
 		getMapPanel().setTargetDistance(null);
@@ -345,7 +323,7 @@ public class Guitwo extends Cli {
 		getMapPanel().setSelectorPosition(null);
 		getMapPanel().repaint();
 		
-		if (selectedMovement == Tables.DONE) {
+		if (getMapPanel().getSelectedMovement() == Tables.DONE) {
 			return -1;
 		}
 		
@@ -363,7 +341,7 @@ public class Guitwo extends Cli {
 		ArrayList<Integer> selectedDaleks = new ArrayList<Integer>();
 		String dalekName;
 		
-		factoryPanel = new selectFactoryDaleksPanel(dalekImages,dalekList,this);
+		factoryPanel = new selectFactoryDaleksPanel(dalekImages,dalekList);
 		
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
@@ -408,28 +386,28 @@ public class Guitwo extends Cli {
 			factoryPanel.repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 			
-			selectedMovement = Tables.NONE;
+			factoryPanel.setSelectedMovement(Tables.NONE);
 			
-			while (selectedMovement == Tables.NONE) {
+			while (factoryPanel.getSelectedMovement() == Tables.NONE) {
 				try {
 					Thread.sleep(250); 
 				} catch (InterruptedException ie) { ; }
 			}
 			
-			if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+			if (factoryPanel.getSelectedMovement() == Tables.RIGHT || factoryPanel.getSelectedMovement() == Tables.BACKWARD) {
 				currentSelection --;
 				if (currentSelection < 0 ) { currentSelection += dalekSize; }
 			}
-			if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+			if (factoryPanel.getSelectedMovement() == Tables.LEFT || factoryPanel.getSelectedMovement() == Tables.FORWARD) {
 				currentSelection++;
 				if (currentSelection >= dalekSize) {currentSelection -= dalekSize;}
 			}
-			if (selectedMovement == Tables.SELECT) {
+			if (factoryPanel.getSelectedMovement() == Tables.SELECT) {
 				selectedDaleks.add(currentSelection);
 				factoryPanel.addDalek(currentSelection);
 				factoryPanel.repaint();
 			}
-		} while (selectedMovement != Tables.DONE || selectedDaleks.size() == 0) ;
+		} while (factoryPanel.getSelectedMovement() != Tables.DONE || selectedDaleks.size() == 0) ;
 		
 		frame.getContentPane().remove (factoryPanel);
 		
@@ -461,22 +439,21 @@ public class Guitwo extends Cli {
 			
 			getStatusPanel().getTacticalImage().setSelected(currentSelection);
 			getStatusPanel().repaint();
-			
-			
-			selectedMovement = Tables.NONE;
-			while (selectedMovement == Tables.NONE) {
+						
+			getMapPanel().setSelectedMovement(Tables.NONE);
+			while (getMapPanel().getSelectedMovement() == Tables.NONE) {
 				try {
 					Thread.sleep(250); 
 				} catch (InterruptedException ie) { ; }
 			}
 			
-				if (selectedMovement == Tables.LEFT || selectedMovement == Tables.FORWARD) {
+				if (getMapPanel().getSelectedMovement() == Tables.LEFT || getMapPanel().getSelectedMovement() == Tables.FORWARD) {
 
 				currentSelection --;
 				if (currentSelection < 0 ) { currentSelection += weaponSize; }
 			}
 			
-			if (selectedMovement == Tables.RIGHT || selectedMovement == Tables.BACKWARD) {
+			if (getMapPanel().getSelectedMovement() == Tables.RIGHT || getMapPanel().getSelectedMovement() == Tables.BACKWARD) {
 
 				currentSelection++;
 				if (currentSelection >= weaponSize) {currentSelection -= weaponSize;}
@@ -484,12 +461,12 @@ public class Guitwo extends Cli {
 			
 			//System.out.println ("Selected Movement: " + selectedMovement);
 			
-		} while (selectedMovement != Tables.SELECT && selectedMovement != Tables.DONE)  ;
+		} while (getMapPanel().getSelectedMovement() != Tables.SELECT && getMapPanel().getSelectedMovement() != Tables.DONE)  ;
 		
 		getStatusPanel().repaint();
 
 		
-		if (selectedMovement == Tables.SELECT) {
+		if (getMapPanel().getSelectedMovement() == Tables.SELECT) {
 			return currentSelection;
 		} else {
 			return -1;
