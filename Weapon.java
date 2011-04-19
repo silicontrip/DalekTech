@@ -72,6 +72,13 @@ public void setAmmo(int i) { this.ammo = i; }
 	void destroy() { ammo = 0; } // cheats way to disable the weapon
 	
 	int costFire (Dalek d) {
+		
+		System.out.println("Base: " + this.getDalek().baseHit());
+		System.out.println("Range: " + this.getRangeCost(this.distanceTo(d)));
+		System.out.println("Terrain: " + this.getDalek().terrainLineCost(d));
+		System.out.println("Target: " + d.targetHitCost());
+
+		
 		return this.getRangeCost(this.distanceTo(d))  // Range
 		+ this.getDalek().baseHit() // Attacker Movement
 		+ this.getDalek().terrainLineCost(d)  // Terrain

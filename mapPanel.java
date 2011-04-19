@@ -113,9 +113,23 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	double getScale() { return scale; }
 
 	void setScale(double scale) {	
-		if (imageBound(scale,xpos,ypos) ) {
+		
+		// scale around the centre
+		int txpos = xpos - (int) ((320 - xpos)  - (320 - xpos) / scale *  this.scale);
+		int typos = ypos - (int) ((240 - ypos)  - (240 - ypos) / scale *  this.scale);
+		
+		// System.out.println ("x: " + xpos + " -> " + txpos + " y: " + ypos + " -> " + typos);
+		
 		// want to change xpos and ypos to accomodate scale change
+		if (txpos > 0) { txpos = 0; }
+		if (typos > 0) { typos = 0; }
+		if (map.getWidth(null) * scale+txpos < mapPanelWidth) { txpos = (int)(mapPanelWidth - map.getWidth(null) * scale); }
+		if (map.getHeight(null) * scale+typos < mapPanelHeight) { typos = (int)(mapPanelHeight - map.getHeight(null) * scale); }
+
+		if (imageBound(scale,txpos,typos) ) {
 			this.scale = scale;
+			xpos = txpos;
+			ypos = typos;
 		}
 	}
 	
@@ -294,8 +308,18 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 
 	}
 	
+	boolean imageYBound (double scale, int y) {
+		return y<=0 && map.getHeight(null) * scale+y >= mapPanelHeight;
+	}
+	
+	boolean imageXBound (double scale, int x) {
+		return x<=0 && map.getWidth(null) * scale+x >= mapPanelWidth;
+	}
+	
+	
 	boolean imageBound (double scale, int x, int y) {
-		return x<=0 && y<=0 && map.getHeight(null) * scale+y >= mapPanelHeight && map.getWidth(null) * scale+x >= mapPanelWidth;
+		return imageXBound(scale,x) && imageYBound(scale,y);
+		// return x<=0 && y<=0 && map.getHeight(null) * scale+y >= mapPanelHeight && map.getWidth(null) * scale+x >= mapPanelWidth;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -420,11 +444,11 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		int txpos = xpos + (e.getX() - startx);
 		int typos = ypos + (e.getY() - starty);
 						
-		if (imageBound(this.scale,xpos,typos)) {
+		if (imageYBound(this.scale,typos)) {
 			// xpos = txpos;
 			ypos = typos;
 		}
-		if (imageBound(this.scale,txpos,ypos)) {
+		if (imageXBound(this.scale,txpos)) {
 			xpos = txpos;
 			//ypos = typos;
 		}

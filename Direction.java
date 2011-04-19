@@ -28,6 +28,8 @@ public class Direction implements Serializable {
 		this.dir = dir; 
 	}
 	
+	public void setDirection(Direction d) { this.setDirection(d.getDirection()); }
+	
 	public boolean isNone() { return dir == NONE; }
 	public boolean isNorth() { return dir == NORTH; }
 	public boolean isNorthEast() { return dir == NORTHEAST; }

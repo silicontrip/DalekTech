@@ -229,15 +229,8 @@ public class Player {
 					
 					forward= true;
 					backward=true;
-					if (dal.getPosition().newForwardsPosition().isIn(getGame().allDalekPositions())) {
-						forward = false;
-					}
-					
-					if (dal.getPosition().newBackwardsPosition().isIn(getGame().allDalekPositions())) {
-						
-						backward = false;
-						
-					}
+					if (dal.getPosition().newForwardsPosition().isIn(getGame().allDalekPositions())) { forward = false; }
+					if (dal.getPosition().newBackwardsPosition().isIn(getGame().allDalekPositions())) { backward = false; }
 					
 					
 					dir = getUI().getDalekMove(dal,
@@ -274,6 +267,8 @@ public class Player {
 			ArrayList<Dalek> havent = getHaventTwist();
 			Dalek dal;
 			dal = havent.get(getUI().selectDalek(havent));
+			getUI().notifyDalekPosition(dal);
+			getOtherUI().notifyDalekPosition(dal);
 			dal.setTwist(true);
 			getUI().setInterfaceMessage("Twist");
 

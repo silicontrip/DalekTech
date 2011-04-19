@@ -101,7 +101,8 @@ public class Guitwo extends Cli {
 		
 		getMapPanel().setSelectedPosition(null);
 		getMapPanel().positionDalek(dalekImage(d.getName()));
-		
+		getMapPanel().setPositionDalek();
+
 		while (getMapPanel().getSelectedPosition() == null) {
 			try {
 				Thread.sleep(250); 
@@ -115,6 +116,8 @@ public class Guitwo extends Cli {
 		
 		getMapPanel().setSelectedDirection(null);
 		getMapPanel().directDalek(dalekImage(d.getName()),d.getPosition());
+		
+		getMapPanel().setDirectDalek();
 		
 		while (getMapPanel().getSelectedDirection() == null) {
 			try {
@@ -133,7 +136,8 @@ public class Guitwo extends Cli {
 		Position selectedPosition = this.getDalekPosition(d);
 		d.setPosition(selectedPosition);
 		selectedPosition.setDirection(this.getDalekDirection(d));
-				
+		getMapPanel().setNothing();
+		d.setPosition(new Position(-1,-1));
 		return selectedPosition;
 	}
 	
@@ -298,7 +302,11 @@ public class Guitwo extends Cli {
 			getMapPanel().repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 			
+			
+			System.out.println ("Dalek Facing Angle: " + d.getFacing().getAngle());
+			System.out.println ("Dalek Angle range: " + (d.getFacing().getAngle() - Direction.PI3) + " to " + (d.getFacing().getAngle() + Direction.PI3));
 			System.out.println ("Angle to target: " + d.getPosition().getAngleTo(targetList.get(currentSelection).getPosition()));
+			
 			
 			getMapPanel().setSelectedMovement(Tables.NONE);
 			

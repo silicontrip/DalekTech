@@ -79,7 +79,7 @@ public class MapImage extends BufferedImage implements ActionListener {
 		double angle2 = p2.getAngle();
 
 		if (angle1 - angle2 > java.lang.Math.PI) { angle2 += 2 * java.lang.Math.PI; }
-		if (angle2 - angle1 > java.lang.Math.PI) { angle2 += 2 * java.lang.Math.PI; }
+		if (angle2 - angle1 > java.lang.Math.PI) { angle1 += 2 * java.lang.Math.PI; }
 		return  (p1.getAngle() * this.getInversePercentAsDouble() + p2.getAngle() * this.getPercentAsDouble()); 
 	}
 	

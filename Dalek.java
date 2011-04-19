@@ -46,14 +46,14 @@ public class Dalek implements Serializable  {
 	public HashMap<String,DalekSection> getLocationMap() { return locationMap; }
 	// public void getLocationMap(HashMap<String,DalekSection> ds) { this.locationMap = ds; }
 	
-	public void setPosition (Position p) {this.position = p;}
+	public void setPosition (Position p) {this.position = p; old = new Position(p); }
 	public Position getPosition () { return this.position; }
 	
 	void setDirection (Direction d) {
-		this.getPosition().setDirection(d);  // position direction has out of bounds detector
+		this.getPosition().setDirection(d); 
 		this.setFacing(d); 
 	}
-	void setFacing(Direction d) { this.facing = d; }
+	void setFacing(Direction d) { this.facing.setDirection(d); }
 	Direction getFacing() { return facing; }
 	Direction getDirection() { return this.getPosition().getDirection(); }
 	void setMovement (int m) { movement = m; }
@@ -221,12 +221,12 @@ public class Dalek implements Serializable  {
 	}
 	
 	void faceLeft() { 
-		setFacing(this.getDirection());
-		getFacing().turnLeft();
+	//	setFacing(this.getDirection());
+		this.getFacing().turnLeft();
 	}
 	void faceRight() { 
-		setFacing(this.getDirection());
-		getFacing().turnRight();
+	//	setFacing(this.getDirection());
+		this.getFacing().turnRight();
 
 	}
 	
@@ -304,8 +304,10 @@ public class Dalek implements Serializable  {
 		this.locationArray = new ArrayList<DalekSection>();
 		this.locationMap = new HashMap<String,DalekSection>();
 		
+		facing = new Direction(0);
 		setPosition(new Position(-1,-1));
 		this.old = new Position(-1,-1);
+		
 		this.reset();
 	}		
 	
