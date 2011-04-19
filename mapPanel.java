@@ -216,6 +216,15 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	public void setTargetDistance (Double d) { this.targetDistance = d; }
 	public double getTargetDistance () { return targetDistance.doubleValue(); }
 	
+	public void setFiringArc(Weapon w) {
+		map.setFiringArc(w.getDalek().getPosition(),w.getMin(),w.getShortRange(), w.getMedRange(), w.getLongRange());
+	}
+	
+	public void unsetFiringArc() {
+		map.setFiringArc(null,0,0,0,0);
+	}
+	
+	
 	public void setLineOfSight (ArrayList<Hex> los) { this.lineSight = los; }
 	public ArrayList<Hex> getLineOfSight () { return lineSight; }
 	

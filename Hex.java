@@ -9,6 +9,9 @@ public class Hex implements Serializable {
 	public static final int WATER = 4;
 	public static final int PAVEMENT = 5;	
 	
+	static final String[] typeString = {"Clear","Woods","Rough","HeavyWoods","Water","Pavement"};
+
+	
 	int type;
 	int elevation;
 	
@@ -40,5 +43,7 @@ public class Hex implements Serializable {
 	public boolean isWoods() { return type==Tables.WOODS || type==Tables.HEAVYWOODS; }
 	public boolean isDepth2Water() { return type==Tables.WATER && elevation <= -2; }
 	public boolean isDepth1Water() { return type==Tables.WATER && elevation == -1; }
+	
+	public String toString() { return new String(typeString[type] + ":" + elevation); }
 		
 }

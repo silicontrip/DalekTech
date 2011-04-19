@@ -318,7 +318,12 @@ public class Cli extends UserInterface {
 	 12 - 1 - 36 - 97%
 	 */	 
 	void notifyLOS(ArrayList<Hex> line) {
-		;
+		Iterator<Hex> it = line.iterator();
+		while (it.hasNext()) {
+		
+			System.out.println(it.next());
+			
+		}
 	}
 	
 	void notifyTargetDalek  (Dalek d) { 

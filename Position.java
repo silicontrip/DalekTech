@@ -70,6 +70,7 @@ public class Position implements Serializable {
 	
 	public double getAngleTo(Position p) {
 		
+		double PI2 = java.lang.Math.PI * 2;
 		Double diff = this.getSpatialDiff(p);
 		
 		double angle=0;
@@ -94,7 +95,10 @@ public class Position implements Serializable {
 		
 		}
 		angle -= java.lang.Math.PI/2;
-		angle = 2*java.lang.Math.PI - angle;
+		angle = PI2 - angle;
+		
+		while (angle < 0 ) { angle += PI2; }
+		while (angle > PI2) { angle -= PI2; }
 		
 		return angle;
 		

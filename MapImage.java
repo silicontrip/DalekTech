@@ -34,7 +34,13 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Image arrowLeftImage=null;
 	Image arrowRightImage=null;
 
+	// firing arc
 	
+	Position firingArc;
+	int minFiringArc;
+	int shortFiringArc;
+	int medFiringArc;
+	int longFiringArc;
 	
 	// Weapons fire...
 	
@@ -151,6 +157,17 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Position getTemporaryDalekPosition() { return tempDalekPosition; }
 	void faceTemporaryDalekPosition(Position p) { tempDalekPosition.facePosition(p);}
 	
+	void setFiringArc(Position p, int min, int sh, int med, int lo) {
+	
+		this.firingArc = p;
+		this.minFiringArc = min;
+		this.shortFiringArc = sh;
+		this.medFiringArc = med;
+		this.longFiringArc = lo;
+		
+	}
+	Position getArcPosition() { return firingArc; }
+	boolean hasArc() {return firingArc != null; }
 	
 	boolean hasTemporaryDalek() { return tempDalekImage != null && tempDalekPosition != null; }
 	boolean hasSelector() { return selectorImage != null && selectorPosition != null; }
@@ -174,6 +191,87 @@ public class MapImage extends BufferedImage implements ActionListener {
 								 this.imageX(getSelectorPosition())-w/2,
 								 this.imageY(getSelectorPosition())-h/2,
 								 w,h,null);
+			}
+			
+			// firing arc
+			
+			if (this.hasArc()) {
+				Position p = getArcPosition();
+				
+				double xtl, ytl, xbr, ybr;
+				
+				 xtl = getArcPosition().getSpatialX();
+				 ytl = getArcPosition().getSpatialY();
+
+				 xbr = getArcPosition().getSpatialX();
+				 ybr = getArcPosition().getSpatialY();
+
+				xtl -= shortFiringArc;
+				ytl -= shortFiringArc;
+				xbr += shortFiringArc;
+				ybr += shortFiringArc;
+				
+				
+				int xitl = (int) (getMap().getRegScaleX() *xtl + getMap().getRegTLX());
+				int yitl = (int) (getMap().getRegScaleX() *ytl + getMap().getRegTLX());
+
+				int xibr = (int) (getMap().getRegScaleX() *xbr + getMap().getRegTLX());
+				int yibr = (int) (getMap().getRegScaleX() *ybr + getMap().getRegTLX());
+
+				// arg horrible registration
+				yitl -= 28;
+				yibr -= 28;
+				
+				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,0,360);
+				
+				xtl = getArcPosition().getSpatialX();
+				ytl = getArcPosition().getSpatialY();
+				
+				xbr = getArcPosition().getSpatialX();
+				ybr = getArcPosition().getSpatialY();
+				
+				xtl -= medFiringArc;
+				ytl -= medFiringArc;
+				xbr += medFiringArc;
+				ybr += medFiringArc;
+				
+				
+				 xitl = (int) (getMap().getRegScaleX() *xtl + getMap().getRegTLX());
+				 yitl = (int) (getMap().getRegScaleX() *ytl + getMap().getRegTLX());
+				
+				 xibr = (int) (getMap().getRegScaleX() *xbr + getMap().getRegTLX());
+				 yibr = (int) (getMap().getRegScaleX() *ybr + getMap().getRegTLX());
+				
+				// arg horrible registration
+				yitl -= 28;
+				yibr -= 28;
+				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,0,360);
+
+				
+				xtl = getArcPosition().getSpatialX();
+				ytl = getArcPosition().getSpatialY();
+				
+				xbr = getArcPosition().getSpatialX();
+				ybr = getArcPosition().getSpatialY();
+				
+				xtl -= longFiringArc;
+				ytl -= longFiringArc;
+				xbr += longFiringArc;
+				ybr += longFiringArc;
+				
+				
+				 xitl = (int) (getMap().getRegScaleX() *xtl + getMap().getRegTLX());
+				 yitl = (int) (getMap().getRegScaleX() *ytl + getMap().getRegTLX());
+				
+				 xibr = (int) (getMap().getRegScaleX() *xbr + getMap().getRegTLX());
+				 yibr = (int) (getMap().getRegScaleX() *ybr + getMap().getRegTLX());
+				
+				// arg horrible registration
+				yitl -= 28;
+				yibr -= 28;
+				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,0,360);
+				
+				
 			}
 			
 			// layer weapons fire

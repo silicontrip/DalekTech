@@ -46,7 +46,7 @@ public class Dalek implements Serializable  {
 	public HashMap<String,DalekSection> getLocationMap() { return locationMap; }
 	// public void getLocationMap(HashMap<String,DalekSection> ds) { this.locationMap = ds; }
 	
-	public void setPosition (Position p) {this.position = p; old = new Position(p); }
+	public void setPosition (Position p) {this.position = p; old = new Position(p); this.setFacing(p.getDirection()); }
 	public Position getPosition () { return this.position; }
 	
 	void setDirection (Direction d) {
@@ -204,6 +204,7 @@ public class Dalek implements Serializable  {
 	boolean turnLeft () { 			
 		if (this.canTurn()) {
 			this.getDirection().turnLeft();
+			this.getFacing().turnLeft();
 			movement ++;
 			return true;
 		}
@@ -213,6 +214,8 @@ public class Dalek implements Serializable  {
 	boolean turnRight () { 			
 		if (this.canTurn()) {
 			this.getDirection().turnRight();
+			this.getFacing().turnRight();
+
 			movement ++;
 			return true;
 		}
@@ -255,10 +258,11 @@ public class Dalek implements Serializable  {
 		// Don't include the first hex
 		for (int index=1;index < line.size();index++) {
 			Hex h = (Hex)line.get(index);
-			if (h.getWoodElevation() > dalekHeight) {
+			//if (h.getWoodElevation() > dalekHeight) {
 				// only woods blocking LOS count.
+				// actually this rule is confusing me
 				cost += h.getTargetCost();
-			}
+			//}
 		}
 		return cost;
 	}
@@ -270,6 +274,14 @@ public class Dalek implements Serializable  {
 		int dalekHeight = java.lang.Math.max(this.getHeight(),d.getHeight());
 		
 		// TODO: check that Dalek is facing.
+		
+		double angle = this.getPosition().getAngleTo(d.getPosition());
+		double facingAngle = this.getFacing().getAngle();
+		
+		if (facingAngle - angle > java.lang.Math.PI) { facingAngle -= java.lang.Math.PI * 2; }
+		if (angle - facingAngle > java.lang.Math.PI) { facingAngle += java.lang.Math.PI * 2; }
+		
+		if (java.lang.Math.abs(facingAngle - angle) > java.lang.Math.PI/3) { return false; }
 		
 		ArrayList<Hex> line = getMap().getLineOfHex(this.getPosition(),d.getPosition());
 		

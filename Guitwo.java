@@ -302,11 +302,11 @@ public class Guitwo extends Cli {
 			getMapPanel().repaint();
 			//System.out.println("**** current selection position : " + dalekList.get(currentSelection).getPosition() +" ****");
 			
-			
+			/*
 			System.out.println ("Dalek Facing Angle: " + d.getFacing().getAngle());
 			System.out.println ("Dalek Angle range: " + (d.getFacing().getAngle() - Direction.PI3) + " to " + (d.getFacing().getAngle() + Direction.PI3));
 			System.out.println ("Angle to target: " + d.getPosition().getAngleTo(targetList.get(currentSelection).getPosition()));
-			
+			*/
 			
 			getMapPanel().setSelectedMovement(Tables.NONE);
 			
@@ -445,7 +445,11 @@ public class Guitwo extends Cli {
 
 		do {
 			
+			// want to display firing arc
 			
+			getMapPanel().setFiringArc(w.get(currentSelection));
+			
+			getMapPanel().repaint();
 		//	System.out.println("selectWeapon currentSelection: " + currentSelection);
 			
 			getStatusPanel().getTacticalImage().setSelected(currentSelection);
@@ -473,7 +477,10 @@ public class Guitwo extends Cli {
 			//System.out.println ("Selected Movement: " + selectedMovement);
 			
 		} while (getMapPanel().getSelectedMovement() != Tables.SELECT && getMapPanel().getSelectedMovement() != Tables.DONE)  ;
-		
+
+		getMapPanel().setFiringArc(null);
+		getMapPanel().repaint();
+
 		getStatusPanel().repaint();
 
 		

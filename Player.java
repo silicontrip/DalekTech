@@ -281,7 +281,6 @@ public class Player {
 	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
 		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
 		
-		
 		if (!this.allFired()) {
 			ArrayList<Weapon> weaponArray;
 			Weapon weap;

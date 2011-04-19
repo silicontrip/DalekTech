@@ -78,11 +78,16 @@ public void setAmmo(int i) { this.ammo = i; }
 		System.out.println("Terrain: " + this.getDalek().terrainLineCost(d));
 		System.out.println("Target: " + d.targetHitCost());
 
+// include direction facing.
 		
-		return this.getRangeCost(this.distanceTo(d))  // Range
-		+ this.getDalek().baseHit() // Attacker Movement
-		+ this.getDalek().terrainLineCost(d)  // Terrain
-		+ d.targetHitCost(); // Target
+		if (this.getDalek().hasLOS(d)) {
+			return this.getRangeCost(this.distanceTo(d))  // Range
+			+ this.getDalek().baseHit() // Attacker Movement
+			+ this.getDalek().terrainLineCost(d)  // Terrain
+			+ d.targetHitCost(); // Target
+		} else {
+			return 65535; // impossible
+		}
 	}
 	
 	int getRangeCost (double d) {
@@ -101,6 +106,7 @@ public void setAmmo(int i) { this.ammo = i; }
 		// longer than long range, cannot hit
 		return 0;
 	}
+	
 	
 	int getDamage (int d) { return this.getDamage((double)d); }
 	
