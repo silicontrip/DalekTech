@@ -37,6 +37,7 @@ public class MapImage extends BufferedImage implements ActionListener {
 	// firing arc
 	
 	Position firingArc;
+	Direction firingArcDirection;
 	int minFiringArc;
 	int shortFiringArc;
 	int medFiringArc;
@@ -157,9 +158,10 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Position getTemporaryDalekPosition() { return tempDalekPosition; }
 	void faceTemporaryDalekPosition(Position p) { tempDalekPosition.facePosition(p);}
 	
-	void setFiringArc(Position p, int min, int sh, int med, int lo) {
+	void setFiringArc(Position p, Direction d, int min, int sh, int med, int lo) {
 	
 		this.firingArc = p;
+		this.firingArcDirection = d;
 		this.minFiringArc = min;
 		this.shortFiringArc = sh;
 		this.medFiringArc = med;
@@ -167,6 +169,8 @@ public class MapImage extends BufferedImage implements ActionListener {
 		
 	}
 	Position getArcPosition() { return firingArc; }
+	Direction getArcDirection() { return firingArcDirection; }
+
 	boolean hasArc() {return firingArc != null; }
 	
 	boolean hasTemporaryDalek() { return tempDalekImage != null && tempDalekPosition != null; }
@@ -199,12 +203,30 @@ public class MapImage extends BufferedImage implements ActionListener {
 				Position p = getArcPosition();
 				
 				double xtl, ytl, xbr, ybr;
+				int xitl, yitl, xibr, yibr;
 				
-				 xtl = getArcPosition().getSpatialX();
-				 ytl = getArcPosition().getSpatialY();
+				int faceAngle, startAngle, endAngle;
+				
+				
+			// convert from map coordinates to trig
+				
+				faceAngle = 450 - getArcDirection().getDegrees();
+				
+				//System.out.println ("face angle : " + faceAngle);
+				
+				endAngle = faceAngle + 60 ;
+				
+				if (endAngle > 360) { endAngle -= 360; }
+				
+				startAngle = faceAngle - 60 ;
+				if (startAngle < 0) { startAngle += 360; }
 
-				 xbr = getArcPosition().getSpatialX();
-				 ybr = getArcPosition().getSpatialY();
+
+				xtl = getArcPosition().getSpatialX();
+				ytl = getArcPosition().getSpatialY();
+
+				xbr = getArcPosition().getSpatialX();
+				ybr = getArcPosition().getSpatialY();
 
 				xtl -= shortFiringArc;
 				ytl -= shortFiringArc;
@@ -212,17 +234,17 @@ public class MapImage extends BufferedImage implements ActionListener {
 				ybr += shortFiringArc;
 				
 				
-				int xitl = (int) (getMap().getRegScaleX() *xtl + getMap().getRegTLX());
-				int yitl = (int) (getMap().getRegScaleX() *ytl + getMap().getRegTLX());
+				xitl = (int) (getMap().getRegScaleX() *xtl + getMap().getRegTLX());
+				yitl = (int) (getMap().getRegScaleX() *ytl + getMap().getRegTLX());
 
-				int xibr = (int) (getMap().getRegScaleX() *xbr + getMap().getRegTLX());
-				int yibr = (int) (getMap().getRegScaleX() *ybr + getMap().getRegTLX());
+				xibr = (int) (getMap().getRegScaleX() *xbr + getMap().getRegTLX());
+				yibr = (int) (getMap().getRegScaleX() *ybr + getMap().getRegTLX());
 
 				// arg horrible registration
 				yitl -= 28;
 				yibr -= 28;
 				
-				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,0,360);
+				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,startAngle,120);
 				
 				xtl = getArcPosition().getSpatialX();
 				ytl = getArcPosition().getSpatialY();
@@ -245,7 +267,7 @@ public class MapImage extends BufferedImage implements ActionListener {
 				// arg horrible registration
 				yitl -= 28;
 				yibr -= 28;
-				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,0,360);
+				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,startAngle,120);
 
 				
 				xtl = getArcPosition().getSpatialX();
@@ -269,7 +291,7 @@ public class MapImage extends BufferedImage implements ActionListener {
 				// arg horrible registration
 				yitl -= 28;
 				yibr -= 28;
-				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,0,360);
+				canvas.drawArc(xitl,yitl,xibr-xitl,yibr-yitl,startAngle,120);
 				
 				
 			}
