@@ -478,7 +478,7 @@ public class Guitwo extends Cli {
 			
 		} while (getMapPanel().getSelectedMovement() != Tables.SELECT && getMapPanel().getSelectedMovement() != Tables.DONE)  ;
 
-		getMapPanel().setFiringArc(null);
+		getMapPanel().unsetFiringArc();
 		getMapPanel().repaint();
 
 		getStatusPanel().repaint();

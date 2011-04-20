@@ -171,7 +171,7 @@ public class MapImage extends BufferedImage implements ActionListener {
 	Position getArcPosition() { return firingArc; }
 	Direction getArcDirection() { return firingArcDirection; }
 
-	boolean hasArc() {return firingArc != null; }
+	boolean hasArc() {return firingArc != null && firingArcDirection != null; }
 	
 	boolean hasTemporaryDalek() { return tempDalekImage != null && tempDalekPosition != null; }
 	boolean hasSelector() { return selectorImage != null && selectorPosition != null; }
@@ -213,10 +213,6 @@ public class MapImage extends BufferedImage implements ActionListener {
 				faceAngle = 450 - getArcDirection().getDegrees();
 				
 				//System.out.println ("face angle : " + faceAngle);
-				
-				endAngle = faceAngle + 60 ;
-				
-				if (endAngle > 360) { endAngle -= 360; }
 				
 				startAngle = faceAngle - 60 ;
 				if (startAngle < 0) { startAngle += 360; }
