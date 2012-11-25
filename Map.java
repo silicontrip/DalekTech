@@ -48,6 +48,10 @@ public class Map implements Serializable {
 		regBR = new Point(0,0);
 	}
 	
+	public boolean validPosition(Position p) { 
+		// must be really careful of off by 1
+		return (p.getX()>=0 && p.getY()>=0 && p.getX()<this.getSizeX() && p.getY() <this.getSizeX());
+	}
 	public Position getSize() { return size; }
 	int getSizeX() { return getSize().getX() + 1; }
 	int getSizeY() { return getSize().getY() + 1; }
@@ -76,8 +80,6 @@ public class Map implements Serializable {
 	}
 	
 	ArrayList<Hex> getLineOfHex(Position p1,Position p2) {
-
-		
 		Double spatial = p1.getSpatial();
 		Double espatial = p2.getSpatial();
 		double scale = p1.distanceTo(p2) * 2;

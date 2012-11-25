@@ -169,7 +169,7 @@ public class Player {
 			do {
 				dalekPosition=getUI().getDalekPositionAndDirection(dal);
 				// check it doesn't clobber another dalek
-			} while (dalekPosition.isIn(getGame().allDalekPositions()));
+			} while (dalekPosition.isIn(getGame().allDalekPositions()) || !Map.getInstance().validPosition(dalekPosition));
 			dal.setPosition(dalekPosition);
 			
 			// tell both interfaces where the new dalek is.
