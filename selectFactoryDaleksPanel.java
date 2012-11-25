@@ -12,7 +12,9 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	int slide, slideDelta;
 	Image selector;
 	Image overlay;
+	Image background;
 
+	
 	int selectedMovement;
 	
 	javax.swing.Timer timer;
@@ -70,6 +72,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		
 	void setSelectorImage (Image i) { selector = i; }
 	void setOverlayImage (Image i) { overlay = i; }	
+	void setBackgroundImage (Image i) { background = i; }
 	Image dalekImage(String name) { return dalekImages.get(name); }
 	public Dimension getPreferredSize() { return new Dimension(640,480); }	
 	public void setDalekList(ArrayList<Dalek> dalekList) { this.dalekList = dalekList; }
@@ -119,19 +122,11 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		
 		if (dalekList != null) {
 			
+			//background image
+			
 			int xl = -128;
 			String dalekName;
-			
-			// if (slide == 0) {
-			//	getStatusPanel().setDalekName(dalekList.get(select).getName());
-			//	getStatusPanel().setEngineWalk(dalekList.get(select).getWalk());
-			//	getStatusPanel().setEngineRun(dalekList.get(select).getRun());
-
-				// getStatusPanel().damageView();
-			//	getStatusPanel().repaint();
-			// }
-			
-			
+						
 			for (int d=select-3;d<=select+3;d++) {
 				int dal = d % dalekList.size();
 				if (dal < 0) { dal += dalekList.size();}
