@@ -1,4 +1,4 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
@@ -39,23 +39,23 @@ public class statusPanel extends JPanel {
 		techFont = new Font("Eurostile",0,16);
 	}
 	
-	void setBackground (Image i)  { this.panelBackground = i; }
+	public void setBackground (Image i)  { this.panelBackground = i; }
 	
-	int getPanelHeight() { return panelHeight; }
-	int getPanelWidth() { return panelWidth; }
+	public int getPanelHeight() { return panelHeight; }
+	public int getPanelWidth() { return panelWidth; }
 	
 	/*
 	void setTacticalImages(HashMap<String,Image> hm) { dalekTacticalImages = hm; }
 	void setDamageImages(HashMap<String,DamageUI> hm) { dalekDamageImages = hm; }
 	*/
-	void setDalekName(String s) { 
+	public void setDalekName(String s) { 
 		this.name = new String(s);
 	//	setDamageImage(getDamageImageFromName());
 	//	setTacticalImage(getTacticalImageFromName());
 	}
-	void setDamageImage(Image i) { this.dalekDamageImage = i; }
-	void setTacticalImage(TacticalUI i) { this.dalekTacticalImage = i; }
-	TacticalUI getTacticalImage() { return dalekTacticalImage; }
+	public void setDamageImage(Image i) { this.dalekDamageImage = i; }
+	public void setTacticalImage(TacticalUI i) { this.dalekTacticalImage = i; }
+	public TacticalUI getTacticalImage() { return dalekTacticalImage; }
 	
 	/*
 	public void setFromSections(HashMap<String,DalekSection> hm) {
@@ -63,18 +63,18 @@ public class statusPanel extends JPanel {
 	}
 	*/
 		
-	void setEngine(int current, int walk, int run) {
+	public void setEngine(int current, int walk, int run) {
 		this.setEngineCurrent(current);
 		this.setEngineWalk(walk);
 		this.setEngineRun(run);
 	}
-	void setEngineCurrent (int i) { this.engineCurrent = new Integer(i); }
-	void setEngineWalk (int i) { this.engineWalk = new Integer(i); }
-	void setEngineRun (int i) { this.engineRun = new Integer(i); }
+	public void setEngineCurrent (int i) { this.engineCurrent = new Integer(i); }
+	public void setEngineWalk (int i) { this.engineWalk = new Integer(i); }
+	public void setEngineRun (int i) { this.engineRun = new Integer(i); }
 	
-	Integer getEngineCurrent() { return this.engineCurrent; }
-	Integer getEngineWalk() { return this.engineWalk; }
-	Integer getEngineRun() { return this.engineRun; }
+	public Integer getEngineCurrent() { return this.engineCurrent; }
+	public Integer getEngineWalk() { return this.engineWalk; }
+	public Integer getEngineRun() { return this.engineRun; }
 	
 	/*
 	void tacticalView() { dalekImage = this.dalekTacticalImage;  displayFlag = TACTICAL;}

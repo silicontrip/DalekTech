@@ -1,18 +1,18 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 
 public class GoldSupremeDamage extends DamageUI {
 
 	public GoldSupremeDamage() {
-		super(Guitwo.getImageWithFilename ("Images/GoldSupremeDamage.png"));
+		super(getImageWithFilename ("Images/GoldSupremeDamage.png"));
 	}
 	
 	public GoldSupremeDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		super(getImageWithFilename (imageName));
 			  if (white) {
 			  enableWhite();
 			  }
-			  }
+	}
 			  
 	
 	public Rectangle getDome() { return new Rectangle (137,38,5,2); }

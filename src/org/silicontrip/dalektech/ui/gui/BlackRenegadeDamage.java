@@ -1,14 +1,16 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 
 public class BlackRenegadeDamage extends DamageUI {
 
 	public BlackRenegadeDamage() {
-		super(Guitwo.getImageWithFilename ("Images/RenegadeDamage.png"));
+		super(getImageWithFilename ("Images/RenegadeDamage.png"));
 	}
 
 	public BlackRenegadeDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		// this should be in a superclass of Damage UI.
+		// I have a feeling getImageWithFilename is used a lot in these subclassses.
+		super(getImageWithFilename (imageName));
 			  if (white) {
 				enableWhite();
 			  }

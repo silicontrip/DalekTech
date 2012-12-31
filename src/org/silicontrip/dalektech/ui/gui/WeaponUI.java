@@ -1,11 +1,13 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.*;
 import java.awt.*;
 
-public class WeaponUI extends BufferedImage {
+import org.silicontrip.dalektech.dalek.Weapon;
+
+public class WeaponUI extends DalekTechUI {
 
 	public static final int DOME = 0;
 	public static final int NECK = 1;

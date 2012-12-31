@@ -51,7 +51,7 @@ public class Direction implements Serializable {
 		return turn;
 	}
 	
-	void setDirectionFromString (String dir) {
+	public void setDirectionFromString (String dir) {
 		
 		// lot's of conditional logic
 		this.setDirection(NONE);

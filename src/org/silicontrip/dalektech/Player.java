@@ -1,14 +1,30 @@
 package org.silicontrip.dalektech;
-import java.util.*;
+//import java.util.*;
 import java.io.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+
+import org.silicontrip.dalektech.ui.UserInterface;
+import org.silicontrip.dalektech.dalek.Dalek;
+import org.silicontrip.dalektech.dalek.Weapon;
+
+import org.silicontrip.dalektech.Tables;
+
+
+import org.silicontrip.dalektech.map.*;
+
 
 public class Player {
 	
 	UserInterface ui;
 	UserInterface oui;
 	ArrayList<Dalek> daleks;
+	ArrayList<Player> players;
 	Map map;
-	DalekTech game;
+// 	DalekTech game;
 	HashMap<Weapon,Dalek> firing;
 	
 	public Player () {
@@ -16,25 +32,27 @@ public class Player {
 		// firing = new HashMap<Weapon,Dalek>();
 	}
 	
-	public  Player (UserInterface ui, UserInterface ui2, DalekTech game) {
+	public  Player (UserInterface ui, UserInterface ui2, ArrayList<Player> pl) {
 		this();
 		this.ui = ui;
 		this.oui = ui2;
-		this.game = game;
+		this.players = pl;
 		
 	}
 	
 	void setUI (UserInterface ui) { this.ui = ui; }
-	UserInterface getUI() { return ui; }
+	public UserInterface getUI() { return ui; }
 	void setOtherUI (UserInterface ui) { this.oui = ui; }
 	UserInterface getOtherUI() { return oui; }
 	
 	public void setFiring(HashMap<Weapon,Dalek> hm) { this.firing = hm; } 
 	public HashMap<Weapon,Dalek> getFiring() { return this.firing; }
 	
-	Map getMap() { return getGame().getMap(); }
+	// Map getMap() { return getGame().getMap(); }
+	Map getMap() { return Map.getInstance(); }
 	
-	ArrayList<Dalek> getDaleks() { 
+	
+	public ArrayList<Dalek> getDaleks() { 
 		// don't return dead daleks
 		ArrayList<Dalek> alive = new ArrayList<Dalek>();
 		Iterator<Dalek> it = daleks.iterator();
@@ -49,9 +67,9 @@ public class Player {
 	//return daleks; 
 	}
 	
-	DalekTech getGame() { return game; }
+	// DalekTech getGame() { return game; }
 	
-	boolean allDestroyed() {
+	public boolean allDestroyed() {
 		Iterator<Dalek> it = daleks.iterator();
 		while(it.hasNext()) {
 			if (!it.next().isDestroyed()) {
@@ -61,7 +79,7 @@ public class Player {
 		return true;
 	}
 	
-	ArrayList<Position> getAllPositions () {
+	public ArrayList<Position> getAllPositions () {
 		ArrayList<Position> allPositions = new ArrayList<Position>();
 		Iterator<Dalek> it = getDaleks().iterator();
 		while(it.hasNext()) {
@@ -109,14 +127,14 @@ public class Player {
 		return selected;
 	}
 	
-	void allReset () {
+	public void allReset () {
 		Iterator<Dalek> it = getDaleks().iterator();
 		while(it.hasNext()) {
 			it.next().reset();
 		}
 	}
 	
-	boolean allMoved () {
+	public boolean allMoved () {
 		Iterator<Dalek> it = getDaleks().iterator();		
 		Dalek dal;
 
@@ -129,7 +147,7 @@ public class Player {
 		return true;
 	}
 	
-	boolean allTwist () {
+	public boolean allTwist () {
 		Iterator<Dalek> it = getDaleks().iterator();
 		Dalek dal;
 
@@ -143,7 +161,7 @@ public class Player {
 		return true;
 	}
 	
-	boolean allFired () {
+	public boolean allFired () {
 		Iterator<Dalek> it = getDaleks().iterator();
 		Dalek dal;
 
@@ -157,7 +175,19 @@ public class Player {
 		return true;
 	}
 	
-	void positionDaleks() {
+	ArrayList<Position> allDalekPositions() {
+		ArrayList<Position> allPositions = new ArrayList<Position>();
+		
+		Iterator<Player> it = players.iterator();
+		
+		while(it.hasNext()) {
+			allPositions.addAll(it.next().getAllPositions());
+		}
+		return allPositions;
+	}
+	
+	
+	public void positionDaleks() {
 		Dalek dal;
 		Iterator<Dalek> it = getDaleks().iterator();
 		
@@ -170,7 +200,7 @@ public class Player {
 			do {
 				dalekPosition=getUI().getDalekPositionAndDirection(dal);
 				// check it doesn't clobber another dalek
-			} while (dalekPosition.isIn(getGame().allDalekPositions()) || !Map.getInstance().validPosition(dalekPosition));
+			} while (dalekPosition.isIn(allDalekPositions()) || !Map.getInstance().validPosition(dalekPosition));
 			dal.setPosition(dalekPosition);
 			
 			// tell both interfaces where the new dalek is.
@@ -183,7 +213,7 @@ public class Player {
 	}
 	
 	
-	void selectFactoryDaleks(ArrayList<Dalek> dalekList) {
+	public void selectFactoryDaleks(ArrayList<Dalek> dalekList) {
 		Iterator<Integer> it;
 		ArrayList<Integer> select;
 		select = getUI().selectFactoryDaleks(dalekList);
@@ -201,7 +231,7 @@ public class Player {
 		}
 	}
 	
-	void moveDalek () {
+	public void moveDalek () {
 		
 		if (!this.allMoved()) {
 			int dir;
@@ -230,8 +260,8 @@ public class Player {
 					
 					forward= true;
 					backward=true;
-					if (dal.getPosition().newForwardsPosition().isIn(getGame().allDalekPositions())) { forward = false; }
-					if (dal.getPosition().newBackwardsPosition().isIn(getGame().allDalekPositions())) { backward = false; }
+					if (dal.getPosition().newForwardsPosition().isIn(allDalekPositions())) { forward = false; }
+					if (dal.getPosition().newBackwardsPosition().isIn(allDalekPositions())) { backward = false; }
 					
 					
 					dir = getUI().getDalekMove(dal,
@@ -260,7 +290,7 @@ public class Player {
 		
 	}
 	
-	void twistDalek () {
+	public void twistDalek () {
 		
 		getUI().setInterfaceMessage("Select Dalek to Twist");
 		
@@ -279,7 +309,7 @@ public class Player {
 		
 	}
 	
-	HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
+	public HashMap<Weapon,Dalek> fireDalek (ArrayList<Dalek> targetDaleks) {
 		HashMap<Weapon,Dalek> fireMap = new HashMap<Weapon,Dalek>();
 		
 		if (!this.allFired()) {
@@ -328,7 +358,7 @@ public class Player {
 		return fireMap;
 	}
 	
-	void endGame () {
+	public void endGame () {
 		getUI().notifyEnd(allDestroyed());
 	}
 	

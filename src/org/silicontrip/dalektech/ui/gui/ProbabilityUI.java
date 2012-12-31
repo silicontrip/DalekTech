@@ -1,4 +1,4 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.geom.AffineTransform;
 
 import java.awt.image.BufferedImage;

@@ -1,14 +1,14 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 
 public class RedSaucerDamage extends DamageUI {
 
 	public RedSaucerDamage() {
-		super(Guitwo.getImageWithFilename ("Images/RedSaucerDamage.png"));
+		super(getImageWithFilename ("Images/RedSaucerDamage.png"));
 	}
 	
 	public RedSaucerDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		super(getImageWithFilename (imageName));
 		if (white) {
 			enableWhite();
 		}

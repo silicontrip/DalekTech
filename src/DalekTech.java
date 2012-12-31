@@ -1,5 +1,22 @@
-import java.util.*;
+// import java.util.*;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Iterator;
+
+
 import java.io.*;
+
+import org.silicontrip.dalektech.Player;
+import org.silicontrip.dalektech.ui.*;
+import org.silicontrip.dalektech.map.*;
+
+import org.silicontrip.dalektech.DalekFactory;
+
+import org.silicontrip.dalektech.dalek.Weapon;
+import org.silicontrip.dalektech.dalek.Dalek;
+
 
 
 public class DalekTech {
@@ -9,7 +26,7 @@ public class DalekTech {
 	Random rand;
 	Map map;
 	
-	Player players[];
+	ArrayList<Player> players;
 	
 	/*
 	public static DalekTech getInstance() {
@@ -40,7 +57,7 @@ public class DalekTech {
 	public DalekTech (String i1, String i2) {
 		
 		// Although it's only made here for 2 players, it shouldn't be too hard to extend to more.
-		players = new Player[2];
+		players = new ArrayList<Player>();
 		
 		rand = new java.util.Random(java.lang.System.currentTimeMillis());
 
@@ -53,12 +70,12 @@ public class DalekTech {
 		ui2 = interfaceFactory(i2,map);
 
 		
-		players[0] = new Player(ui1,ui2,this); // UI2DGraphic();
-		players[1] = new Player(ui2,ui1,this); // ultimately UI3dGraphic();
+		players.add(new Player(ui1,ui2,players)); // UI2DGraphic();
+		players.add( new Player(ui2,ui1,players)); // ultimately UI3dGraphic();
 	}
 
 	Map getMap() { return Map.getInstance(); }
-	Player getPlayer(int i) { return this.players[i]; }
+	Player getPlayer(int i) { return this.players.get(i); }
 	
 	ArrayList<Position> allDalekPositions() {
 		ArrayList<Position> allPositions = new ArrayList<Position>();

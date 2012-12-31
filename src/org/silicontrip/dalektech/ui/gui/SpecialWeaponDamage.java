@@ -1,14 +1,14 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 
 public class SpecialWeaponDamage extends DamageUI {
 
 	public SpecialWeaponDamage() {
-		super(Guitwo.getImageWithFilename ("Images/SpecialWeaponDamage.png"));
+		super(getImageWithFilename ("Images/SpecialWeaponDamage.png"));
 	}
 	
 	public SpecialWeaponDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		super(getImageWithFilename (imageName));
 		if (white) {
 			enableWhite();
 		}

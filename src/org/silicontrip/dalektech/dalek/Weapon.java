@@ -2,6 +2,9 @@ package org.silicontrip.dalektech.dalek;
 import java.io.*;
 import java.util.ArrayList;
 
+import org.silicontrip.dalektech.map.Hex;
+
+
 public class Weapon implements Serializable {
 	
 	String name;
@@ -60,19 +63,19 @@ public void setAmmo(int i) { this.ammo = i; }
 	
 	public String toString () { return name; }
 
-	DalekSection getDalekSection() { return this.dalsec; }
-	void setDalekSection(DalekSection ds) { this.dalsec = ds; }
-	Dalek getDalek() {return this.getDalekSection().getDalek(); }
-	void setFired(boolean b) { fired = b; }
-	void fire() { ammo --; } // could put in side effects
-	boolean canFire () { return !fired && ammo != 0; }
-	boolean inRange(Dalek d) { return this.distanceTo(d) < longRange; }
-	double distanceTo(Dalek d) { return this.getDalek().distanceTo(d); }
-	ArrayList<Hex> getLineOfSight(Dalek d) { return this.getDalek().getLineOfSight(d); }
+	public DalekSection getDalekSection() { return this.dalsec; }
+	public void setDalekSection(DalekSection ds) { this.dalsec = ds; }
+	public Dalek getDalek() {return this.getDalekSection().getDalek(); }
+	public void setFired(boolean b) { fired = b; }
+	public void fire() { ammo --; } // could put in side effects
+	public boolean canFire () { return !fired && ammo != 0; }
+	public boolean inRange(Dalek d) { return this.distanceTo(d) < longRange; }
+	public double distanceTo(Dalek d) { return this.getDalek().distanceTo(d); }
+	public ArrayList<Hex> getLineOfSight(Dalek d) { return this.getDalek().getLineOfSight(d); }
 	
-	void destroy() { ammo = 0; } // cheats way to disable the weapon
+	public void destroy() { ammo = 0; } // cheats way to disable the weapon
 	
-	int costFire (Dalek d) {
+	public int costFire (Dalek d) {
 		
 		System.out.println("Base: " + this.getDalek().baseHit());
 		System.out.println("Range: " + this.getRangeCost(this.distanceTo(d)));
@@ -100,7 +103,7 @@ public void setAmmo(int i) { this.ammo = i; }
 		return 12;
 	}
 	
-	int getDamage(double d) {
+	public int getDamage(double d) {
 		if (d <= shortRange) { return shortDamage; }
 		if (d <= medRange) { return medDamage; }
 		if (d <= longRange) { return longDamage; }
@@ -109,6 +112,6 @@ public void setAmmo(int i) { this.ammo = i; }
 	}
 	
 	
-	int getDamage (int d) { return this.getDamage((double)d); }
+	public int getDamage (int d) { return this.getDamage((double)d); }
 	
 }

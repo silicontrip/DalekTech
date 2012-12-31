@@ -1,5 +1,10 @@
 package org.silicontrip.dalektech;
 
+import org.silicontrip.dalektech.dalek.Dalek;
+
+import org.silicontrip.dalektech.map.*;
+
+
 // This class contains table information.
 // NO CALCULATION IS DONE HERE
 // All return values are constants.

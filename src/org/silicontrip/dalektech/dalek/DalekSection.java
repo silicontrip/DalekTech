@@ -11,7 +11,7 @@ public class DalekSection implements Serializable {
 	int currentArmour;
 	
 	void setDalek(Dalek dalek) { this.dalek = dalek; }
-	Dalek getDalek() { return this.dalek; }
+	public Dalek getDalek() { return this.dalek; }
 	
 	public void setWeapon(Weapon weapon) { this.weapon = weapon; weapon.setDalekSection(this); }
 	public Weapon getWeapon() { return this.weapon; }
@@ -23,7 +23,7 @@ public class DalekSection implements Serializable {
 	public int getArmour() { return armour; }
 	public void setArmour(int i) { this.armour = i; }
 	
-	int getDamage() { return currentArmour; }
+	public int getDamage() { return currentArmour; }
 	void destroyArmour() { currentArmour = 0; }
 	
 	boolean armourHolds (int damage) { return currentArmour > damage;}

@@ -1,9 +1,13 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+
+import org.silicontrip.dalektech.dalek.Dalek;
+import org.silicontrip.dalektech.Tables;
+
 
 public class selectFactoryDaleksPanel extends JPanel implements KeyListener, ActionListener {
 	
@@ -27,14 +31,14 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	HashMap<String,Image> dalekImages;
 	
 
-	void setDalekWidth(int i) { dalekWidth = i; }
-	int getDalekWidth() { return dalekWidth; }
+	public void setDalekWidth(int i) { dalekWidth = i; }
+	public int getDalekWidth() { return dalekWidth; }
 	
-	void setDalekIconWidth(int i) { dalekIconWidth = i; }
-	int getDalekIconWidth() { return dalekIconWidth; }
+	public void setDalekIconWidth(int i) { dalekIconWidth = i; }
+	public int getDalekIconWidth() { return dalekIconWidth; }
 
-	void setSelectedMovement(int i) { this.selectedMovement = i; }
-	int getSelectedMovement() { return selectedMovement; }
+	public void setSelectedMovement(int i) { this.selectedMovement = i; }
+	public int getSelectedMovement() { return selectedMovement; }
 	
 	
 	public selectFactoryDaleksPanel () {
@@ -70,14 +74,14 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 		timer.setRepeats(true);
 	}
 		
-	void setSelectorImage (Image i) { selector = i; }
-	void setOverlayImage (Image i) { overlay = i; }	
-	void setBackgroundImage (Image i) { background = i; }
-	Image dalekImage(String name) { return dalekImages.get(name); }
+	public void setSelectorImage (Image i) { selector = i; }
+	public void setOverlayImage (Image i) { overlay = i; }	
+	public void setBackgroundImage (Image i) { background = i; }
+	public Image dalekImage(String name) { return dalekImages.get(name); }
 	public Dimension getPreferredSize() { return new Dimension(640,480); }	
 	public void setDalekList(ArrayList<Dalek> dalekList) { this.dalekList = dalekList; }
 	
-	void drawDalekAt (Graphics g, String name, int x, int y, int w) {
+	public void drawDalekAt (Graphics g, String name, int x, int y, int w) {
 	
 		Image dalek = dalekImage(name);
 		int h = (int)  (dalek.getHeight(null) * w / dalek.getWidth(null)  );
@@ -92,7 +96,7 @@ public class selectFactoryDaleksPanel extends JPanel implements KeyListener, Act
 	}
 	
 	
-	public void addDalek(int i) {
+	 public void addDalek(int i) {
 		selectedDaleks.add(i);
 	}
 	

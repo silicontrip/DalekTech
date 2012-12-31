@@ -3,8 +3,15 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+// import java.util.*;
 import java.net.*;
+
+import java.util.ArrayList;
+
+import org.silicontrip.dalektech.dalek.Dalek;
+import org.silicontrip.dalektech.dalek.Weapon;
+
+import org.silicontrip.dalektech.map.*;
 
 
 public  class Network extends UserInterface {
@@ -61,7 +68,7 @@ public  class Network extends UserInterface {
 	}
 	
 	// Ask user for information
-	Position getDalekPosition(Dalek d) {
+	public Position getDalekPosition(Dalek d) {
 		
 		try {
 			oos.reset();
@@ -78,7 +85,7 @@ public  class Network extends UserInterface {
 	} 
 	
 	
-	Direction getDalekDirection (Dalek d) {
+public 	Direction getDalekDirection (Dalek d) {
 		try {
 			oos.reset();
 
@@ -94,7 +101,7 @@ public  class Network extends UserInterface {
 		return null;
 		
 	}
-	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn)  {
+public 	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn)  {
 		
 		try {
 			oos.reset();
@@ -122,7 +129,7 @@ public  class Network extends UserInterface {
 		
 	}
 	
-	int getDalekTwist (Dalek d){
+public 	int getDalekTwist (Dalek d){
 		
 		try {
 			oos.reset();
@@ -140,7 +147,7 @@ public  class Network extends UserInterface {
 		
 		
 	}
-	
+public 	
 	Position getDalekPositionAndDirection(Dalek d) {
 		
 		try {
@@ -158,7 +165,7 @@ public  class Network extends UserInterface {
 	}
 	
 	// Show and ask user selections
-	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
+public 	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 		try {
 			oos.reset();
 
@@ -176,7 +183,7 @@ public  class Network extends UserInterface {
 	}
 	
 	
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los) {
+public 	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los) {
 		try {
 			oos.reset();
 
@@ -197,7 +204,7 @@ public  class Network extends UserInterface {
 		
 		
 	}
-	int selectWeapon(ArrayList<Weapon> w) {
+public 	int selectWeapon(ArrayList<Weapon> w) {
 		try {
 			oos.reset();
 
@@ -214,7 +221,7 @@ public  class Network extends UserInterface {
 		
 	}
 	
-	int selectDalek(ArrayList<Dalek> dalekList) {
+public 	int selectDalek(ArrayList<Dalek> dalekList) {
 		try {
 			oos.reset();
 
@@ -231,7 +238,7 @@ public  class Network extends UserInterface {
 		
 	}
 	
-	int selectDalekWithExit(ArrayList<Dalek> dalekList) {
+public 	int selectDalekWithExit(ArrayList<Dalek> dalekList) {
 		try {
 			oos.reset();
 
@@ -252,7 +259,7 @@ public  class Network extends UserInterface {
 	// it's a toss up between geting the calling class to do the work
 	// or getting this class to do the work.
 	
-	void notifyDalek (String s, Dalek d) {
+public 	void notifyDalek (String s, Dalek d) {
 		try {
 			oos.reset();
 
@@ -265,13 +272,13 @@ public  class Network extends UserInterface {
 	}
 	
 	// status 
-	void notifyDalekPosition(Dalek d) { notifyDalek("notifyDalekPosition",d); }
-	void notifyName(Dalek d) { notifyDalek("notifyName",d); }
-	void notifyDamage(Dalek d) { notifyDalek("notifyDamage",d); }
-	void notifyTargetDalek(Dalek d) { notifyDalek("notifyTargetDalek",d); }
+	public void notifyDalekPosition(Dalek d) { notifyDalek("notifyDalekPosition",d); }
+	public void notifyName(Dalek d) { notifyDalek("notifyName",d); }
+	public void notifyDamage(Dalek d) { notifyDalek("notifyDamage",d); }
+	public void notifyTargetDalek(Dalek d) { notifyDalek("notifyTargetDalek",d); }
 	
 	
-	void notifyEngine(int current, int walk, int run) {
+	public void notifyEngine(int current, int walk, int run) {
 		try {
 			oos.reset();
 
@@ -286,7 +293,7 @@ public  class Network extends UserInterface {
 		
 		
 	}
-	void notifyDifficulty(int cost) {
+	public void notifyDifficulty(int cost) {
 		try {
 			oos.reset();
 
@@ -297,7 +304,7 @@ public  class Network extends UserInterface {
 		}
 		
 	}
-	void notifyLOS(ArrayList<Hex> line) {
+	public void notifyLOS(ArrayList<Hex> line) {
 		try {
 			oos.reset();
 
@@ -307,7 +314,7 @@ public  class Network extends UserInterface {
 			System.out.println("notifyLOS IO error " + ioe);
 		}
 	}
-	void notifyDalekDamage(Dalek d,int location, Weapon w, int damage) {
+	public void notifyDalekDamage(Dalek d,int location, Weapon w, int damage) {
 		try {
 			oos.reset();
 
@@ -321,7 +328,7 @@ public  class Network extends UserInterface {
 			System.out.println("notifyDalekDamage IO error " + ioe);
 		}
 	}
-	void notifyFire(Dalek d, Weapon w) {
+	public void notifyFire(Dalek d, Weapon w) {
 		try {
 			oos.reset();
 			
@@ -335,7 +342,7 @@ public  class Network extends UserInterface {
 		
 	}
 	
-	void notifyMiss(Dalek d, Weapon w) {
+	public void notifyMiss(Dalek d, Weapon w) {
 		try {
 			oos.reset();
 
@@ -348,7 +355,7 @@ public  class Network extends UserInterface {
 		}
 		
 	}
-	void notifyEnd(boolean destroyed) {
+	public void notifyEnd(boolean destroyed) {
 		try {		
 			oos.reset();
 
@@ -359,7 +366,7 @@ public  class Network extends UserInterface {
 		}
 		
 	}
-	void setInterfaceMessage(String s) {
+	public void setInterfaceMessage(String s) {
 		try {
 			oos.reset();
 

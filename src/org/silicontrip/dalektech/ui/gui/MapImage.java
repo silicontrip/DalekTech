@@ -1,11 +1,16 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.*;
+// import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
+
+import java.util.HashMap;
+import java.util.Iterator;
+
+import org.silicontrip.dalektech.map.*;
 
 public class MapImage extends BufferedImage implements ActionListener {
 	

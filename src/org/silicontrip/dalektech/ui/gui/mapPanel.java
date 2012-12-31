@@ -1,10 +1,20 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-import java.util.*;
+// import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+
+import org.silicontrip.dalektech.map.*;
+import org.silicontrip.dalektech.ui.Guitwo;
+import org.silicontrip.dalektech.dalek.Weapon;
+import org.silicontrip.dalektech.Tables;
+
 
 public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelListener, MouseListener, ActionListener, KeyListener {
 
@@ -90,30 +100,30 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	}
 			
 	MapImage getMapImage() { return map; }
-	void setSelectorImage(Image i) { this.getMapImage().setSelectorImage(i); }
-	void setArrowImage(Image i) { this.getMapImage().setMovementImage(i); }
-	void setLeftImage(Image i) { this.getMapImage().setLeftImage(i); }
-	void setRightImage(Image i) { this.getMapImage().setRightImage(i); }
-	void setProbabilityUI(ProbabilityUI pui) { this.probUI = pui; }
+	public void setSelectorImage(Image i) { this.getMapImage().setSelectorImage(i); }
+	public void setArrowImage(Image i) { this.getMapImage().setMovementImage(i); }
+	public void setLeftImage(Image i) { this.getMapImage().setLeftImage(i); }
+	public void setRightImage(Image i) { this.getMapImage().setRightImage(i); }
+	public void setProbabilityUI(ProbabilityUI pui) { this.probUI = pui; }
 
-	void setSelectorPosition(Position p) { this.getMapImage().setSelectorPosition(p); }
+	public void setSelectorPosition(Position p) { this.getMapImage().setSelectorPosition(p); }
 //	Position getSelectorPosition() { return this.selectorPosition; }
 	
-	void setInterfaceMessage(String s) { interfaceMessage = s; }
+	public void setInterfaceMessage(String s) { interfaceMessage = s; }
 		
 	
-	void setSelectedMovement(int i) { this.selectedMovement = i; }
-	int getSelectedMovement() { return selectedMovement; }
-	void setSelectedPosition(Position p) {this.selectedPosition = p; }
-	Position getSelectedPosition() { return selectedPosition; }
-	void setSelectedDirection(Direction d) { this.selectedDirection = d; }
-	Direction getSelectedDirection() {return this.selectedDirection; }
+	public void setSelectedMovement(int i) { this.selectedMovement = i; }
+	public int getSelectedMovement() { return selectedMovement; }
+	public void setSelectedPosition(Position p) {this.selectedPosition = p; }
+	public Position getSelectedPosition() { return selectedPosition; }
+	public void setSelectedDirection(Direction d) { this.selectedDirection = d; }
+	public Direction getSelectedDirection() {return this.selectedDirection; }
 	
 	
-	Map getMap() { return gridMap; }
-	double getScale() { return scale; }
+	public Map getMap() { return gridMap; }
+	public double getScale() { return scale; }
 
-	void setScale(double scale) {	
+	public void setScale(double scale) {	
 		
 		// scale around the centre
 		int txpos = xpos - (int) ((320 - xpos)  - (320 - xpos) / scale *  this.scale);
@@ -138,7 +148,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	double calX (double x) { return ((getMap().getRegScaleX() *x + getMap().getRegTLX()) * getScale()) + xpos; }
 	double calY (double y) { return ((getMap().getRegScaleY() *y + getMap().getRegTLY()) * getScale()) + ypos; }
 		
-	void centreOn(Position p) { 
+	public void centreOn(Position p) { 
 	
 		moveXpos = (mapPanelWidth/2  - this.calX(p.getSpatialX())) / 50.0;
 		moveYpos = (mapPanelHeight/2 - this.calY(p.getSpatialY())) / 50.0;
@@ -157,7 +167,7 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 		
 	Position getCentre() {  return getPositionFrom(mapPanelWidth/2,mapPanelHeight/2);  }
 	
-	void notifyDalek(Long l, Image i, Position p) {
+	public void notifyDalek(Long l, Image i, Position p) {
 		// scroll map display to position.
 		
 		this.centreOn(p);
@@ -178,41 +188,40 @@ public class mapPanel extends JPanel implements MouseMotionListener, MouseWheelL
 	int getMapHeight() { return (int)(map.getHeight(null) * scale); }
 	int getMapWidth() { return (int)(map.getWidth(null) * scale); }
 	
-	void setNothing() {
+	public void setNothing() {
 		//System.out.println("setNothing()");
 		mouseState = 0;
 	}
 	
-	void setPositionDalek() {
+	public void setPositionDalek() {
 		//System.out.println("setPosition()");
 		mouseState = 1;
 	}
-		
-	void setDirectDalek() {
+	public void setDirectDalek() {
 		//System.out.println("setDirect()");
 		mouseState = 2;
 	}
 	
-	boolean isPositionDalek() { return mouseState == 1; }
-	boolean isDirectDalek() { return mouseState == 2; }
-	boolean isNothing() { return mouseState == 0; }
+	public boolean isPositionDalek() { return mouseState == 1; }
+	public boolean isDirectDalek() { return mouseState == 2; }
+	public boolean isNothing() { return mouseState == 0; }
 
 	
-	void positionDalek (Image dalek) {
+	public void positionDalek (Image dalek) {
 		this.setPositionDalek();
 		getMapImage().setTemporaryDalekImage(dalek);
 	}
 	
-	void directDalek (Image dalek, Position pos) { 
+	public void directDalek (Image dalek, Position pos) { 
 		this.setDirectDalek();
 		getMapImage().setTemporaryDalek(dalek,pos);
 	}
 	
-	public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {		
+	 public void setMovementCost(Position p, Integer forward, Integer backward, Boolean forwardMove, Boolean backwardMove) {		
 		getMapImage().setMovementCost(p,forward,backward,forwardMove,backwardMove);
 	}
 	
-	Position getMovementCostPosition() { return costPosition; }
+	public Position getMovementCostPosition() { return costPosition; }
 	
 	public void setTargetDistance (Double d) { this.targetDistance = d; }
 	public double getTargetDistance () { return targetDistance.doubleValue(); }

@@ -1,4 +1,4 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 
 import java.awt.image.BufferedImage;
 import java.awt.Image;
@@ -6,7 +6,10 @@ import java.awt.Rectangle;
 import java.util.*;
 import java.awt.*;
 
-public abstract class TacticalUI extends BufferedImage {
+import org.silicontrip.dalektech.dalek.Weapon;
+
+
+public abstract class TacticalUI extends DalekTechUI {
 	
 	HashMap<String,WeaponUI> weaponMap;
 	ArrayList<WeaponUI> weaponArray;

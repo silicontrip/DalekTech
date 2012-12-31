@@ -1,11 +1,20 @@
 package org.silicontrip.dalektech.ui;
 
+import org.silicontrip.dalektech.ui.gui.*;
+import org.silicontrip.dalektech.dalek.Dalek;
+import org.silicontrip.dalektech.dalek.Weapon;
+import org.silicontrip.dalektech.map.*;
+import org.silicontrip.dalektech.Tables;
+
+
 import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.util.*;
+//import java.util.*;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.net.URL;
 
 
@@ -54,15 +63,15 @@ public class Guitwo extends Cli {
 		
 		// statusp.setDamageImages (dalekDamageImages);
 		// statusp.setTacticalImages (dalekImages);
-		statusp.setBackground(getImageWithFilename("Images/statusPanel.png"));
+		statusp.setBackground(DalekTechUI.getImageWithFilename("Images/statusPanel.png"));
 		
-		mapImage = getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
+		mapImage = DalekTechUI.getImageWithFilename (new String ("Images/").concat(super.getMap().getImageName()));
 		mapp = new mapPanel(mapImage,m,this);
 		
-		mapp.setSelectorImage(getImageWithFilename("Images/hexSelector.png"));
-		mapp.setArrowImage(getImageWithFilename("Images/Arrow.png"));
-		mapp.setLeftImage(getImageWithFilename("Images/ArrowLeft.png"));
-		mapp.setRightImage(getImageWithFilename("Images/ArrowRight.png"));
+		mapp.setSelectorImage(DalekTechUI.getImageWithFilename("Images/hexSelector.png"));
+		mapp.setArrowImage(DalekTechUI.getImageWithFilename("Images/Arrow.png"));
+		mapp.setLeftImage(DalekTechUI.getImageWithFilename("Images/ArrowLeft.png"));
+		mapp.setRightImage(DalekTechUI.getImageWithFilename("Images/ArrowRight.png"));
 
 		
 		// for testing the selector registration...
@@ -90,9 +99,9 @@ public class Guitwo extends Cli {
 	mapPanel getMapPanel() { return mapp; }
 	statusPanel getStatusPanel() { return statusp; }
 	
-	void setInterfaceMessage(String s) { getMapPanel().setInterfaceMessage(s); getMapPanel().repaint(); }
+	public void setInterfaceMessage(String s) { getMapPanel().setInterfaceMessage(s); getMapPanel().repaint(); }
 	
-	Position getDalekPosition(Dalek d) {
+	public Position getDalekPosition(Dalek d) {
 		
 		getMapPanel().setSelectedPosition(null);
 		getMapPanel().positionDalek(dalekImage(d.getName()));
@@ -107,7 +116,7 @@ public class Guitwo extends Cli {
 		return getMapPanel().getSelectedPosition();
 	}
 	
-	Direction getDalekDirection (Dalek d) {
+	public Direction getDalekDirection (Dalek d) {
 		
 		getMapPanel().setSelectedDirection(null);
 		getMapPanel().directDalek(dalekImage(d.getName()),d.getPosition());
@@ -123,7 +132,7 @@ public class Guitwo extends Cli {
 		return getMapPanel().getSelectedDirection();
 	}
 	
-	Position getDalekPositionAndDirection(Dalek d) {
+	public Position getDalekPositionAndDirection(Dalek d) {
 		
 		getMapPanel().setFocusable(true);
 		getMapPanel().requestFocus();
@@ -136,7 +145,7 @@ public class Guitwo extends Cli {
 		return selectedPosition;
 	}
 	
-	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
+	public int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
 		
 		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().setEngine(currentMove,walk,run);
@@ -164,7 +173,7 @@ public class Guitwo extends Cli {
 		return getMapPanel().getSelectedMovement();
 	}
 	
-	int getDalekTwist(Dalek d) {
+	public int getDalekTwist(Dalek d) {
 		
 		getStatusPanel().setDalekName(d.getName());
 		getStatusPanel().repaint();
@@ -197,7 +206,7 @@ public class Guitwo extends Cli {
 		
 	}
 	
-	int selectDalek (ArrayList<Dalek> dalekList) {
+	public int selectDalek (ArrayList<Dalek> dalekList) {
 		
 		int currentSelection = 0;
 		int dalekSize = dalekList.size();
@@ -268,7 +277,7 @@ public class Guitwo extends Cli {
 	}
 	
 	//int selectTargetDalek (Dalek d, ArrayList<Dalek> dalekList, ArrayList<Integer> targetCost) 
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost, ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
+	public int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost, ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
 	{
 		
 		int currentSelection = 0;
@@ -333,7 +342,7 @@ public class Guitwo extends Cli {
 	}
 	
 	
-	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
+	public ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 		
 		int currentSelection = 0;
 		DamageUI dalekStatus;
@@ -346,8 +355,8 @@ public class Guitwo extends Cli {
 		
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
-		factoryPanel.setSelectorImage(getImageWithFilename("Images/statusPanel.png"));
-		factoryPanel.setOverlayImage(getImageWithFilename("Images/selectionOverlay.png"));
+		factoryPanel.setSelectorImage(DalekTechUI.getImageWithFilename("Images/statusPanel.png"));
+		factoryPanel.setOverlayImage(DalekTechUI.getImageWithFilename("Images/selectionOverlay.png"));
 		
 		
 		// want this to return each keypress.
@@ -422,7 +431,7 @@ public class Guitwo extends Cli {
 		return selectedDaleks;
 	}
 	
-	int selectWeapon(ArrayList<Weapon> w) {
+	public int selectWeapon(ArrayList<Weapon> w) {
 		
 		int currentSelection = 0;
 		int weaponSize = w.size();
@@ -487,17 +496,17 @@ public class Guitwo extends Cli {
 		
 		HashMap<String,Image> imageMap = new HashMap<String,Image>();
 		
-		imageMap.put("Black Renegade",getImageWithFilename("Images/BlackRenegade.png"));
-		imageMap.put("Black Supreme",getImageWithFilename("Images/BlackSupreme.png"));
-		imageMap.put("Blue Drone",getImageWithFilename("Images/BlueDrone.png"));
-		imageMap.put("Emperor Time War",getImageWithFilename("Images/EmperorTimeWar.png"));
-		imageMap.put("Gold Supreme",getImageWithFilename("Images/GoldSupreme.png"));
-		imageMap.put("Gold Time War",getImageWithFilename("Images/GoldTimeWar.png"));
-		imageMap.put("Grey Renegade",getImageWithFilename("Images/GreyRenegade.png"));
-		imageMap.put("Imperial",getImageWithFilename("Images/Imperial.png"));
-		imageMap.put("Red Commander",getImageWithFilename("Images/RedCommander.png"));
-		imageMap.put("Red Saucer Pilot",getImageWithFilename("Images/RedSaucerPilot.png"));
-		imageMap.put("Special Weapon",getImageWithFilename("Images/SpecialWeapon.png"));
+		imageMap.put("Black Renegade",DalekTechUI.getImageWithFilename("Images/BlackRenegade.png"));
+		imageMap.put("Black Supreme",DalekTechUI.getImageWithFilename("Images/BlackSupreme.png"));
+		imageMap.put("Blue Drone",DalekTechUI.getImageWithFilename("Images/BlueDrone.png"));
+		imageMap.put("Emperor Time War",DalekTechUI.getImageWithFilename("Images/EmperorTimeWar.png"));
+		imageMap.put("Gold Supreme",DalekTechUI.getImageWithFilename("Images/GoldSupreme.png"));
+		imageMap.put("Gold Time War",DalekTechUI.getImageWithFilename("Images/GoldTimeWar.png"));
+		imageMap.put("Grey Renegade",DalekTechUI.getImageWithFilename("Images/GreyRenegade.png"));
+		imageMap.put("Imperial",DalekTechUI.getImageWithFilename("Images/Imperial.png"));
+		imageMap.put("Red Commander",DalekTechUI.getImageWithFilename("Images/RedCommander.png"));
+		imageMap.put("Red Saucer Pilot",DalekTechUI.getImageWithFilename("Images/RedSaucerPilot.png"));
+		imageMap.put("Special Weapon",DalekTechUI.getImageWithFilename("Images/SpecialWeapon.png"));
 		
 		
 		return imageMap;
@@ -568,7 +577,7 @@ public class Guitwo extends Cli {
 	
 	
 	
-	void notifyEngine (int current, int walk, int run) {
+	public void notifyEngine (int current, int walk, int run) {
 		
 		getStatusPanel().setEngineCurrent(current);
 		getStatusPanel().setEngineWalk(walk);
@@ -577,16 +586,16 @@ public class Guitwo extends Cli {
 		getStatusPanel().repaint();
 	}
 	
-	void notifyDalekPosition(Dalek d) {
+	public void notifyDalekPosition(Dalek d) {
 		getMapPanel().notifyDalek(d.getDalekID(),dalekImage(d.getName()),d.getPosition());
 	}
 	
-	void notifyEnd(boolean destroyed) {
+	public void notifyEnd(boolean destroyed) {
 		if (destroyed) { this.setInterfaceMessage("All Daleks Destroyed - Mission Failed"); }
 		if (!destroyed) { this.setInterfaceMessage("Enemy Daleks Destroyed - Mission Accomplished"); }
 	}
 	
-	void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
+	public void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
 
 		DamageUI dalekStatus;
 		BufferedImage oldImage; 
@@ -624,7 +633,7 @@ public class Guitwo extends Cli {
 		
 	}
 	
-	void notifyDamage(Dalek d) {
+	public void notifyDamage(Dalek d) {
 		
 		DamageUI dalekStatus;
 		TacticalUI dalekWeapon;
@@ -684,14 +693,6 @@ public class Guitwo extends Cli {
 	}
 	
 	
-	public static Image getImageWithFilename (String fn) {
-		URL imageURL = DalekTech.class.getResource(fn);
-		if (imageURL != null) {
-			return new ImageIcon(imageURL).getImage();
-		}
-		System.err.println ("getImageWithFilename (" + fn + ") Returns Null");
-		return null;
-	}
 	
 	
 	

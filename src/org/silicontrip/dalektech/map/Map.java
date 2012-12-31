@@ -7,6 +7,9 @@ import java.beans.*;
 import javax.xml.parsers.*;
 
 
+// How did I get away with naming a class like this?
+// I may rename it to something that doesn't clash with java.util.Map;
+
 public class Map implements Serializable {
 
 	public static final int CLEAR = 0;
@@ -54,25 +57,25 @@ public class Map implements Serializable {
 		return (p.getX()>=0 && p.getY()>=0 && p.getX()<this.getSizeX() && p.getY() <this.getSizeX());
 	}
 	public Position getSize() { return size; }
-	int getSizeX() { return getSize().getX() + 1; }
-	int getSizeY() { return getSize().getY() + 1; }
-	int getRegTLX () { return (int)regTL.getX(); }
-	int getRegTLY () { return (int)regTL.getY(); }
-	int getRegBRX () { return (int)regBR.getX(); }
-	int getRegBRY () { return (int)regBR.getY(); }
+	public int getSizeX() { return getSize().getX() + 1; }
+	public int getSizeY() { return getSize().getY() + 1; }
+	public int getRegTLX () { return (int)regTL.getX(); }
+	public int getRegTLY () { return (int)regTL.getY(); }
+	public int getRegBRX () { return (int)regBR.getX(); }
+	public int getRegBRY () { return (int)regBR.getY(); }
 
-	void setRegTL(int x, int y) { regTL.setLocation(x,y); }
-	void setRegBR(int x, int y) { regBR.setLocation(x,y); }
+	public void setRegTL(int x, int y) { regTL.setLocation(x,y); }
+	public void setRegBR(int x, int y) { regBR.setLocation(x,y); }
 
-	int getRegHeight() { return getRegBRY() - getRegTLY(); }
-	int getRegWidth() { return getRegBRX() - getRegTLX(); }	
-	double getRegScaleX () { return this.getRegWidth()/this.getSize().getSpatialX(); }
-	double getRegScaleY () { return this.getRegHeight()/this.getSize().getSpatialY(); }
+	public int getRegHeight() { return getRegBRY() - getRegTLY(); }
+	public int getRegWidth() { return getRegBRX() - getRegTLX(); }	
+	public double getRegScaleX () { return this.getRegWidth()/this.getSize().getSpatialX(); }
+	public double getRegScaleY () { return this.getRegHeight()/this.getSize().getSpatialY(); }
 
 	
-	String getImageName() { return graphicFile; }
+	public String getImageName() { return graphicFile; }
 	
-	Hex getHexAt(Position p) {
+	public Hex getHexAt(Position p) {
 		try {
 			return maparray[p.getX()][p.getY()];
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
@@ -80,7 +83,7 @@ public class Map implements Serializable {
 		}
 	}
 	
-	ArrayList<Hex> getLineOfHex(Position p1,Position p2) {
+	public ArrayList<Hex> getLineOfHex(Position p1,Position p2) {
 		Double spatial = p1.getSpatial();
 		Double espatial = p2.getSpatial();
 		double scale = p1.distanceTo(p2) * 2;
@@ -113,7 +116,7 @@ public class Map implements Serializable {
 	
 	
 	// will move this to XML doc loader
-	void initSampleMap() {
+	public void initSampleMap() {
 
 		maparray=new Hex[15][17];		
 		size = new Position(14,16);

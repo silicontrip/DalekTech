@@ -1,11 +1,14 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.*;
 import java.awt.*;
 
-public abstract class DamageUI extends BufferedImage {
+import org.silicontrip.dalektech.dalek.DalekSection;
+
+
+public abstract class DamageUI extends DalekTechUI {
 	
 	Image baseImage;
 	int spacing;

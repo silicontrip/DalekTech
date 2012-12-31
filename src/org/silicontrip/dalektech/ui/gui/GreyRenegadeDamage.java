@@ -1,14 +1,14 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 
 public class GreyRenegadeDamage extends DamageUI {
 
 	public GreyRenegadeDamage() {
-		super(Guitwo.getImageWithFilename ("Images/RenegadeDamage.png"));
+		super(getImageWithFilename ("Images/RenegadeDamage.png"));
 	}
 	
 	public GreyRenegadeDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		super(getImageWithFilename (imageName));
 		if (white) {
 			enableWhite();
 		}

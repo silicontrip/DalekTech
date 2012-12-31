@@ -1,13 +1,13 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 public class InvasionDamage extends DamageUI {
 
 	public InvasionDamage() {
-		super(Guitwo.getImageWithFilename ("Images/InvasionDamage.png"));
+		super(getImageWithFilename ("Images/InvasionDamage.png"));
 	}
 	
 	public InvasionDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		super(getImageWithFilename (imageName));
 			  if (white) {
 			  enableWhite();
 			  }

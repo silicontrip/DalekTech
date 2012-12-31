@@ -6,6 +6,7 @@ import java.io.*;
 import java.beans.*;
 import javax.xml.parsers.*;
 
+import org.silicontrip.dalektech.dalek.*;
 
 public class DalekFactory {
 	
@@ -270,7 +271,7 @@ public class DalekFactory {
 		return null;
 	}
 	
-	static ArrayList<Dalek> getAllDaleks() {
+	public static ArrayList<Dalek> getAllDaleks() {
 	
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		

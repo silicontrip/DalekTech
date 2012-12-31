@@ -5,6 +5,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collection;
 
+import org.silicontrip.dalektech.map.*;
+import org.silicontrip.dalektech.dalek.Dalek;
+import org.silicontrip.dalektech.dalek.Weapon;
+import org.silicontrip.dalektech.dalek.DalekSection;
+
+
+import org.silicontrip.dalektech.Tables;
+
 
 public class Cli extends UserInterface {
 
@@ -56,7 +64,7 @@ public class Cli extends UserInterface {
 	}
 	
 	
-	Position getDalekPosition(Dalek d) {
+	public Position getDalekPosition(Dalek d) {
 		
 		String input;
 		String sValues[];
@@ -80,7 +88,7 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	Direction getDalekDirection (Dalek d) {
+	public Direction getDalekDirection (Dalek d) {
 	
 		Direction dir = new Direction();
 		String input;
@@ -96,7 +104,7 @@ public class Cli extends UserInterface {
 		return dir;
 	}
 	
-	Position getDalekPositionAndDirection(Dalek d) {
+	public Position getDalekPositionAndDirection(Dalek d) {
 	
 		String input;
 		String sValues[];
@@ -126,7 +134,7 @@ public class Cli extends UserInterface {
 	}
 	
 	
-	int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
+	public int getDalekMove (Dalek d, int currentMove, int walk, int run, int forwardCost, int backwardCost,boolean forward, boolean backward, boolean turn) { 
 		
 		String input;
 		String outString = new String("Enter Movement ");
@@ -145,7 +153,7 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	int getDalekTwist(Dalek d) {
+	public int getDalekTwist(Dalek d) {
 		String input;
 		
 		System.out.println (d.toString());
@@ -158,7 +166,7 @@ public class Cli extends UserInterface {
 	
 //////////////////////////////////////////////////////////////////////
 	
-	ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
+	public ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
 		String sValues[];
 		String input;
 		int dal;
@@ -194,7 +202,7 @@ public class Cli extends UserInterface {
 		return dalekSelection;
 	}
 	
-	private int choose (ArrayList l) {
+	 private int choose (ArrayList l) {
 		String choice;
 		int ichoice;
 		int i;
@@ -220,7 +228,7 @@ public class Cli extends UserInterface {
 	
 	// int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost) 
 	
-	int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
+	public int selectTargetDalek (Dalek d, ArrayList<Dalek> targetList, ArrayList<Integer> targetCost,ArrayList<Double> distance, ArrayList<ArrayList<Hex>> los)
 	{
 	
 		int choice,i;
@@ -236,7 +244,7 @@ public class Cli extends UserInterface {
 		return choice;
 	}
 	
-	int selectWeapon(ArrayList<Weapon> w) {
+	public int selectWeapon(ArrayList<Weapon> w) {
 	
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -251,7 +259,7 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	int selectDalek (ArrayList<Dalek> dalekList) {
+	public int selectDalek (ArrayList<Dalek> dalekList) {
 		
 		int i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -262,7 +270,7 @@ public class Cli extends UserInterface {
 		return choose(choiceList);
 	}
 	
-	int selectDalekWithExit (ArrayList<Dalek> dalekList) {
+	public int selectDalekWithExit (ArrayList<Dalek> dalekList) {
 		
 		int choice,i;
 		ArrayList<String> choiceList = new ArrayList<String>();
@@ -283,14 +291,14 @@ public class Cli extends UserInterface {
 //
 ///////////////////////////////////////////////////////
 	
-	void setInterfaceMessage(String s) {
+	public void setInterfaceMessage(String s) {
 		if (s != null) {
 			System.out.println (s);
 		}
 	}
 
 	
-	void notifyEngine (int current, int walk, int run) {
+	public void notifyEngine (int current, int walk, int run) {
 		
 		if (current == 0) {
 			System.out.println("STATIONARY");
@@ -302,7 +310,7 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	void notifyDifficulty (int cost) {
+	public void notifyDifficulty (int cost) {
 		;
 	}
 	/*
@@ -318,7 +326,7 @@ public class Cli extends UserInterface {
 	 11 - 2 - 35 - 92%
 	 12 - 1 - 36 - 97%
 	 */	 
-	void notifyLOS(ArrayList<Hex> line) {
+	public void notifyLOS(ArrayList<Hex> line) {
 		Iterator<Hex> it = line.iterator();
 		while (it.hasNext()) {
 		
@@ -327,16 +335,16 @@ public class Cli extends UserInterface {
 		}
 	}
 	
-	void notifyTargetDalek  (Dalek d) { 
+	public void notifyTargetDalek  (Dalek d) { 
 		;
 	}	
 	
-	void notifyDalekPosition(Dalek d) {
+	public void notifyDalekPosition(Dalek d) {
 		System.out.println (d.getName() + ": " + d.getPosition().toString());
 	}
 	
 	// Damage to my dalek
-	void notifyDamage(Dalek d) {
+	public void notifyDamage(Dalek d) {
 	
 		Collection<DalekSection> c = d.getSections().values();
 		Iterator<DalekSection> it  = c.iterator();
@@ -350,25 +358,25 @@ public class Cli extends UserInterface {
 		
 	}
 	
-	void notifyName(Dalek d) {
+	public void notifyName(Dalek d) {
 		System.out.println (d.getName());
 	}
 	
 	//Damage to other Dalek.
-	void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
+	public void notifyDalekDamage (Dalek d, int location, Weapon w, int damage) {
 		System.out.println (d.getName() + " " + d.getLocation(location) + " ** " + damage + " **");
 	}
 
-	void notifyFire (Dalek d, Weapon w) {
+	public void notifyFire (Dalek d, Weapon w) {
 		System.out.println (w.getDalekSection().getDalek().getName() + " Fires at " + d.getName() + " with " + w.toString());
 	}
 	
 	
-	void notifyMiss (Dalek d, Weapon w) {
+public 	void notifyMiss (Dalek d, Weapon w) {
 		System.out.println (w.getDalekSection().getDalek().getName() + " Misses " + d.getName() + " with " + w.toString());
 	}
 	
-	void notifyEnd(boolean destroyed) {
+	public void notifyEnd(boolean destroyed) {
 	
 		if (destroyed) { System.out.println("All Daleks Destroyed - Mission Failed"); }
 		if (!destroyed) { System.out.println("Enemy Daleks Destroyed - Mission Accomplished"); }

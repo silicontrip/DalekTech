@@ -1,6 +1,9 @@
 package org.silicontrip.dalektech.map;
 import java.io.*;
 
+import org.silicontrip.dalektech.Tables;
+
+
 public class Hex implements Serializable {
 
 	public static final int CLEAR = 0;

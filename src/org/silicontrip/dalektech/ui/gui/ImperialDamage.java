@@ -1,14 +1,14 @@
-package org.silicontrip.dalektech.ui;
+package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
 
 public class ImperialDamage extends DamageUI {
 
 	public ImperialDamage() {
-		super(Guitwo.getImageWithFilename ("Images/ImperialDamage.png"));
+		super(getImageWithFilename ("Images/ImperialDamage.png"));
 	}
 	
 	public ImperialDamage(String imageName, boolean white) {
-		super(Guitwo.getImageWithFilename (imageName));
+		super(getImageWithFilename (imageName));
 		if (white) {
 			enableWhite();
 		}
