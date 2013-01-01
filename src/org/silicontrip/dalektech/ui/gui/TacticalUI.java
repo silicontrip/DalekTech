@@ -7,6 +7,7 @@ import java.util.*;
 import java.awt.*;
 
 import org.silicontrip.dalektech.dalek.Weapon;
+import java.io.FileNotFoundException;
 
 
 public abstract class TacticalUI extends DalekTechUI {
@@ -15,16 +16,16 @@ public abstract class TacticalUI extends DalekTechUI {
 	ArrayList<WeaponUI> weaponArray;
 	Graphics2D canvas;
 	
-	public abstract WeaponUI getDome();
-	public abstract WeaponUI getNeck();
-	public abstract WeaponUI getShoulder();
-	public abstract WeaponUI getLeftShoulder();
-	public abstract WeaponUI getRightShoulder();
-	public abstract WeaponUI getLeftSkirt();
-	public abstract WeaponUI getRightSkirt();
+	public abstract WeaponUI getDome() throws FileNotFoundException;
+	public abstract WeaponUI getNeck() throws FileNotFoundException;
+	public abstract WeaponUI getShoulder() throws FileNotFoundException;
+	public abstract WeaponUI getLeftShoulder() throws FileNotFoundException;
+	public abstract WeaponUI getRightShoulder() throws FileNotFoundException;
+	public abstract WeaponUI getLeftSkirt() throws FileNotFoundException;
+	public abstract WeaponUI getRightSkirt() throws FileNotFoundException;
 	
 	
-	public TacticalUI(int weapons) {
+	public TacticalUI(int weapons) throws FileNotFoundException {
 		// these values need to be queried from WeaponUI
 		super (160,weapons * 40 ,BufferedImage.TYPE_4BYTE_ABGR);
 		/*

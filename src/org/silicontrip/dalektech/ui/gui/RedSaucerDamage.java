@@ -1,13 +1,15 @@
 package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
+import java.io.FileNotFoundException;
+
 
 public class RedSaucerDamage extends DamageUI {
 
-	public RedSaucerDamage() {
+	public RedSaucerDamage() throws FileNotFoundException {
 		super(getImageWithFilename ("Images/RedSaucerDamage.png"));
 	}
 	
-	public RedSaucerDamage(String imageName, boolean white) {
+	public RedSaucerDamage(String imageName, boolean white) throws FileNotFoundException {
 		super(getImageWithFilename (imageName));
 		if (white) {
 			enableWhite();

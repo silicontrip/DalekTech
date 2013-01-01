@@ -1,13 +1,15 @@
 package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
+import java.io.FileNotFoundException;
+
 
 public class GoldSupremeDamage extends DamageUI {
 
-	public GoldSupremeDamage() {
+	public GoldSupremeDamage() throws FileNotFoundException {
 		super(getImageWithFilename ("Images/GoldSupremeDamage.png"));
 	}
 	
-	public GoldSupremeDamage(String imageName, boolean white) {
+	public GoldSupremeDamage(String imageName, boolean white) throws FileNotFoundException {
 		super(getImageWithFilename (imageName));
 			  if (white) {
 			  enableWhite();

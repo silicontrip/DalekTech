@@ -16,7 +16,7 @@ import org.silicontrip.dalektech.DalekFactory;
 
 import org.silicontrip.dalektech.dalek.Weapon;
 import org.silicontrip.dalektech.dalek.Dalek;
-
+import org.silicontrip.dalektech.NoSuchInterfaceException;
 
 
 public class DalekTech {
@@ -37,24 +37,7 @@ public class DalekTech {
 	}
 	 */
 	
-	UserInterface interfaceFactory (String s,Map m) {
-	
-		if (s.equalsIgnoreCase("cli")) {
-			return new Cli(m);
-		}
-		if (s.equalsIgnoreCase("network"))  {
-			return new Network(m);
-		}
-		if (s.equalsIgnoreCase("gui2"))  {
-			return new Guitwo(m);
-		}
-		
-		// TODO: add AI player!
-		
-		return null;
-	}
-	
-	public DalekTech (String i1, String i2) {
+	public DalekTech (String i1, String i2) throws NoSuchInterfaceException, FileNotFoundException {
 		
 		// Although it's only made here for 2 players, it shouldn't be too hard to extend to more.
 		players = new ArrayList<Player>();
@@ -66,8 +49,8 @@ public class DalekTech {
 		
 		UserInterface ui1,ui2;
 		
-		ui1 = interfaceFactory(i1,map);
-		ui2 = interfaceFactory(i2,map);
+		ui1 = UserInterfaceFactory.interfaceFactory(i1,map);
+		ui2 = UserInterfaceFactory.interfaceFactory(i2,map);
 
 		
 		players.add(new Player(ui1,ui2,players)); // UI2DGraphic();
@@ -124,6 +107,8 @@ public class DalekTech {
 			return;
 		} 
 		
+		
+		try {
 		
 		DalekTech Game = new DalekTech(args[0],args[1]);
 		ArrayList<Player> playerOrder;	
@@ -208,6 +193,11 @@ public class DalekTech {
 		playerOrder.get(0).endGame();
 		playerOrder.get(1).endGame();
 
+		} catch (NoSuchInterfaceException e) {
+			System.out.println(e.getMessage());
+		} catch (FileNotFoundException e) {
+			System.out.println("Error initialising Interface: " + e.getMessage());
+		}
 		
 	}
 	

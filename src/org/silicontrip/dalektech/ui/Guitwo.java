@@ -25,6 +25,9 @@ public class Guitwo extends Cli {
 	
 	Image mapImage;
 	
+	Image SelectorImage;
+	Image OverlayImage;
+	
 	mapPanel mapp;
 	selectFactoryDaleksPanel factoryPanel;
 	statusPanel statusp;
@@ -45,7 +48,7 @@ public class Guitwo extends Cli {
 	Graphics2D statusGraphic;
 	Graphics2D mapGraphic;
 	
-	public Guitwo(Map m) {
+	public Guitwo(Map m) throws FileNotFoundException {
 		
 		super(m);
 		
@@ -53,6 +56,11 @@ public class Guitwo extends Cli {
 		dalekDamageImages = InitDalekImageDamage();
 		dalekRemoteImages = InitDalekImageRemote();
 		dalekTacticalImages = InitDalekImageTactical();
+		
+		
+		SelectorImage= (DalekTechUI.getImageWithFilename("Images/statusPanel.png"));
+		OverlayImage= (DalekTechUI.getImageWithFilename("Images/selectionOverlay.png"));
+
 		
 		frame = new JFrame();
 		frame.setTitle("Dalek Battle");
@@ -342,7 +350,7 @@ public class Guitwo extends Cli {
 	}
 	
 	
-	public ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList) {
+	public ArrayList<Integer> selectFactoryDaleks (ArrayList<Dalek> dalekList)  {
 		
 		int currentSelection = 0;
 		DamageUI dalekStatus;
@@ -351,12 +359,14 @@ public class Guitwo extends Cli {
 		ArrayList<Integer> selectedDaleks = new ArrayList<Integer>();
 		String dalekName;
 		
+		
+		
 		factoryPanel = new selectFactoryDaleksPanel(dalekImages,dalekList);
 		
 		factoryPanel.setDalekWidth(128);
 		factoryPanel.setDalekIconWidth(48);
-		factoryPanel.setSelectorImage(DalekTechUI.getImageWithFilename("Images/statusPanel.png"));
-		factoryPanel.setOverlayImage(DalekTechUI.getImageWithFilename("Images/selectionOverlay.png"));
+		factoryPanel.setSelectorImage(SelectorImage);
+		factoryPanel.setOverlayImage(OverlayImage);
 		
 		
 		// want this to return each keypress.
@@ -492,7 +502,7 @@ public class Guitwo extends Cli {
 	}
 	
 	
-	HashMap<String,Image> InitDalekImage() {
+	HashMap<String,Image> InitDalekImage() throws FileNotFoundException {
 		
 		HashMap<String,Image> imageMap = new HashMap<String,Image>();
 		
@@ -512,7 +522,7 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
-	HashMap<String,DamageUI> InitDalekImageDamage() {
+	HashMap<String,DamageUI> InitDalekImageDamage() throws FileNotFoundException {
 		
 		HashMap<String,DamageUI> imageMap = new HashMap<String,DamageUI>();
 		
@@ -533,7 +543,7 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
-	HashMap<String,DamageUI> InitDalekImageRemote() {
+	HashMap<String,DamageUI> InitDalekImageRemote() throws FileNotFoundException {
 		
 		HashMap<String,DamageUI> imageMap = new HashMap<String,DamageUI>();
 		
@@ -554,7 +564,7 @@ public class Guitwo extends Cli {
 		return imageMap;
 	}
 	
-	HashMap<String,TacticalUI> InitDalekImageTactical() {
+	HashMap<String,TacticalUI> InitDalekImageTactical()  throws FileNotFoundException {
 		
 		HashMap<String,TacticalUI> imageMap = new HashMap<String,TacticalUI>();
 		

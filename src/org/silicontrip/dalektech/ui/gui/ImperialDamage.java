@@ -1,13 +1,14 @@
 package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
+import java.io.FileNotFoundException;
 
 public class ImperialDamage extends DamageUI {
 
-	public ImperialDamage() {
+	public ImperialDamage() throws FileNotFoundException {
 		super(getImageWithFilename ("Images/ImperialDamage.png"));
 	}
 	
-	public ImperialDamage(String imageName, boolean white) {
+	public ImperialDamage(String imageName, boolean white) throws FileNotFoundException {
 		super(getImageWithFilename (imageName));
 		if (white) {
 			enableWhite();

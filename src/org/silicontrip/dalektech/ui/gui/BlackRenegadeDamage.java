@@ -1,15 +1,14 @@
 package org.silicontrip.dalektech.ui.gui;
 import java.awt.Rectangle;
+import java.io.FileNotFoundException;
 
 public class BlackRenegadeDamage extends DamageUI {
 
-	public BlackRenegadeDamage() {
+	public BlackRenegadeDamage() throws FileNotFoundException {
 		super(getImageWithFilename ("Images/RenegadeDamage.png"));
 	}
 
-	public BlackRenegadeDamage(String imageName, boolean white) {
-		// this should be in a superclass of Damage UI.
-		// I have a feeling getImageWithFilename is used a lot in these subclassses.
+	public BlackRenegadeDamage(String imageName, boolean white) throws FileNotFoundException {
 		super(getImageWithFilename (imageName));
 			  if (white) {
 				enableWhite();

@@ -8,31 +8,13 @@ import org.silicontrip.dalektech.ui.*;
 import org.silicontrip.dalektech.map.*;
 import org.silicontrip.dalektech.dalek.Dalek;
 import org.silicontrip.dalektech.dalek.Weapon;
+import org.silicontrip.dalektech.NoSuchInterfaceException;
 
 
 public class NetworkClient {
 	
 	final static int PORT = 5555;
 	
-	static UserInterface interfaceFactory (String s,Map m) {
-		
-		if (s.equalsIgnoreCase("cli")) {
-			System.out.println("CLI");
-			return new Cli(m);
-		}
-		if (s.equalsIgnoreCase("network"))  {
-			System.out.println("NETWORK");
-
-			return new Network(m);
-		}
-		if (s.equalsIgnoreCase("gui2"))  {
-			System.out.println("GUI2");
-
-			return new Guitwo(m);
-		}
-		
-		return new Guitwo(m);
-	}
 	
 	
 	public static void main(String[] args) {
@@ -64,7 +46,7 @@ public class NetworkClient {
 				
 				
 				
-				intf = interfaceFactory(args[0],map);
+				intf = UserInterfaceFactory.interfaceFactory(args[0],map);
 				
 				
 				if (intf != null) {
@@ -174,9 +156,13 @@ public class NetworkClient {
 					System.out.println("An invalid interface was chosen");
 				}
 				
-			} catch (IOException ioe) {
+			} catch (NoSuchInterfaceException e) {
+				System.out.println(e.getMessage());
+			} catch (FileNotFoundException e) {
+				System.out.println("Error initialising Interface: " + e.getMessage());
+			} 			catch (IOException ioe) {
 				System.out.println ("main IOException occured: " + ioe);
-			}
+			} 
 			
 		}
 		
