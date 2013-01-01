@@ -1,0 +1,11 @@
+#!/bin/sh
+
+for n in $@
+do
+
+
+m=$(echo $n | sed 's/\.[^.]*$//')
+
+sips -s format png $n --out ${m}.png
+
+done
